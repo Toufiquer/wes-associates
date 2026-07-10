@@ -255,7 +255,7 @@
     .hero-content {
       position: relative;
       z-index: 1;
-      width: min(980px, calc(100% - 32px));
+      width: min(1120px, calc(100% - 32px));
       margin: 0 auto;
       text-align: center;
     }
@@ -278,14 +278,19 @@
     }
 
     .hero-line:first-child {
-      font-size: clamp(46px, 7vw, 98px);
+      font-size: clamp(42px, 6.4vw, 98px);
       animation-delay: 0.14s;
     }
 
     .hero-line:nth-child(2) {
       margin-top: 12px;
-      font-size: clamp(52px, 8vw, 118px);
+      font-size: clamp(40px, 6.9vw, 112px);
+      line-height: 1.04;
       animation-delay: 0.34s;
+    }
+
+    .hero-nowrap {
+      white-space: nowrap;
     }
 
     .hero-muted {
@@ -1213,7 +1218,7 @@
       }
 
       .hero-content {
-        width: min(860px, calc(100% - 32px));
+        width: min(900px, calc(100% - 32px));
       }
 
       .hero-copy {
@@ -1259,13 +1264,13 @@
       }
 
       .hero-line:first-child {
-        font-size: clamp(42px, 13vw, 64px);
+        font-size: clamp(36px, 10vw, 64px);
       }
 
       .hero-line:nth-child(2) {
         margin-top: 10px;
-        font-size: clamp(39px, 12vw, 62px);
-        line-height: 1.08;
+        font-size: clamp(30px, 8.2vw, 54px);
+        line-height: 1.12;
       }
 
       .hero-copy {
@@ -1375,7 +1380,7 @@
       <div class="hero-content">
         <h1 class="hero-title">
           <span class="hero-line">ভয়কে জয় করে</span>
-          <span class="hero-line"><span class="hero-muted">STUDY ABROAD</span>-এ <span class="hero-red">সফল হোন</span></span>
+          <span class="hero-line"><span class="hero-nowrap"><span class="hero-muted">STUDY ABROAD</span>-এ</span> <span class="hero-red">সফল হোন</span></span>
         </h1>
         <p class="hero-copy">
           <strong>সঠিক গাইডলাইন</strong> নিয়ে বিদেশে পড়াশোনার স্বপ্ন পূরণ করুন -
