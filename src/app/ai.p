@@ -1,4 +1,8 @@
-Look at index.html inside 'src/app/index.html' and wesassociates inside 'src/app/WesAssociates.tsx' you find id names
+Look at index.html inside 'src/app/index.html' and wesassociates inside 'src/app/WesAssociates.tsx' 
+
+
+Now your task is generate sections inside WesAssociates.tsx same as index.html
+
     - home
     - about
     - why
@@ -14,5 +18,3 @@ Look at index.html inside 'src/app/index.html' and wesassociates inside 'src/app
     - documents
     - news 
     - contact 
-
-Now your task  is generate sections inside WesAssociates.tsx same as index.html
