@@ -147,7 +147,7 @@ export default async function HomePage() {
       {items.length === 0 ? (
         <div>
           <div className="min-h-[50vh] flex flex-col items-center justify-center text-slate-500 space-y-4">
-            <p className="text-lg font-medium">Home Page Found</p>
+            <p className="text-lg font-medium">Home Page Found 2.0</p>
             <p className="text-sm">But it has no content configured yet.</p>
           </div>
         </div>

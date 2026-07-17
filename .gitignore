@@ -42,3 +42,4 @@ next-env.d.ts
 
 # Backup env files
 /backup_env
+/git-old
