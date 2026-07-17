@@ -1,0 +1,10 @@
+0000000000000000000000000000000000000000 8bea60576884206bb51905adf5f7ce354f078e89 Toufiquer <toufiquerabc@gmail.com> 1783691954 +0600	commit (initial): first commit
+8bea60576884206bb51905adf5f7ce354f078e89 8bea60576884206bb51905adf5f7ce354f078e89 Toufiquer <toufiquerabc@gmail.com> 1783691959 +0600	Branch: renamed refs/heads/master to refs/heads/main
+8bea60576884206bb51905adf5f7ce354f078e89 3df8cddcef126815c144344d3e67491b4917d2bf Toufiquer <toufiquerabc@gmail.com> 1783695881 +0600	commit: first demo web
+3df8cddcef126815c144344d3e67491b4917d2bf f3888ff7b011073c4aa5a8532a857776931a32bc Toufiquer <toufiquerabc@gmail.com> 1783696955 +0600	commit: update home section
+f3888ff7b011073c4aa5a8532a857776931a32bc 02ddf5cebe16b4327b42a7983b4511a12893ee3e Toufiquer <toufiquerabc@gmail.com> 1783805946 +0600	commit: done @ update home sections
+02ddf5cebe16b4327b42a7983b4511a12893ee3e e10df5e30708f4f1c79581214378a6d5a41fe7b2 Toufiquer <toufiquerabc@gmail.com> 1783806228 +0600	commit: done @ update footer
+e10df5e30708f4f1c79581214378a6d5a41fe7b2 4fb59500ddddb7c1be75b763bd9bce90d912ebeb Toufiquer <toufiquerabc@gmail.com> 1783806899 +0600	commit: update home design
+4fb59500ddddb7c1be75b763bd9bce90d912ebeb 38abb24306cb5ec1f0bb13e880dc6103d0fe0fdf Toufiquer <toufiquerabc@gmail.com> 1783808813 +0600	commit: check build
+38abb24306cb5ec1f0bb13e880dc6103d0fe0fdf ba29bc360ce366ae8004ecde536f942eda3cf43b Toufiquer <toufiquerabc@gmail.com> 1783932619 +0600	commit: done @ update web note
+ba29bc360ce366ae8004ecde536f942eda3cf43b a77c7b26a0d45dfdcd07bbcdf098483d8cfa2c83 Toufiquer <toufiquerabc@gmail.com> 1783951885 +0600	commit: done @ check google-auth, reset-password, mail-conformation

@@ -92,14 +92,17 @@ const MobileMainMenuEditor = () => {
   useEffect(() => {
     const fetchConfig = async () => {
       try {
-        const response = await fetch('/api/menu/mobile-main-menu');
-        if (!response.ok) return;
-        const brandSettings = await response.json();
-        const layout = brandSettings.mobileMenuGridLayout || '2x2';
+        const response = await fetch('/api/menu/mobile-main-menu', { cache: 'no-store' });
+        if (!response.ok) throw new Error('Failed to fetch mobile menu settings');
+        const payload = await response.json();
+        const brandSettings = (payload?.data && typeof payload.data === 'object' ? payload.data : payload) as Partial<MobileMainMenuConfig>;
+        const layout = gridOptions.includes(brandSettings.mobileMenuGridLayout as MobileMenuGridLayout)
+          ? (brandSettings.mobileMenuGridLayout as MobileMenuGridLayout)
+          : '2x2';
         const shape = getGridShape(layout);
         const limit = shape.rows * shape.columns;
         setConfig({
-          mobileMenuIsPublished: brandSettings.mobileMenuIsPublished,
+          mobileMenuIsPublished: brandSettings.mobileMenuIsPublished !== false,
           mobileMenuViewStyle: brandSettings.mobileMenuViewStyle || 'grid',
           mobileMenuGridLayout: layout,
           mobileMainMenuItems: brandSettings.mobileMainMenuItems?.length ? brandSettings.mobileMainMenuItems.slice(0, limit) : defaultItems,
@@ -215,14 +218,15 @@ const MobileMainMenuEditor = () => {
         body: JSON.stringify({ ...config, mobileMainMenuItems: config.mobileMainMenuItems.slice(0, itemLimit) }),
       });
       if (!response.ok) throw new Error('Update failed');
-      const data = await response.json();
-      if (data?.data) {
+      const payload = await response.json();
+      const settings = (payload?.data && typeof payload.data === 'object' ? payload.data : payload) as Partial<MobileMainMenuConfig>;
+      if (settings && typeof settings === 'object') {
         setConfig(prev => ({
           ...prev,
-          mobileMenuIsPublished: data.data.mobileMenuIsPublished,
-          mobileMenuViewStyle: data.data.mobileMenuViewStyle,
-          mobileMenuGridLayout: data.data.mobileMenuGridLayout,
-          mobileMainMenuItems: data.data.mobileMainMenuItems?.length ? data.data.mobileMainMenuItems : defaultItems,
+          mobileMenuIsPublished: settings.mobileMenuIsPublished !== false,
+          mobileMenuViewStyle: settings.mobileMenuViewStyle || prev.mobileMenuViewStyle,
+          mobileMenuGridLayout: settings.mobileMenuGridLayout || prev.mobileMenuGridLayout,
+          mobileMainMenuItems: settings.mobileMainMenuItems?.length ? settings.mobileMainMenuItems : defaultItems,
         }));
       }
       window.dispatchEvent(new Event('brand-settings-updated'));

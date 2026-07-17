@@ -32,6 +32,9 @@ export const apiSlice = createApi({
     'tagTypeMembers',
     'tagTypeNews',
     'tagTypeCampaign',
+    'tagTypeTopBanner',
+    'tagTypeService',
+    'tagTypeApplication',
   ],
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({

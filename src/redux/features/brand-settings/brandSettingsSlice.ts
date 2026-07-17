@@ -41,6 +41,7 @@ export interface BrandSettings {
   menuSticky: boolean;
   menuPosition: NavigationPosition;
   menuButtonMode: MenuButtonMode;
+  menuButtonIconName: string;
   menuButtonContactText: string;
   menuButtonContactLink: string;
   menuButtonBackgroundColor: string;
@@ -77,11 +78,13 @@ export interface BrandSettings {
   searchPanelBackgroundColor: string;
   searchPanelTextColor: string;
   mobileMenuIsPublished: boolean;
+  mobileBottomMenuIsPublished: boolean;
   mobileMenuVariant: MobileMenuVariant;
   mobileMenuViewStyle: MobileMenuViewStyle;
   mobileMenuGridLayout: MobileMenuGridLayout;
   mobileMainMenuItems: MobileMenuItem[];
   mobileMenuItems: MobileMenuItem[];
+  dashboardFooterMenuIsPublished: boolean;
   createdAt?: string;
   updatedAt?: string;
 }

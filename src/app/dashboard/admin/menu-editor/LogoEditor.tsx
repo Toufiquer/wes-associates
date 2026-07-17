@@ -362,8 +362,8 @@ export default function LogoEditor({ config, setConfig }: LogoEditorProps) {
 
   return (
     <div className="backdrop-blur-xl bg-white/10 border border-white/60 p-4 rounded-sm shadow-2xl">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-        <div className="space-y-8">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12">
+        <div>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/70 flex items-center gap-2">
@@ -371,9 +371,7 @@ export default function LogoEditor({ config, setConfig }: LogoEditorProps) {
               </label>
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-2 rounded-sm border border-white/20 bg-white/5 px-3 py-2">
-                  <span className="text-[9px] font-black uppercase tracking-[0.2em] text-white/60">
-                    {config.logoIsPublished ? 'Visible' : 'Hidden'}
-                  </span>
+                  <span className="text-[9px] font-black uppercase tracking-[0.2em] text-white/60">{config.logoIsPublished ? 'Visible' : 'Hidden'}</span>
                   <Switch
                     checked={config.logoIsPublished}
                     onCheckedChange={value => setConfig(p => ({ ...p, logoIsPublished: value }))}
@@ -426,70 +424,6 @@ export default function LogoEditor({ config, setConfig }: LogoEditorProps) {
             </Dialog>
           </div>
 
-          <div className="space-y-4 rounded-sm border border-white/10 bg-white/5 p-4">
-            <div className="flex items-center justify-between gap-3">
-              <div>
-                <h3 className="text-sm font-black uppercase tracking-[0.2em] text-white/80">Logo Position</h3>
-                <p className="mt-1 text-[10px] font-bold uppercase tracking-widest text-white/40">Use negative values for left/up and positive values for right/down.</p>
-              </div>
-              <Button
-                variant="outlineGlassy"
-                size="sm"
-                onClick={() =>
-                  setConfig(p => ({
-                    ...p,
-                    logoDesktopOffsetX: 0,
-                    logoDesktopOffsetY: 0,
-                    logoMobileOffsetX: 0,
-                    logoMobileOffsetY: 0,
-                  }))
-                }
-              >
-                Reset
-              </Button>
-            </div>
-
-            <div className="grid gap-4">
-              {offsetGroups.map(group => (
-                <div key={group.title} className="space-y-4 rounded-sm border border-white/10 bg-black/10 p-4">
-                  <div>
-                    <h4 className="text-xs font-black uppercase tracking-[0.2em] text-white">{group.title}</h4>
-                    <p className="mt-1 text-[10px] font-bold uppercase tracking-widest text-white/40">{group.description}</p>
-                  </div>
-
-                  {[
-                    { label: 'Left / Right', key: group.xKey, helper: 'Negative = left, positive = right' },
-                    { label: 'Up / Down', key: group.yKey, helper: 'Negative = up, positive = down' },
-                  ].map(item => {
-                    const value = Number(config[item.key] || 0);
-
-                    return (
-                      <div key={item.key} className="space-y-2">
-                        <div className="flex items-center justify-between gap-3">
-                          <div>
-                            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/70">{item.label}</label>
-                            <p className="text-[9px] font-bold uppercase tracking-widest text-white/35">{item.helper}</p>
-                          </div>
-                          <div className="flex h-9 w-24 overflow-hidden rounded-sm border border-white/20 bg-white/5">
-                            <Input
-                              type="number"
-                              min={-120}
-                              max={120}
-                              value={value}
-                              onChange={e => updateOffset(item.key, Number(e.target.value))}
-                              className="h-full rounded-none border-0 bg-transparent px-2 text-right text-xs font-black text-white"
-                            />
-                            <span className="flex items-center pr-2 text-[10px] font-bold text-white/40">px</span>
-                          </div>
-                        </div>
-                        <Slider value={[value]} min={-120} max={120} step={1} onValueChange={v => updateOffset(item.key, v[0])} />
-                      </div>
-                    );
-                  })}
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
 
         <div className="space-y-10">
@@ -559,6 +493,73 @@ export default function LogoEditor({ config, setConfig }: LogoEditorProps) {
               ))}
             </div>
           </div>
+        </div>
+      </div>
+
+      <div className="mt-8 space-y-4 rounded-sm border border-white/10 bg-white/5 p-4">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h3 className="text-sm font-black uppercase tracking-[0.2em] text-white/80">Logo Position</h3>
+            <p className="mt-1 text-[10px] font-bold uppercase tracking-widest text-white/40">
+              Use negative values for left/up and positive values for right/down.
+            </p>
+          </div>
+          <Button
+            variant="outlineGlassy"
+            size="sm"
+            onClick={() =>
+              setConfig(p => ({
+                ...p,
+                logoDesktopOffsetX: 0,
+                logoDesktopOffsetY: 0,
+                logoMobileOffsetX: 0,
+                logoMobileOffsetY: 0,
+              }))
+            }
+          >
+            Reset
+          </Button>
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+          {offsetGroups.map(group => (
+            <div key={group.title} className="space-y-4 rounded-sm border border-white/10 bg-black/10 p-4">
+              <div>
+                <h4 className="text-xs font-black uppercase tracking-[0.2em] text-white">{group.title}</h4>
+                <p className="mt-1 text-[10px] font-bold uppercase tracking-widest text-white/40">{group.description}</p>
+              </div>
+
+              {[
+                { label: 'Left / Right', key: group.xKey, helper: 'Negative = left, positive = right' },
+                { label: 'Up / Down', key: group.yKey, helper: 'Negative = up, positive = down' },
+              ].map(item => {
+                const value = Number(config[item.key] || 0);
+
+                return (
+                  <div key={item.key} className="space-y-2">
+                    <div className="flex items-center justify-between gap-3">
+                      <div>
+                        <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/70">{item.label}</label>
+                        <p className="text-[9px] font-bold uppercase tracking-widest text-white/35">{item.helper}</p>
+                      </div>
+                      <div className="flex h-9 w-24 overflow-hidden rounded-sm border border-white/20 bg-white/5">
+                        <Input
+                          type="number"
+                          min={-120}
+                          max={120}
+                          value={value}
+                          onChange={e => updateOffset(item.key, Number(e.target.value))}
+                          className="h-full rounded-none border-0 bg-transparent px-2 text-right text-xs font-black text-white"
+                        />
+                        <span className="flex items-center pr-2 text-[10px] font-bold text-white/40">px</span>
+                      </div>
+                    </div>
+                    <Slider value={[value]} min={-120} max={120} step={1} onValueChange={v => updateOffset(item.key, v[0])} />
+                  </div>
+                );
+              })}
+            </div>
+          ))}
         </div>
       </div>
     </div>

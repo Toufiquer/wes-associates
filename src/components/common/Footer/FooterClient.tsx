@@ -13,6 +13,7 @@ import { AlertTriangle } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 
 import { AllFooter } from '@/components/all-footer/all-footer-index/all-footer';
+import MobileNaviation from './MobileNaviation';
 
 interface DisabledPath {
   path: string;
@@ -46,19 +47,22 @@ const FooterClient: React.FC<FooterClientProps> = ({ initialFooter }) => {
 
   if (!initialFooter || !initialFooter.data) {
     return (
-      <div className="w-full py-12 bg-neutral-950 border-t border-neutral-800 flex items-center justify-center text-neutral-400">
-        <div className="flex flex-col items-center gap-2">
-          <AlertTriangle size={24} className="text-amber-500" />
-          <p className="text-sm font-medium">Footer not configured</p>
+      <>
+        <div className="w-full py-12 bg-neutral-950 border-t border-neutral-800 flex items-center justify-center text-neutral-400">
+          <div className="flex flex-col items-center gap-2">
+            <AlertTriangle size={24} className="text-amber-500" />
+            <p className="text-sm font-medium">Footer not configured</p>
+          </div>
         </div>
-      </div>
+        <MobileNaviation />
+      </>
     );
   }
 
   const isPathDisabled = initialFooter.disabledPaths?.some(rule => rule.isExcluded && rule.path === pathname);
 
   if (isPathDisabled) {
-    return null;
+    return <MobileNaviation />;
   }
 
   const { templateKey, content } = initialFooter.data;
@@ -68,17 +72,25 @@ const FooterClient: React.FC<FooterClientProps> = ({ initialFooter }) => {
 
   if (!TemplateConfig || !TemplateConfig.query) {
     return (
-      <div className="w-full py-12 bg-neutral-950 border-t border-neutral-800 flex items-center justify-center text-neutral-400">
-        <p>
-          Template <strong>{templateKey}</strong> not found.
-        </p>
-      </div>
+      <>
+        <div className="w-full py-12 bg-neutral-950 border-t border-neutral-800 flex items-center justify-center text-neutral-400">
+          <p>
+            Template <strong>{templateKey}</strong> not found.
+          </p>
+        </div>
+        <MobileNaviation />
+      </>
     );
   }
 
   const QueryComponent = TemplateConfig.query;
 
-  return <QueryComponent data={content} />;
+  return (
+    <>
+      <QueryComponent data={content} />
+      <MobileNaviation />
+    </>
+  );
 };
 
 export default FooterClient;

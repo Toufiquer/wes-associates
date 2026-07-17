@@ -10,13 +10,11 @@
 
 import {
   Type,
-  Layers,
   Upload,
   Anchor,
   Loader2,
   Palette,
   Activity,
-  StarIcon,
   RotateCcw,
   GlassWater,
   ChevronRight,
@@ -31,7 +29,8 @@ import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Slider } from '@/components/ui/slider';
 import { TooltipProvider } from '@/components/ui/tooltip';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { Tabs, TabsContent } from '@/components/ui/tabs';
+import { iconMap, iconOptions } from '@/components/all-icons/all-icons-jsx';
 
 import LogoEditor from './LogoEditor';
 
@@ -61,6 +60,7 @@ export interface BrandConfiguration {
   menuSticky: boolean;
   menuPosition: NavigationPosition;
   menuButtonMode: MenuButtonMode;
+  menuButtonIconName: string;
   menuButtonContactText: string;
   menuButtonContactLink: string;
   menuButtonBackgroundColor: string;
@@ -90,6 +90,7 @@ const defaultBrandConfig: BrandConfiguration = {
   menuSticky: true,
   menuPosition: 'fixed',
   menuButtonMode: 'auth',
+  menuButtonIconName: '',
   menuButtonContactText: 'Contact Me',
   menuButtonContactLink: '/contact',
   menuButtonBackgroundColor: '#ffffff',
@@ -147,19 +148,23 @@ const buttonPaddingXValues: Record<MenuButtonPadding, string> = {
   '2xl': '40px',
 };
 
-export default function PrimaryMenuEditor() {
+export type PrimaryMenuSection = 'brand' | 'menu' | 'button';
+
+export default function PrimaryMenuEditor({ activeSection }: { activeSection: PrimaryMenuSection }) {
   const [config, setConfig] = useState<BrandConfiguration>(defaultBrandConfig);
   const [isSaving, setIsSaving] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('brand');
+  const SelectedButtonIcon = config.menuButtonIconName ? iconMap[config.menuButtonIconName] || MousePointer2 : MousePointer2;
 
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        const res = await fetch('/api/menu/primary-menu');
-        if (res.ok) {
-          const data = await res.json();
-          if (data?.brandName) setConfig(p => ({ ...p, ...data }));
+        const res = await fetch('/api/menu/primary-menu', { cache: 'no-store' });
+        if (!res.ok) throw new Error('Failed to fetch primary menu settings');
+        const payload = await res.json();
+        const settings = payload?.data && typeof payload.data === 'object' ? payload.data : payload;
+        if (settings && typeof settings === 'object') {
+          setConfig({ ...defaultBrandConfig, ...(settings as Partial<BrandConfiguration>) });
         }
       } catch {
         toast.error('Sync failed');
@@ -173,11 +178,17 @@ export default function PrimaryMenuEditor() {
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      await fetch('/api/menu/primary-menu', {
+      const response = await fetch('/api/menu/primary-menu', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(config),
       });
+      if (!response.ok) throw new Error('Update failed');
+      const payload = await response.json();
+      const settings = payload?.data && typeof payload.data === 'object' ? payload.data : payload;
+      if (settings && typeof settings === 'object') {
+        setConfig(prev => ({ ...prev, ...(settings as Partial<BrandConfiguration>) }));
+      }
       window.dispatchEvent(new Event('brand-settings-updated'));
       toast.success('Settings Synced Successfully');
     } catch {
@@ -206,32 +217,8 @@ export default function PrimaryMenuEditor() {
         <div className="container mx-auto relative z-10 p-4 max-w-7xl">
           <ToastContainer position="bottom-right" theme="dark" hideProgressBar />
 
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <header className="flex flex-col md:flex-row justify-between items-center gap-6 transition-all mb-8">
-              <div className="backdrop-blur-xl bg-white/10 border border-white/40 p-1 rounded-sm shadow-2xl sticky top-8 w-full md:w-auto">
-                <TabsList className="flex w-full h-auto bg-transparent gap-1 p-0">
-                  <TabsTrigger
-                    value="brand"
-                    className="w-full justify-center gap-4 px-5 py-2 rounded-sm data-[state=active]:bg-white/10 data-[state=active]:text-white data-[state=active]:border data-[state=active]:border-white/40 text-white/40 hover:text-white/80 transition-all text-xs font-bold uppercase tracking-tight"
-                  >
-                    <StarIcon className="w-4 h-4" /> Branding
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="menu"
-                    className="w-full justify-center gap-4 px-5 py-2 rounded-sm data-[state=active]:bg-white/10 data-[state=active]:text-white data-[state=active]:border data-[state=active]:border-white/40 text-white/40 hover:text-white/80 transition-all text-xs font-bold uppercase tracking-tight"
-                  >
-                    <Layers className="w-4 h-4" /> Theme
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="button"
-                    className="w-full justify-center gap-4 px-5 py-2 rounded-sm data-[state=active]:bg-white/10 data-[state=active]:text-white data-[state=active]:border data-[state=active]:border-white/40 text-white/40 hover:text-white/80 transition-all text-xs font-bold uppercase tracking-tight"
-                  >
-                    <MousePointer2 className="w-4 h-4" /> Button
-                  </TabsTrigger>
-                </TabsList>
-              </div>
-
-              <div className="flex items-center gap-3 w-full md:w-auto justify-end">
+          <Tabs value={activeSection} className="w-full">
+            <header className="mb-8 flex items-center justify-end gap-3 transition-all">
                 <Button size="sm" onClick={() => setConfig(defaultBrandConfig)} variant="outlineGlassy">
                   <RotateCcw className="w-3.5 h-3.5 mr-2" /> Reset
                 </Button>
@@ -244,12 +231,11 @@ export default function PrimaryMenuEditor() {
                     </>
                   )}
                 </Button>
-              </div>
             </header>
 
             <AnimatePresence mode="wait">
               <motion.div
-                key={activeTab}
+                key={activeSection}
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
@@ -520,6 +506,29 @@ export default function PrimaryMenuEditor() {
 
                     <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
                       <div className="flex flex-col gap-6 rounded-sm border border-white/10 bg-white/5 p-8 hover:border-white/40 transition-all">
+                        <div className="space-y-3">
+                          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/70">Button Icon</label>
+                          <div className="flex items-center gap-3">
+                            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-sm border border-white/20 bg-white/10">
+                              <SelectedButtonIcon className="h-5 w-5 text-white" />
+                            </div>
+                            <select
+                              value={config.menuButtonIconName}
+                              onChange={e => setConfig(p => ({ ...p, menuButtonIconName: e.target.value }))}
+                              className="h-12 w-full rounded-sm border border-white/20 bg-white/5 px-4 text-xs font-black text-white outline-none focus:border-white/40"
+                            >
+                              <option value="" className="bg-slate-900">
+                                Automatic (Based on mode)
+                              </option>
+                              {iconOptions.map(iconName => (
+                                <option key={iconName} value={iconName} className="bg-slate-900">
+                                  {iconName}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        </div>
+
                         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                           <div className="space-y-3">
                             <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/70">Button Background</label>
@@ -638,7 +647,7 @@ export default function PrimaryMenuEditor() {
                             borderColor: config.menuButtonBackgroundTransparent ? config.menuButtonTextColor : 'transparent',
                           }}
                         >
-                          <MousePointer2 className="h-4 w-4" />
+                          <SelectedButtonIcon className="h-4 w-4" />
                           {config.menuButtonMode === 'contact' ? config.menuButtonContactText || 'Contact Me' : config.menuButtonMode === 'account' ? 'Account' : 'Login / Dashboard'}
                         </button>
                       </div>

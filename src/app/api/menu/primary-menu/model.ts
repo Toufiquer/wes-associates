@@ -46,6 +46,7 @@ export interface IPrimaryMenuSettings extends Document {
   menuSticky?: boolean;
   menuPosition?: NavigationPosition;
   menuButtonMode?: MenuButtonMode;
+  menuButtonIconName?: string;
   menuButtonContactText?: string;
   menuButtonContactLink?: string;
   menuButtonBackgroundColor?: string;

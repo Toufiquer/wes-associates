@@ -17,6 +17,7 @@ export interface IDashboardFooterMenuItem {
 }
 
 export interface IMobileDashboardFooterMenuSettings extends Document {
+  dashboardFooterMenuIsPublished?: boolean;
   dashboardFooterMenuItems?: IDashboardFooterMenuItem[];
 }
 

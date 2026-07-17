@@ -680,7 +680,7 @@ function EditPageContent() {
                     </div>
 
                     {isSectionMode && (
-                      <div className="px-6 pb-0 flex overflow-x-auto no-scrollbar gap-2">
+                      <div className="px-6 -mt-6 pb-0 flex overflow-x-auto no-scrollbar gap-2">
                         {sectionCategories.map(cat => (
                           <button
                             key={cat}
@@ -712,7 +712,7 @@ function EditPageContent() {
                               key={key}
                               className="group relative bg-white/10 border border-white/20 rounded-sm overflow-hidden hover:border-white/40 hover:shadow-2xl transition-all duration-300 flex flex-col h-[calc(62vh)] min-h-100"
                             >
-                              <ScrollArea className="flex-1 h-105 w-ful">
+                              <ScrollArea className="flex-1 h-100 w-ful">
                                 {PreviewComp ? <PreviewComp data={JSON.stringify(config.data)} /> : <div className="text-slate-600">No Preview</div>}
                               </ScrollArea>
 
@@ -796,7 +796,7 @@ function EditPageContent() {
                   </div>
 
                   {totalPages > 1 && (
-                    <div className="shrink-0 p-4 border-t border-white/10 bg-white/10 backdrop-blur-md flex items-center justify-between z-20">
+                    <div className="shrink-0 p-4 border-t border-white/10 bg-white/10 backdrop-blur-md flex items-center justify-between z-20 py-2">
                       <div className="text-xs text-slate-300 font-mono hidden sm:block">
                         Showing {(paginationPage - 1) * ITEMS_PER_PAGE + 1} - {Math.min(paginationPage * ITEMS_PER_PAGE, totalItems)} of {totalItems}
                       </div>
@@ -850,7 +850,7 @@ function EditPageContent() {
                       </Button>
                     </div>
                   </div>
-                  <ScrollArea className="h-[70vh] w-full bg-black -mt-4">
+                  <ScrollArea className="h-[68vh] w-full bg-black -mt-4">
                     <div className="min-h-full flex flex-col">
                       {QueryComp ? (
                         <QueryComp data={JSON.stringify(config.data)} />

@@ -17,7 +17,6 @@ import { AllPages, AllPagesKeys } from '@/components/all-pages/all-page-index/al
 import { AllAssets, AllAssetsKeys } from '@/components/all-assets/all-assets-index/all-page';
 
 import { getAllPages } from './api/page-builder/v1/controller';
-import WesAssociates from './WesAssociates';
 
 interface PageApiResponse {
   data: {
@@ -138,8 +137,7 @@ export default async function HomePage() {
   const homePage = pages.find(p => p.path === '/');
 
   if (!homePage) {
-    return <WesAssociates />;
-    // notFound();
+    notFound();
   }
 
   const items: PageContent[] = Array.isArray(homePage.content) ? homePage.content : [];
@@ -160,7 +158,6 @@ export default async function HomePage() {
           ))}
         </div>
       )}
-      <WesAssociates />
     </main>
   );
 }

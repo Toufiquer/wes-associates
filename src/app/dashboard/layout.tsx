@@ -187,6 +187,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [expandedItem, setExpandedItem] = useState<number | null>(null);
   const [loadingLogout, setLoadingLogout] = useState(false);
+  const [dashboardFooterMenuIsPublished, setDashboardFooterMenuIsPublished] = useState(true);
   const [dashboardFooterMenuItems, setDashboardFooterMenuItems] = useState<DashboardFooterMenuItem[]>(defaultDashboardFooterMenuItems);
 
   const pathname = usePathname();
@@ -210,6 +211,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
         const response = await fetch('/api/menu/mobile-dashboard-footer-menu', { cache: 'no-store' });
         if (!response.ok) return;
         const settings = await response.json();
+        setDashboardFooterMenuIsPublished(settings.dashboardFooterMenuIsPublished !== false);
         setDashboardFooterMenuItems(normalizeDashboardFooterMenuItems(settings.dashboardFooterMenuItems));
       } catch (error) {
         console.error('Failed to fetch dashboard footer menu:', error);
@@ -330,13 +332,18 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
         </ScrollArea>
       </motion.aside>
 
-      <motion.main initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="flex-1 md:pb-0 pb-20 text-white">
+      <motion.main
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className={`flex-1 text-white md:pb-0 ${dashboardFooterMenuIsPublished ? 'pb-20' : 'pb-0'}`}
+      >
         <ScrollArea className="w-full h-[calc(100vh-65px)]">
           <HasAccess>{children}</HasAccess>
         </ScrollArea>
       </motion.main>
 
-      <div className="md:hidden fixed bottom-0 left-0 w-full bg-white/10 backdrop-blur-xl border-t border-white/20 flex justify-between items-center px-4 py-3 text-white z-40">
+      {dashboardFooterMenuIsPublished && <div className="md:hidden fixed bottom-0 left-0 w-full bg-white/10 backdrop-blur-xl border-t border-white/20 flex justify-between items-center px-4 py-3 text-white z-40">
         <DashboardFooterLinkItem item={homeFooterItem} />
 
         {centerFooterItems.map(item => (
@@ -403,7 +410,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
             )}
           </SheetContent>
         </Sheet>
-      </div>
+      </div>}
     </div>
   );
 };

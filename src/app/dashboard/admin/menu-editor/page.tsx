@@ -63,11 +63,8 @@ import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, v
 
 import PrimaryMenuEditor from './PrimaryMenuEditor';
 import CartLinkEditor from './CartLinkEditor';
-import MobileBottomMenuEditor from './MobileBottomMenuEditor';
 import MobileMainMenuEditor from './MobileMainMenuEditor';
 import SearchMenuButtonEditor from './SearchMenuButtonEditor';
-import TopBannerEditor from './TopBannerEditor';
-import MobileFooterDashboardMenuEditor from '../../menu-editor/MobileFooterDashboardMenuEditor';
 
 interface SidebarItem {
   id: number;
@@ -91,7 +88,7 @@ interface DragState {
 }
 
 type DeviceType = 'mobile' | 'tablet' | 'desktop';
-type TopEditorTab = 'logo' | 'banner' | 'cart' | 'search' | 'mobile-menu' | 'mobile-nav' | 'dashboard-footer';
+type TopEditorTab = 'branding' | 'theme' | 'button' | 'cart' | 'search' | 'mobile-menu';
 
 const createImage = (url: string): Promise<HTMLImageElement> =>
   new Promise((resolve, reject) => {
@@ -668,7 +665,7 @@ export default function SiteMenuPage() {
   const [collapsedItems, setCollapsedItems] = useState<Set<number>>(new Set());
   const [iconSearch, setIconSearch] = useState('');
 
-  const [activeTopEditor, setActiveTopEditor] = useState<TopEditorTab | null>(null);
+  const [activeTopEditor, setActiveTopEditor] = useState<TopEditorTab | null>('branding');
 
   useEffect(() => {
     if (menuData?.data?.items) {
@@ -1189,13 +1186,12 @@ export default function SiteMenuPage() {
 
             <div className="flex flex-wrap gap-2 w-full lg:w-auto">
               {[
-                { key: 'logo' as const, label: 'Logo' },
-                { key: 'banner' as const, label: 'Banner' },
-                { key: 'cart' as const, label: 'Cart' },
-                { key: 'search' as const, label: 'Search' },
+                { key: 'branding' as const, label: 'Branding-Logo' },
+                { key: 'theme' as const, label: 'Theme' },
+                { key: 'button' as const, label: 'Button' },
+                // { key: 'cart' as const, label: 'Cart' },
+                // { key: 'search' as const, label: 'Search' },
                 { key: 'mobile-menu' as const, label: 'Mobile Menu' },
-                { key: 'mobile-nav' as const, label: 'Mobile Nav' },
-                { key: 'dashboard-footer' as const, label: 'Dashboard Footer' },
               ].map(tab => (
                 <Button
                   key={tab.key}
@@ -1222,29 +1218,15 @@ export default function SiteMenuPage() {
         </div>
 
         <AnimatePresence>
-          {activeTopEditor === 'logo' && (
+          {(activeTopEditor === 'branding' || activeTopEditor === 'theme' || activeTopEditor === 'button') && (
             <motion.div
-              key="logo-editor"
+              key="primary-menu-editor"
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               className="overflow-hidden"
             >
-              <PrimaryMenuEditor />
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        <AnimatePresence>
-          {activeTopEditor === 'banner' && (
-            <motion.div
-              key="banner-editor"
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              className="overflow-hidden"
-            >
-              <TopBannerEditor />
+              <PrimaryMenuEditor activeSection={activeTopEditor === 'branding' ? 'brand' : activeTopEditor === 'theme' ? 'menu' : 'button'} />
             </motion.div>
           )}
         </AnimatePresence>
@@ -1287,34 +1269,6 @@ export default function SiteMenuPage() {
               className="overflow-hidden"
             >
               <MobileMainMenuEditor />
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        <AnimatePresence>
-          {activeTopEditor === 'mobile-nav' && (
-            <motion.div
-              key="mobile-nav-editor"
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              className="overflow-hidden"
-            >
-              <MobileBottomMenuEditor />
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        <AnimatePresence>
-          {activeTopEditor === 'dashboard-footer' && (
-            <motion.div
-              key="dashboard-footer-editor"
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              className="overflow-hidden"
-            >
-              <MobileFooterDashboardMenuEditor />
             </motion.div>
           )}
         </AnimatePresence>

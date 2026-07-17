@@ -33,11 +33,11 @@ import React, { useState, useEffect, useMemo, useRef } from 'react';
 
 import { useSession } from '@/lib/auth-client';
 import { ASSET_CART_UPDATED_EVENT, getAssetCart } from '@/lib/asset-cart';
+import { iconMap as sharedIconMap } from '@/components/all-icons/all-icons-jsx';
 
 import TopBanner, { TopBannerBrandConfig } from './TopBanner';
 import CartLink from './CartLink';
 import PrimaryMenu from './PrimaryMenu';
-import MobileBottomMenu from './MobileBottomMenu';
 import MobileMainMenu from './MobileMainMenu';
 import SearchMenuButton from './SearchMenuButton';
 
@@ -89,6 +89,7 @@ interface BrandConfiguration extends TopBannerBrandConfig {
   menuSticky: boolean;
   menuPosition?: NavigationPosition;
   menuButtonMode?: MenuButtonMode;
+  menuButtonIconName?: string;
   menuButtonContactText?: string;
   menuButtonContactLink?: string;
   menuButtonBackgroundColor?: string;
@@ -113,6 +114,7 @@ interface BrandConfiguration extends TopBannerBrandConfig {
   searchPanelBackgroundColor?: string;
   searchPanelTextColor?: string;
   mobileMenuIsPublished?: boolean;
+  mobileBottomMenuIsPublished?: boolean;
   mobileMenuVariant?: MobileMenuVariant;
   mobileMenuViewStyle?: MobileMenuViewStyle;
   mobileMenuGridLayout?: MobileMenuGridLayout;
@@ -301,7 +303,8 @@ const MenuActionButton = ({
   const isAccountMode = config.menuButtonMode === 'account';
   const href = isAccountMode ? '/account' : isContactMode ? config.menuButtonContactLink || '/contact' : isLoggedIn ? '/dashboard' : '/login';
   const label = isAccountMode ? 'Account' : isContactMode ? config.menuButtonContactText || 'Contact Me' : isLoggedIn ? 'Dashboard' : 'Login';
-  const Icon = isAccountMode ? User : isContactMode ? Phone : isLoggedIn ? LayoutDashboard : LogIn;
+  const fallbackIcon = isAccountMode ? User : isContactMode ? Phone : isLoggedIn ? LayoutDashboard : LogIn;
+  const Icon = config.menuButtonIconName ? sharedIconMap[config.menuButtonIconName] || fallbackIcon : fallbackIcon;
   const textColor = config.menuButtonTextColor || config.menuBackgroundColor;
   const backgroundColor = config.menuButtonBackgroundTransparent ? 'transparent' : config.menuButtonBackgroundColor || config.textColor;
   const radiusClass = menuButtonRadiusClass[config.menuButtonRadius || 'full'];
@@ -554,7 +557,6 @@ const MenuClient: React.FC<MenuClientProps> = ({ initialBrandConfig, initialMenu
           )}
         </AnimatePresence>
       </nav>
-      <MobileBottomMenu config={brandConfig} pathname={pathname || '/'} cartQuantity={cartQuantity} />
     </>
   );
 };

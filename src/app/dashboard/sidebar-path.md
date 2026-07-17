@@ -29,6 +29,9 @@
 => Sidebar
 -> /dashboard/admin/sidebar
 
+=> Top Banner
+-> /dashboard/admin/top-banner
+
 => Users
 -> /dashboard/admin/users
 

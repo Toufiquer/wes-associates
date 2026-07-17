@@ -9,10 +9,12 @@
 import { UploadThingError } from 'uploadthing/server';
 import { createUploadthing, type FileRouter } from 'uploadthing/next';
 
+import { auth as betterAuth } from '@/lib/auth';
+
 const f = createUploadthing();
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const auth = async (req: Request) => {
-  return { id: 'fakeUserId' };
+  const session = await betterAuth.api.getSession({ headers: req.headers });
+  return session?.user ? { id: session.user.id } : null;
 };
 
 export const ourFileRouter = {

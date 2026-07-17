@@ -45,8 +45,8 @@ I want to saparage the file for better understanding. Now please seaparate it as
               'src/app/api/menu/cart-link/model.ts'
               'src/app/api/menu/cart-link/route.ts'
 
-3. MobileBottomMenuEditor.tsx
-    Admin   - 'src/app/dashboard/admin/menu-editor/MobileBottomMenuEditor.tsx',
+3. MobileNaviation.tsx
+    Admin   - 'src/app/dashboard/admin/footer-editor/MobileNaviation.tsx',
     Client  - 'src/components/common/Menu/MobileBottomMenu.tsx',
     api     - 'src/app/api/menu/mobile-bottom-menu/controller.ts'
               'src/app/api/menu/mobile-bottom-menu/model.ts'

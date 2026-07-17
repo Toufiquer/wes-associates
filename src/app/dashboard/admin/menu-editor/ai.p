@@ -1,12 +1,8 @@
-Look at the file 'src/app/dashboard/admin/menu-editor/'
+Look at the file 'src/app/dashboard/admin/menu-editor/page.tsx'
 
-1. 'src/app/dashboard/admin/menu-editor/PrimaryMenuEditor.tsx'
+Inside the Logo tab you found 3 sub tabs 
+    - Branding
+    - Theme
+    - Button
 
-2. 'src/app/api/menu/primary-menu/controller.ts'
-2. 'src/app/api/menu/primary-menu/model.ts'
-3. 'src/app/api/menu/primary-menu/route.ts'
-
-4. 'src/components/common/menu/PrimaryMenu.tsx'
-
-
-You found a tab named Logo. Now please create a new file name 'LogoEditor.tsx' and move logo tabs.
+Now move them on the main tabs

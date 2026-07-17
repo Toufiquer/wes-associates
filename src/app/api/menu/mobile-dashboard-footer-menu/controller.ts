@@ -7,6 +7,7 @@
 import MobileDashboardFooterMenuSettings, { IMobileDashboardFooterMenuSettings } from './model';
 
 export const DEFAULT_MOBILE_DASHBOARD_FOOTER_MENU = {
+  dashboardFooterMenuIsPublished: true,
   dashboardFooterMenuItems: [
     { id: 1, logo: 'Home', name: 'Home', path: '/dashboard', action: 'link' },
     { id: 2, logo: 'Package', name: 'Products', path: '/dashboard/assets/products', action: 'link' },
@@ -15,7 +16,7 @@ export const DEFAULT_MOBILE_DASHBOARD_FOOTER_MENU = {
   ],
 };
 
-const mobileDashboardFooterMenuFields = ['dashboardFooterMenuItems'] as const;
+const mobileDashboardFooterMenuFields = ['dashboardFooterMenuIsPublished', 'dashboardFooterMenuItems'] as const;
 
 export const getMobileDashboardFooterMenu = async () => {
   const settings = await MobileDashboardFooterMenuSettings.findOne().lean();

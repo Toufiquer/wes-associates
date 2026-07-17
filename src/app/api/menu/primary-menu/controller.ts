@@ -10,9 +10,9 @@ import { NextResponse } from 'next/server';
 import connectToDB from '@/app/api/utils/mongoose';
 
 import { DEFAULT_CART_LINK } from '../cart-link/controller';
-import { DEFAULT_TOP_BANNER } from '../top-banner/controller';
+import { DEFAULT_TOP_BANNER } from '../../top-banner/controller';
 import { DEFAULT_MOBILE_MAIN_MENU } from '../mobile-main-menu/controller';
-import { DEFAULT_MOBILE_BOTTOM_MENU } from '../mobile-bottom-menu/controller';
+import { DEFAULT_MOBILE_BOTTOM_MENU } from '../../footer-settings/mobile-bottom-menu/v1/controller';
 import { DEFAULT_SEARCH_MENU_BUTTON } from '../search-menu-button/controller';
 import Menu, { BrandSettings, IPrimaryMenuSettings } from './model';
 
@@ -35,6 +35,7 @@ const DEFAULT_SETTINGS = {
   menuSticky: true,
   menuPosition: 'fixed',
   menuButtonMode: 'auth',
+  menuButtonIconName: '',
   menuButtonContactText: 'Contact Me',
   menuButtonContactLink: '/contact',
   menuButtonBackgroundColor: '#ffffff',
@@ -69,6 +70,7 @@ const primaryMenuFields = [
   'menuSticky',
   'menuPosition',
   'menuButtonMode',
+  'menuButtonIconName',
   'menuButtonContactText',
   'menuButtonContactLink',
   'menuButtonBackgroundColor',
