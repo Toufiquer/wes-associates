@@ -140,6 +140,7 @@ const ClientSection7: React.FC<Section7Props> = ({ data }) => {
                 <ArrowRight className="ml-2 w-5 h-5" />
               </a>
               <a
+                target="_blank"
                 href={sectionData.websiteUrl || '#'}
                 className="inline-flex items-center justify-center px-8 py-4 bg-white text-slate-700 text-lg font-bold rounded-2xl border border-slate-200 hover:bg-slate-50 hover:border-slate-300 transition-all duration-300 group"
               >

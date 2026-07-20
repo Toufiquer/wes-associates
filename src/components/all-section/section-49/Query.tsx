@@ -5,9 +5,15 @@
 */
 
 import Link from 'next/link';
+import localFont from 'next/font/local';
 import { ArrowRight } from 'lucide-react';
 
 import { defaultDataSection49, type ISection49Data, type Section49Props } from './data';
+
+const liAlinurBanglaborno = localFont({
+  src: './Li Alinur Banglaborno ANSI V2 Italic.ttf',
+  display: 'swap',
+});
 
 const getSectionData = (data?: ISection49Data | string): ISection49Data => {
   if (!data) return defaultDataSection49;
@@ -38,16 +44,15 @@ const QuerySection49 = ({ data }: Section49Props) => {
     >
       <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_center,rgba(250,250,249,0.2),rgba(250,250,249,0.58)_72%)]" />
 
-      <div
-        className="mx-auto w-full max-w-[1040px] text-center"
-        style={{ fontFamily: "'Noto Sans Bengali', 'Hind Siliguri', 'Nirmala UI', sans-serif" }}
-      >
+      <div className="mx-auto w-full max-w-[1040px] text-center" style={{ fontFamily: "'Noto Sans Bengali', 'Hind Siliguri', 'Nirmala UI', sans-serif" }}>
         <h1 className="font-black leading-[0.98] tracking-[-0.045em]" style={{ color: sectionData.headingColor }}>
-          <span className="block text-[clamp(3.1rem,6vw,5.25rem)]">{sectionData.titleLineOne}</span>
+          <span className={`${liAlinurBanglaborno.className} block text-[clamp(3.1rem,6vw,5.25rem)]`}>{sectionData.titleLineOne}</span>
           <span className="mt-5 block text-[clamp(3rem,6.5vw,5.5rem)] sm:mt-6">
             <span className="font-sans tracking-[-0.055em]">{sectionData.titleEnglish}</span>
-            <span className="text-slate-600">{sectionData.titleEnglishSuffix}</span>{' '}
-            <span style={{ color: sectionData.accentColor }}>{sectionData.titleHighlight}</span>
+            <span className={`${liAlinurBanglaborno.className} text-slate-600`}>{sectionData.titleEnglishSuffix}</span>{' '}
+            <span className={liAlinurBanglaborno.className} style={{ color: sectionData.accentColor }}>
+              {sectionData.titleHighlight}
+            </span>
           </span>
         </h1>
 
@@ -55,13 +60,13 @@ const QuerySection49 = ({ data }: Section49Props) => {
           className="mx-auto mt-12 max-w-[790px] text-[clamp(1rem,1.55vw,1.35rem)] font-medium leading-[1.55] sm:mt-14"
           style={{ color: sectionData.descriptionColor }}
         >
-          <strong className="font-extrabold" style={{ color: sectionData.headingColor }}>
+          <strong className={`${liAlinurBanglaborno.className} font-extrabold`} style={{ color: sectionData.headingColor }}>
             {sectionData.descriptionLead}
           </strong>{' '}
           <strong className="font-extrabold" style={{ color: sectionData.accentColor }}>
             {sectionData.descriptionAccent}
           </strong>{' '}
-          {sectionData.descriptionTail}
+          <span className={liAlinurBanglaborno.className}>{sectionData.descriptionTail}</span>
         </p>
 
         <div className="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-6">

@@ -17,6 +17,7 @@ import { AllPages, AllPagesKeys } from '@/components/all-pages/all-page-index/al
 import { AllAssets, AllAssetsKeys } from '@/components/all-assets/all-assets-index/all-page';
 
 import { getAllPages } from './api/page-builder/v1/controller';
+import HomeComponent from './HomeComponent';
 
 interface PageApiResponse {
   data: {
@@ -144,7 +145,8 @@ export default async function HomePage() {
 
   return (
     <main className="min-h-screen w-full bg-slate-950  ">
-      {items.length === 0 ? (
+      <HomeComponent />
+      {/* {items.length === 0 ? (
         <div>
           <div className="min-h-[50vh] flex flex-col items-center justify-center text-slate-500 space-y-4">
             <p className="text-lg font-medium">Home Page Found 2.0</p>
@@ -157,7 +159,7 @@ export default async function HomePage() {
             <SSRItemRenderer key={item.id || index} item={item} />
           ))}
         </div>
-      )}
+      )} */}
     </main>
   );
 }
