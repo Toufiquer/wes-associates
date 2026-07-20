@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { toast, ToastContainer } from 'react-toastify';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Noto_Sans } from 'next/font/google';
 import React, { useState, useEffect } from 'react';
 
 import { Input } from '@/components/ui/input';
@@ -34,8 +35,8 @@ import { iconMap, iconOptions } from '@/components/all-icons/all-icons-jsx';
 
 import LogoEditor from './LogoEditor';
 
-export type BrandFontSize = 'text-lg' | 'text-xl' | 'text-2xl' | 'text-3xl';
-export type BrandFontFamily = 'font-sans' | 'font-serif' | 'font-mono';
+export type BrandFontSize = 'text-base' | 'text-lg' | 'text-xl' | 'text-2xl' | 'text-3xl';
+export type BrandFontFamily = 'font-sans' | 'font-serif' | 'font-mono' | 'font-noto-sans';
 type NavigationPosition = 'fixed' | 'sticky' | 'scroll';
 type MenuButtonMode = 'auth' | 'contact' | 'account';
 type MenuButtonRadius = 'none' | 'sm' | 'xl' | 'full';
@@ -55,6 +56,8 @@ export interface BrandConfiguration {
   menuTextColor: string;
   menuFontSize: BrandFontSize;
   menuFontFamily: BrandFontFamily;
+  desktopMenuFontSize: BrandFontSize;
+  desktopMenuFontFamily: BrandFontFamily;
   menuBackgroundColor: string;
   backgroundTransparent: number;
   menuSticky: boolean;
@@ -85,6 +88,8 @@ const defaultBrandConfig: BrandConfiguration = {
   menuTextColor: '#cbd5e1',
   menuFontSize: 'text-lg',
   menuFontFamily: 'font-sans',
+  desktopMenuFontSize: 'text-base',
+  desktopMenuFontFamily: 'font-noto-sans',
   menuBackgroundColor: 'rgba(15, 23, 42, 0.8)',
   backgroundTransparent: 100,
   menuSticky: true,
@@ -105,14 +110,18 @@ const fontOptions = [
   { label: 'Sans Serif', value: 'font-sans' },
   { label: 'Serif', value: 'font-serif' },
   { label: 'Monospace', value: 'font-mono' },
+  { label: 'Noto Sans', value: 'font-noto-sans' },
 ];
 
 const sizeOptions = [
+  { label: '16 px', value: 'text-base' },
   { label: 'Small', value: 'text-lg' },
   { label: 'Medium', value: 'text-xl' },
   { label: 'Large', value: 'text-2xl' },
   { label: 'Extra Large', value: 'text-3xl' },
 ];
+
+const notoSans = Noto_Sans({ subsets: ['latin'], weight: ['400', '500', '600', '700'] });
 
 const positionOptions: { label: string; value: NavigationPosition; description: string }[] = [
   { label: 'Fixed', value: 'fixed', description: 'Always pinned to the viewport top' },
@@ -390,11 +399,11 @@ export default function PrimaryMenuEditor({ activeSection }: { activeSection: Pr
                           </label>
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                             <div className="space-y-3">
-                              <span className="text-[9px] font-black text-white/30 uppercase tracking-[0.15em]">Sizing Hierarchy</span>
+                              <span className="text-[9px] font-black text-white/30 uppercase tracking-[0.15em]">Tablet &amp; Desktop Font Size</span>
                               <div className="relative">
                                 <select
-                                  value={config.menuFontSize}
-                                  onChange={e => setConfig(p => ({ ...p, menuFontSize: e.target.value as BrandFontSize }))}
+                                  value={config.desktopMenuFontSize}
+                                  onChange={e => setConfig(p => ({ ...p, desktopMenuFontSize: e.target.value as BrandFontSize }))}
                                   className="w-full h-14 bg-white/5 rounded-sm border border-white/20 px-4 text-xs font-black text-white appearance-none focus:outline-none focus:border-white transition-colors"
                                 >
                                   {sizeOptions.map(o => (
@@ -408,7 +417,9 @@ export default function PrimaryMenuEditor({ activeSection }: { activeSection: Pr
                             </div>
                             <div className="flex items-center gap-6 pt-6">
                               <div className="flex-1 h-px bg-white/10" />
-                              <div className={`${config.menuFontSize} ${config.menuFontFamily} italic font-black text-white/60 tracking-tight`}>
+                              <div
+                                className={`${config.desktopMenuFontSize} ${config.desktopMenuFontFamily === 'font-noto-sans' ? notoSans.className : config.desktopMenuFontFamily} italic font-black text-white/60 tracking-tight`}
+                              >
                                 Preview Text
                               </div>
                             </div>
@@ -418,22 +429,22 @@ export default function PrimaryMenuEditor({ activeSection }: { activeSection: Pr
 
                       <div className="space-y-6">
                         <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/70 flex items-center gap-2">
-                          <MousePointer2 className="w-3.5 h-3.5" /> Theme Typeface
+                          <MousePointer2 className="w-3.5 h-3.5" /> Tablet &amp; Desktop Font Family
                         </label>
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                           {fontOptions.map(opt => (
                             <button
                               key={opt.value}
-                              onClick={() => setConfig(p => ({ ...p, menuFontFamily: opt.value as BrandFontFamily }))}
-                              className={`h-28 rounded-sm border transition-all flex flex-col items-center justify-center gap-2 group relative overflow-hidden ${config.menuFontFamily === opt.value ? 'bg-white/20 border-white text-white shadow-2xl' : 'bg-white/5 border-white/10 text-white/20 hover:bg-white/10 hover:text-white/40'}`}
+                              onClick={() => setConfig(p => ({ ...p, desktopMenuFontFamily: opt.value as BrandFontFamily }))}
+                              className={`h-28 rounded-sm border transition-all flex flex-col items-center justify-center gap-2 group relative overflow-hidden ${config.desktopMenuFontFamily === opt.value ? 'bg-white/20 border-white text-white shadow-2xl' : 'bg-white/5 border-white/10 text-white/20 hover:bg-white/10 hover:text-white/40'}`}
                             >
-                              <span className={`text-3xl font-black italic ${opt.value}`}>Aa</span>
+                              <span className={`text-3xl font-black italic ${opt.value === 'font-noto-sans' ? notoSans.className : opt.value}`}>Aa</span>
                               <span className="text-[9px] font-black uppercase tracking-widest">{opt.label}</span>
-                              {config.menuFontFamily === opt.value && (
+                              {config.desktopMenuFontFamily === opt.value && (
                                 <motion.div layoutId="menu-font-active" className="absolute top-0 left-0 right-0 h-0.5 bg-white" />
                               )}
                               <div
-                                className={`absolute bottom-2 opacity-0 group-hover:opacity-100 transition-opacity text-[8px] font-bold uppercase tracking-widest ${config.menuFontFamily === opt.value ? 'opacity-100 text-white/60' : 'text-white/20'}`}
+                                className={`absolute bottom-2 opacity-0 group-hover:opacity-100 transition-opacity text-[8px] font-bold uppercase tracking-widest ${config.desktopMenuFontFamily === opt.value ? 'opacity-100 text-white/60' : 'text-white/20'}`}
                               >
                                 Select Style
                               </div>

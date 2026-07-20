@@ -36,11 +36,13 @@ export interface IPrimaryMenuSettings extends Document {
   logoMobileOffsetX?: number;
   logoMobileOffsetY?: number;
   textColor?: string;
-  fontSize?: 'text-lg' | 'text-xl' | 'text-2xl' | 'text-3xl';
-  fontFamily?: 'font-sans' | 'font-serif' | 'font-mono';
+  fontSize?: 'text-base' | 'text-lg' | 'text-xl' | 'text-2xl' | 'text-3xl';
+  fontFamily?: 'font-sans' | 'font-serif' | 'font-mono' | 'font-noto-sans';
   menuTextColor?: string;
-  menuFontSize?: 'text-lg' | 'text-xl' | 'text-2xl' | 'text-3xl';
-  menuFontFamily?: 'font-sans' | 'font-serif' | 'font-mono';
+  menuFontSize?: 'text-base' | 'text-lg' | 'text-xl' | 'text-2xl' | 'text-3xl';
+  menuFontFamily?: 'font-sans' | 'font-serif' | 'font-mono' | 'font-noto-sans';
+  desktopMenuFontSize?: 'text-base' | 'text-lg' | 'text-xl' | 'text-2xl' | 'text-3xl';
+  desktopMenuFontFamily?: 'font-sans' | 'font-serif' | 'font-mono' | 'font-noto-sans';
   menuBackgroundColor?: string;
   backgroundTransparent?: number;
   menuSticky?: boolean;

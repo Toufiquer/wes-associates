@@ -11,18 +11,10 @@
 import {
   X,
   Menu,
-  Info,
   Phone,
   User,
-  Users,
-  Home,
   LogIn,
-  Settings,
-  LucideIcon,
-  HelpCircle,
-  ShoppingCart,
   ChevronDown,
-  FolderKanban,
   LayoutDashboard,
 } from 'lucide-react';
 import Link from 'next/link';
@@ -41,8 +33,8 @@ import PrimaryMenu from './PrimaryMenu';
 import MobileMainMenu from './MobileMainMenu';
 import SearchMenuButton from './SearchMenuButton';
 
-type BrandFontSize = 'text-lg' | 'text-xl' | 'text-2xl' | 'text-3xl';
-type BrandFontFamily = 'font-sans' | 'font-serif' | 'font-mono';
+type BrandFontSize = 'text-base' | 'text-lg' | 'text-xl' | 'text-2xl' | 'text-3xl';
+type BrandFontFamily = 'font-sans' | 'font-serif' | 'font-mono' | 'font-noto-sans';
 type NavigationPosition = 'fixed' | 'sticky' | 'scroll';
 type MenuButtonMode = 'auth' | 'contact' | 'account';
 type MenuButtonRadius = 'none' | 'sm' | 'xl' | 'full';
@@ -84,6 +76,8 @@ interface BrandConfiguration extends TopBannerBrandConfig {
   menuTextColor: string;
   menuFontSize: BrandFontSize;
   menuFontFamily: BrandFontFamily;
+  desktopMenuFontSize?: BrandFontSize;
+  desktopMenuFontFamily?: BrandFontFamily;
   menuBackgroundColor: string;
   backgroundTransparent: number;
   menuSticky: boolean;
@@ -150,19 +144,7 @@ const parseColorToRgba = (color: string, opacity: number) => {
 };
 
 const IconMapper = ({ name, className, color }: { name?: string; className?: string; color?: string }) => {
-  const iconMap: { [key: string]: LucideIcon } = {
-    Info,
-    FolderKanban,
-    Menu,
-    Phone,
-    Settings,
-    HelpCircle,
-    Users,
-    Home,
-    ShoppingCart,
-    LayoutDashboard,
-  };
-  const IconComponent = name ? iconMap[name] || HelpCircle : HelpCircle;
+  const IconComponent = (name && sharedIconMap[name]) || sharedIconMap.HelpCircle;
   return <IconComponent className={className} style={{ color }} />;
 };
 
@@ -196,12 +178,12 @@ const MobileMenuItem = ({
           }}
         >
           <div className="flex items-center gap-3">
-            {item.imagePath && item.isImagePublish && (
+            {item.imagePath && item.isImagePublish !== false && (
               <div className="relative w-10 h-6 rounded overflow-hidden flex-shrink-0">
                 <Image src={item.imagePath} alt={item.name} fill className="object-cover" />
               </div>
             )}
-            {item.iconName && item.isIconPublish && <IconMapper name={item.iconName} className="w-5 h-5" color={config.menuTextColor} />}
+            {item.iconName && item.isIconPublish !== false && <IconMapper name={item.iconName} className="w-5 h-5" color={config.menuTextColor} />}
             <span className="font-semibold">{item.name}</span>
           </div>
           <ChevronDown size={18} className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
@@ -216,12 +198,12 @@ const MobileMenuItem = ({
               // backgroundColor: isActive ? parseColorToRgba(config.textColor, 12) : 'transparent',
             }}
           >
-            {item.imagePath && item.isImagePublish && (
+            {item.imagePath && item.isImagePublish !== false && (
               <div className="relative w-10 h-6 rounded overflow-hidden flex-shrink-0">
                 <Image src={item.imagePath} alt={item.name} fill className="object-cover" />
               </div>
             )}
-            {item.iconName && item.isIconPublish && (
+            {item.iconName && item.isIconPublish !== false && (
               <IconMapper name={item.iconName} className="w-5 h-5" color={isActive ? config.textColor : config.menuTextColor} />
             )}
             <span className="font-semibold">{item.name}</span>
@@ -496,7 +478,7 @@ const MenuClient: React.FC<MenuClientProps> = ({ initialBrandConfig, initialMenu
                 <CartLink config={brandConfig} quantity={cartQuantity} />
                 <MenuActionButton config={brandConfig} isLoggedIn={isLoggedIn} />
               </div>
-              <div className="lg:hidden">
+              <div className="md:hidden">
                 <SearchMenuButton
                   config={brandConfig}
                   productQuantity={productQuantity}
@@ -511,7 +493,7 @@ const MenuClient: React.FC<MenuClientProps> = ({ initialBrandConfig, initialMenu
                 />
               </div>
               <button
-                className="lg:hidden p-3 rounded-2xl transition-all active:scale-90"
+                className="md:hidden p-3 rounded-2xl transition-all active:scale-90"
                 style={{ color: brandConfig.menuTextColor, backgroundColor: parseColorToRgba(brandConfig.menuTextColor, 12) }}
                 onClick={() => setIsOpen(!isOpen)}
               >
@@ -528,7 +510,7 @@ const MenuClient: React.FC<MenuClientProps> = ({ initialBrandConfig, initialMenu
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              className="lg:hidden overflow-hidden border-t"
+              className="md:hidden overflow-hidden border-t"
               style={{ backgroundColor: brandConfig.menuBackgroundColor, borderColor: parseColorToRgba(brandConfig.menuTextColor, 10) }}
             >
               <div className="flex flex-col p-6 space-y-2 max-h-[85vh] overflow-y-auto custom-scrollbar">

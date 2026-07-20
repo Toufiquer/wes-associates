@@ -9,28 +9,22 @@
 'use client';
 
 import {
-  Info,
-  Menu,
-  Phone,
-  Users,
-  Home,
-  Settings,
-  LucideIcon,
-  HelpCircle,
-  ShoppingCart,
   ChevronDown,
   ChevronRight,
-  FolderKanban,
   GraduationCap,
-  LayoutDashboard,
 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { Noto_Sans } from 'next/font/google';
 import { motion, AnimatePresence } from 'framer-motion';
 import React, { useState } from 'react';
 
-type BrandFontSize = 'text-lg' | 'text-xl' | 'text-2xl' | 'text-3xl';
-type BrandFontFamily = 'font-sans' | 'font-serif' | 'font-mono';
+import { iconMap } from '@/components/all-icons/all-icons-jsx';
+
+type BrandFontSize = 'text-base' | 'text-lg' | 'text-xl' | 'text-2xl' | 'text-3xl';
+type BrandFontFamily = 'font-sans' | 'font-serif' | 'font-mono' | 'font-noto-sans';
+
+const notoSans = Noto_Sans({ subsets: ['latin'], weight: ['400', '500', '600', '700'] });
 
 export interface PrimaryMenuConfig {
   brandName: string;
@@ -46,6 +40,8 @@ export interface PrimaryMenuConfig {
   menuTextColor: string;
   menuFontSize: BrandFontSize;
   menuFontFamily: BrandFontFamily;
+  desktopMenuFontSize?: BrandFontSize;
+  desktopMenuFontFamily?: BrandFontFamily;
   menuBackgroundColor: string;
 }
 
@@ -67,42 +63,8 @@ interface PrimaryMenuProps {
   pathname: string | null;
 }
 
-const parseColorToRgba = (color: string, opacity: number) => {
-  if (!color) return `rgba(15, 23, 42, ${opacity / 100})`;
-  const alpha = opacity / 100;
-
-  if (color.startsWith('rgba') || color.startsWith('rgb')) {
-    const values = color.match(/\d+/g);
-    if (values && values.length >= 3) {
-      return `rgba(${values[0]}, ${values[1]}, ${values[2]}, ${alpha})`;
-    }
-  }
-
-  if (color.startsWith('#')) {
-    const hex = color.replace('#', '');
-    const r = parseInt(hex.length === 3 ? hex[0] + hex[0] : hex.substring(0, 2), 16);
-    const g = parseInt(hex.length === 3 ? hex[1] + hex[1] : hex.substring(2, 4), 16);
-    const b = parseInt(hex.length === 3 ? hex[2] + hex[2] : hex.substring(4, 6), 16);
-    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-  }
-
-  return color;
-};
-
 const IconMapper = ({ name, className, color }: { name?: string; className?: string; color?: string }) => {
-  const iconMap: { [key: string]: LucideIcon } = {
-    Info,
-    FolderKanban,
-    Menu,
-    Phone,
-    Settings,
-    HelpCircle,
-    Users,
-    Home,
-    ShoppingCart,
-    LayoutDashboard,
-  };
-  const IconComponent = name ? iconMap[name] || HelpCircle : HelpCircle;
+  const IconComponent = (name && iconMap[name]) || iconMap.HelpCircle;
   return <IconComponent className={className} style={{ color }} />;
 };
 
@@ -118,65 +80,88 @@ const DesktopMenuItem = ({
   config: PrimaryMenuConfig;
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const hasChildren = item.children && item.children.length > 0;
   const active = isActive(item.path);
   const isRoot = depth === 0;
+  const isExpanded = Boolean(hasChildren && (isHovered || isOpen));
+  const desktopFontSize = config.desktopMenuFontSize || 'text-base';
+  const desktopFontFamily = config.desktopMenuFontFamily || 'font-noto-sans';
+  const desktopFontFamilyClass = desktopFontFamily === 'font-noto-sans' ? notoSans.className : desktopFontFamily;
 
   return (
-    <div className="relative z-50 flex h-full items-center" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+    <div
+      className={`${isRoot ? 'relative' : 'relative w-full'} z-50 flex h-full items-center`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onKeyDown={event => {
+        if (event.key === 'Escape') setIsOpen(false);
+      }}
+    >
       <Link
         href={item.path}
+        aria-haspopup={hasChildren ? 'menu' : undefined}
+        aria-expanded={hasChildren ? isExpanded : undefined}
+        onClick={event => {
+          if (!hasChildren) return;
+          event.preventDefault();
+          setIsOpen(current => !current);
+        }}
         className={`
-          group flex items-center gap-2 px-5 py-2 transition-all duration-300 rounded-full
-          ${config.menuFontSize} ${config.menuFontFamily}
-          ${!isRoot && 'justify-between w-full rounded-xl h-auto px-4'}
+          group flex items-center gap-2 px-2 py-2 transition-all duration-300 rounded-full lg:px-5
+          ${desktopFontSize} ${desktopFontFamilyClass}
+          ${depth === 1 && 'h-auto min-h-[84px] w-full justify-between rounded-xl px-5 py-4 text-slate-950 hover:bg-slate-100'}
+          ${depth > 1 && 'h-auto w-full justify-between rounded-lg px-4 py-3 text-slate-950 hover:bg-slate-100'}
           ${active ? ' underline ' : ''}
         `}
-        style={
-          {
-            // color: active ? config.textColor : config.menuTextColor,
-            // backgroundColor: isHovered ? parseColorToRgba(config.menuTextColor, 10) : 'transparent',
-          }
-        }
+        style={{ color: isRoot ? (active ? config.textColor : config.menuTextColor) : '#0f172a' }}
       >
         <div className="flex items-center gap-3">
-          {item.imagePath && item.isImagePublish ? (
-            <div className={`relative flex-shrink-0 overflow-hidden rounded-md ${isRoot ? 'h-5 w-8' : 'h-6 w-10'}`}>
+          {item.imagePath && item.isImagePublish !== false && (
+            <div className={`relative flex-shrink-0 overflow-hidden rounded-md ${isRoot ? 'h-5 w-8' : 'h-10 w-10'}`}>
               <Image src={item.imagePath} alt={item.name} fill className="object-cover" sizes="40px" />
             </div>
-          ) : (
-            item.iconName &&
-            item.isIconPublish && <IconMapper name={item.iconName} className="h-4 w-4" color={active ? config.textColor : config.menuTextColor} />
+          )}
+          {item.iconName && item.isIconPublish !== false && (
+            <IconMapper
+              name={item.iconName}
+              className={isRoot ? 'h-4 w-4' : 'h-7 w-7'}
+              color={isRoot ? (active ? config.textColor : config.menuTextColor) : '#475569'}
+            />
           )}
           <span className="relative z-10 whitespace-nowrap font-semibold">{item.name}</span>
         </div>
 
         {hasChildren &&
           (isRoot ? (
-            <ChevronDown size={14} style={{ color: config.menuTextColor }} className={`transition-transform duration-300 ${isHovered ? 'rotate-180' : ''}`} />
+            <ChevronDown size={14} style={{ color: config.menuTextColor }} className={`transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
           ) : (
-            <ChevronRight size={14} style={{ color: config.menuTextColor }} />
+            <ChevronRight size={14} className="text-slate-500" />
           ))}
       </Link>
 
       <AnimatePresence>
-        {isHovered && hasChildren && (
+        {isExpanded && hasChildren && (
           <motion.div
-            initial={{ opacity: 0, y: 15, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 15, scale: 0.95 }}
+            initial={{ opacity: 0, x: isRoot ? '-50%' : 0, y: 15, scale: 0.98 }}
+            animate={{ opacity: 1, x: isRoot ? '-50%' : 0, y: 0, scale: 1 }}
+            exit={{ opacity: 0, x: isRoot ? '-50%' : 0, y: 15, scale: 0.98 }}
             transition={{ duration: 0.2, ease: 'circOut' }}
-            className="absolute min-w-[260px] rounded-2xl border p-2 shadow-[0_20px_50px_rgba(0,0,0,0.3)] backdrop-blur-3xl"
+            className={`absolute w-max max-w-[calc(100vw-2rem)] border bg-white shadow-[0_20px_50px_rgba(15,23,42,0.2)] ${
+              isRoot ? 'rounded-sm border-slate-200 p-1' : 'rounded-xl border-slate-200 p-1'
+            }`}
+            role="menu"
             style={{
-              backgroundColor: parseColorToRgba(config.menuBackgroundColor, 98),
-              borderColor: parseColorToRgba(config.menuTextColor, 15),
               top: isRoot ? '100%' : '0',
-              left: isRoot ? '0' : '100%',
-              marginTop: isRoot ? '0.75rem' : '0',
-              marginLeft: isRoot ? '0' : '0.5rem',
+              left: isRoot ? '50%' : '100%',
+              marginTop: '0',
+              marginLeft: '0',
             }}
           >
-            <div className="relative z-10 flex flex-col gap-1">
+            {isRoot && (
+              <span aria-hidden="true" className="absolute -top-2 left-1/2 h-4 w-4 -translate-x-1/2 rotate-45 border-l border-t border-slate-200 bg-white" />
+            )}
+            <div className={`relative z-10 ${isRoot ? 'grid grid-cols-2 gap-4 lg:grid-cols-3' : 'flex flex-col gap-2'}`}>
               {item.children?.map(child => (
                 <DesktopMenuItem key={child._id || child.id} item={child} isActive={isActive} depth={depth + 1} config={config} />
               ))}
@@ -216,14 +201,14 @@ const PrimaryMenu = ({ config, items, pathname }: PrimaryMenuProps) => {
   return (
     <>
       <Link href="/" className="group z-50 flex items-center gap-4">
-        {renderLogoMark(mobileLogoOffsetStyle, 'lg:hidden')}
-        {renderLogoMark(desktopLogoOffsetStyle, 'hidden lg:block')}
+        {renderLogoMark(mobileLogoOffsetStyle, 'md:hidden')}
+        {renderLogoMark(desktopLogoOffsetStyle, 'hidden md:block')}
         <span className={`${config.fontSize} ${config.fontFamily} font-black tracking-tight`} style={{ color: config.textColor }}>
           {config.brandName}
         </span>
       </Link>
 
-      <div className="hidden h-full items-center gap-2 lg:flex">
+      <div className="relative hidden h-full items-center gap-1 md:flex">
         {items.map(item => (
           <DesktopMenuItem key={item._id || item.id} item={item} isActive={path => pathname === path} config={config} />
         ))}
