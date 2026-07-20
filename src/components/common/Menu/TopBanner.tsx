@@ -1,15 +1,23 @@
 'use client';
 
+import { LayoutDashboard, LogIn, Mail, MapPin, Phone } from 'lucide-react';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { motion } from 'framer-motion';
-import { Mail, Phone, Clock } from 'lucide-react';
+import { FaFacebookMessenger, FaWhatsapp } from 'react-icons/fa6';
 
-export interface TopBannerSocialLink {
-  id: string;
+import { useSession } from '@/lib/auth-client';
+
+export type TopBannerActionId = 'call' | 'email' | 'location' | 'messenger' | 'whatsapp';
+
+export interface TopBannerActionLink {
+  id: TopBannerActionId;
   label: string;
-  iconUrl: string;
-  url: string;
   isPublished: boolean;
+  fontColor: string;
+  size: number;
+  padding: number;
+  url: string;
+  openInNewTab: boolean;
 }
 
 export interface TopBannerBrandConfig {
@@ -17,86 +25,96 @@ export interface TopBannerBrandConfig {
   topBannerBackgroundColor?: string;
   topBannerTextColor?: string;
   topBannerDisabledUrls?: string[];
-  contactEmail?: string;
-  contactPhone?: string;
-  contactHours?: string;
-  topBannerSocialLinks?: TopBannerSocialLink[];
+  topBannerActionLinks?: TopBannerActionLink[];
 }
+
+const defaultActionLinks: TopBannerActionLink[] = [
+  { id: 'call', label: 'Call', isPublished: true, fontColor: '#ffffff', size: 14, padding: 6, url: 'tel:+8801303537667', openInNewTab: false },
+  { id: 'email', label: 'Email', isPublished: true, fontColor: '#ffffff', size: 14, padding: 6, url: 'mailto:info@wesassociates.com', openInNewTab: false },
+  { id: 'location', label: 'Location', isPublished: true, fontColor: '#ffffff', size: 14, padding: 6, url: 'https://maps.google.com', openInNewTab: true },
+  { id: 'messenger', label: 'Messager', isPublished: true, fontColor: '#ffffff', size: 14, padding: 6, url: 'https://m.me/', openInNewTab: true },
+  { id: 'whatsapp', label: 'WhatsApp', isPublished: true, fontColor: '#ffffff', size: 14, padding: 6, url: 'https://wa.me/8801303537667', openInNewTab: true },
+];
 
 const defaultConfig: Required<TopBannerBrandConfig> = {
   topBannerIsPublished: true,
-  topBannerBackgroundColor: '#000000',
-  topBannerTextColor: '#9ca3af',
+  topBannerBackgroundColor: '#080c14',
+  topBannerTextColor: '#ffffff',
   topBannerDisabledUrls: [],
-  contactEmail: 'info@wesassociates.com',
-  contactPhone: '+880 1300-111111',
-  contactHours: 'Sat-Thu, 10:00 AM - 7:00 PM',
-  topBannerSocialLinks: [
-    { id: 'facebook', label: 'Facebook', iconUrl: '', url: 'https://facebook.com', isPublished: true },
-    { id: 'youtube', label: 'YouTube', iconUrl: '', url: 'https://youtube.com', isPublished: true },
-    { id: 'linkedin', label: 'LinkedIn', iconUrl: '', url: 'https://linkedin.com', isPublished: true },
-  ],
+  topBannerActionLinks: defaultActionLinks,
 };
 
-const getSafeSocialUrl = (url: string) => (/^https?:\/\//i.test(url.trim()) ? url.trim() : '#');
+const actionIcons = {
+  call: Phone,
+  email: Mail,
+  location: MapPin,
+  messenger: FaFacebookMessenger,
+  whatsapp: FaWhatsapp,
+};
+
+const getSafeActionUrl = (url: string) => (/^(https?:\/\/|mailto:|tel:)/i.test(url.trim()) ? url.trim() : '#');
+
+const getActionDisplayValue = (action: TopBannerActionLink) => {
+  const value = action.url.trim();
+  if (action.id === 'call') return value.replace(/^tel:/i, '');
+  if (action.id === 'email') return value.replace(/^mailto:/i, '');
+  if (action.id === 'whatsapp') return value.replace(/^https?:\/\/(?:www\.)?wa\.me\//i, '+');
+  return value || 'No data added';
+};
 
 const TopBanner = ({ config: incomingConfig }: { config: TopBannerBrandConfig }) => {
   const config = { ...defaultConfig, ...incomingConfig };
   const pathname = usePathname();
+  const session = useSession();
+  const isLoggedIn = !!session?.data?.session;
 
   const normalizeUrl = (url: string) => url.split('?')[0].split('#')[0].replace(/\/$/, '');
   const currentUrl = normalizeUrl(pathname || '/');
-  const isDisabledUrl = config.topBannerDisabledUrls.some(d => currentUrl.includes(normalizeUrl(d)));
-  const visibleSocialLinks = config.topBannerSocialLinks.filter(social => social.isPublished && (social.label || social.iconUrl));
+  const isDisabledUrl = config.topBannerDisabledUrls.some(disabledUrl => currentUrl.includes(normalizeUrl(disabledUrl)));
+  const visibleActionLinks = config.topBannerActionLinks.filter(action => action.isPublished);
 
   if (!config.topBannerIsPublished || isDisabledUrl) return null;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="w-full border-b border-white/10 text-xs md:text-sm overflow-hidden"
-      style={{ backgroundColor: config.topBannerBackgroundColor, color: config.topBannerTextColor }}
-    >
-      <div className="max-w-[1480px] mx-auto px-4 py-2.5 flex flex-col md:flex-row items-center justify-between gap-4">
-        <div className="flex flex-wrap justify-center md:justify-start items-center gap-5">
-          <a href={`mailto:${config.contactEmail}`} className="flex items-center gap-2 hover:text-white transition-colors duration-300">
-            <Mail size={14} /> <span>{config.contactEmail}</span>
-          </a>
-          <a href={`tel:${config.contactPhone}`} className="flex items-center gap-2 hover:text-white transition-colors duration-300">
-            <Phone size={14} /> <span>{config.contactPhone}</span>
-          </a>
-          <div className="hidden sm:flex items-center gap-2">
-            <Clock size={14} /> <span>{config.contactHours}</span>
-          </div>
+    <div className="w-full text-[10px] font-semibold" style={{ backgroundColor: config.topBannerBackgroundColor, color: config.topBannerTextColor }}>
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-2.5 sm:px-6">
+        <div className="flex items-center gap-2">
+          {visibleActionLinks.map(action => {
+            const Icon = actionIcons[action.id] || FaWhatsapp;
+            const safeUrl = getSafeActionUrl(action.url);
+
+            return (
+              <a
+                key={action.id}
+                href={safeUrl}
+                target={action.openInNewTab && safeUrl !== '#' ? '_blank' : undefined}
+                rel={action.openInNewTab && safeUrl !== '#' ? 'noopener noreferrer' : undefined}
+                aria-label={action.label}
+                title={action.label}
+                className="group relative grid place-items-center rounded-full bg-white/10 transition hover:bg-[#ed1c24]"
+                style={{ color: action.fontColor, padding: `${action.padding}px` }}
+              >
+                <Icon aria-hidden="true" size={action.size} />
+                <span
+                  role="tooltip"
+                  className="pointer-events-none absolute left-1/2 top-full z-50 mt-2 hidden -translate-x-1/2 whitespace-nowrap rounded bg-black px-2.5 py-1.5 text-[10px] font-semibold text-white shadow-lg group-hover:block group-focus-visible:block"
+                >
+                  <span className="font-bold">{action.label}:</span> {getActionDisplayValue(action)}
+                </span>
+              </a>
+            );
+          })}
         </div>
 
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-3">
-            {visibleSocialLinks.map(social => (
-              <a
-                key={social.id}
-                href={getSafeSocialUrl(social.url)}
-                target={getSafeSocialUrl(social.url) !== '#' ? '_blank' : undefined}
-                rel={getSafeSocialUrl(social.url) !== '#' ? 'noopener noreferrer' : undefined}
-                aria-label={social.label || 'Social media'}
-                className="w-7 h-7 flex items-center justify-center overflow-hidden rounded-full border border-white/20 hover:border-white hover:text-white transition-all duration-300 font-bold text-[10px] hover:bg-white/10"
-              >
-                {social.iconUrl ? (
-                  <span
-                    aria-hidden="true"
-                    className="h-full w-full rounded-full bg-cover bg-center bg-no-repeat"
-                    style={{ backgroundImage: `url(${JSON.stringify(social.iconUrl)})` }}
-                  />
-                ) : (
-                  social.label.slice(0, 2).toUpperCase()
-                )}
-              </a>
-            ))}
-          </div>
-        </div>
+        <Link
+          href={isLoggedIn ? '/dashboard' : '/login'}
+          className="flex items-center gap-1.5 rounded-full bg-[#ed1c24] px-3 py-1.5 font-bold text-white transition hover:bg-[#c9141b]"
+        >
+          {isLoggedIn ? <LayoutDashboard aria-hidden="true" size={12} /> : <LogIn aria-hidden="true" size={12} />}
+          {isLoggedIn ? 'Dashboard' : 'Login'}
+        </Link>
       </div>
-    </motion.div>
+    </div>
   );
 };
 

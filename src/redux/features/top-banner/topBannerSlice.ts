@@ -9,13 +9,17 @@
 import { apiSlice } from '@/redux/api/apiSlice';
 
 export type TopBannerPosition = 'fixed' | 'sticky' | 'scroll';
+export type TopBannerActionId = 'call' | 'email' | 'location' | 'messenger' | 'whatsapp';
 
-export interface TopBannerSocialLink {
-  id: string;
+export interface TopBannerActionLink {
+  id: TopBannerActionId;
   label: string;
-  iconUrl: string;
-  url: string;
   isPublished: boolean;
+  fontColor: string;
+  size: number;
+  padding: number;
+  url: string;
+  openInNewTab: boolean;
 }
 
 export interface TopBannerConfig {
@@ -24,10 +28,7 @@ export interface TopBannerConfig {
   topBannerBackgroundColor: string;
   topBannerTextColor: string;
   topBannerDisabledUrls: string[];
-  contactEmail: string;
-  contactPhone: string;
-  contactHours: string;
-  topBannerSocialLinks: TopBannerSocialLink[];
+  topBannerActionLinks: TopBannerActionLink[];
 }
 
 interface UpdateTopBannerResponse {

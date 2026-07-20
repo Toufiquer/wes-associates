@@ -8,33 +8,33 @@
 
 'use client';
 
-import { Clock, Loader2, Mail, Phone, Plus, RotateCcw, Save, Trash2, X } from 'lucide-react';
+import { LayoutDashboard, Loader2, LogIn, Mail, MapPin, Phone, Plus, RotateCcw, Save, X } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
+import { FaFacebookMessenger, FaWhatsapp } from 'react-icons/fa6';
 import { toast } from 'react-toastify';
 
-import ImageUploadManagerSingle from '@/components/dashboard-ui/ImageUploadManagerSingle';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
-import { TopBannerConfig, TopBannerSocialLink, useGetTopBannerQuery, useUpdateTopBannerMutation } from '@/redux/features/top-banner/topBannerSlice';
+import { useSession } from '@/lib/auth-client';
+import { TopBannerActionLink, TopBannerConfig, useGetTopBannerQuery, useUpdateTopBannerMutation } from '@/redux/features/top-banner/topBannerSlice';
 
-const defaultSocialLinks: TopBannerSocialLink[] = [
-  { id: 'facebook', label: 'Facebook', iconUrl: '', url: 'https://facebook.com', isPublished: true },
-  { id: 'youtube', label: 'YouTube', iconUrl: '', url: 'https://youtube.com', isPublished: true },
-  { id: 'linkedin', label: 'LinkedIn', iconUrl: '', url: 'https://linkedin.com', isPublished: true },
+const defaultActionLinks: TopBannerActionLink[] = [
+  { id: 'call', label: 'Call', isPublished: true, fontColor: '#ffffff', size: 14, padding: 6, url: 'tel:+8801303537667', openInNewTab: false },
+  { id: 'email', label: 'Email', isPublished: true, fontColor: '#ffffff', size: 14, padding: 6, url: 'mailto:info@wesassociates.com', openInNewTab: false },
+  { id: 'location', label: 'Location', isPublished: true, fontColor: '#ffffff', size: 14, padding: 6, url: 'https://maps.google.com', openInNewTab: true },
+  { id: 'messenger', label: 'Messager', isPublished: true, fontColor: '#ffffff', size: 14, padding: 6, url: 'https://m.me/', openInNewTab: true },
+  { id: 'whatsapp', label: 'WhatsApp', isPublished: true, fontColor: '#ffffff', size: 14, padding: 6, url: 'https://wa.me/8801303537667', openInNewTab: true },
 ];
 
 const defaultConfig: TopBannerConfig = {
   topBannerIsPublished: true,
   topBannerPosition: 'scroll',
-  topBannerBackgroundColor: '#000000',
-  topBannerTextColor: '#9ca3af',
+  topBannerBackgroundColor: '#080c14',
+  topBannerTextColor: '#ffffff',
   topBannerDisabledUrls: [],
-  contactEmail: 'info@wesassociates.com',
-  contactPhone: '+880 1300-111222',
-  contactHours: 'Sat-Thu, 10:00 AM - 7:00 PM',
-  topBannerSocialLinks: defaultSocialLinks,
+  topBannerActionLinks: defaultActionLinks,
 };
 
 const positionOptions = [
@@ -42,6 +42,22 @@ const positionOptions = [
   { label: 'Sticky', value: 'sticky', description: 'Sticks after reaching the top' },
   { label: 'Scroll', value: 'scroll', description: 'Normal page flow' },
 ] as const;
+
+const actionIcons = {
+  call: Phone,
+  email: Mail,
+  location: MapPin,
+  messenger: FaFacebookMessenger,
+  whatsapp: FaWhatsapp,
+};
+
+const getActionDisplayValue = (action: TopBannerActionLink) => {
+  const value = action.url.trim();
+  if (action.id === 'call') return value.replace(/^tel:/i, '');
+  if (action.id === 'email') return value.replace(/^mailto:/i, '');
+  if (action.id === 'whatsapp') return value.replace(/^https?:\/\/(?:www\.)?wa\.me\//i, '+');
+  return value || 'No data added';
+};
 
 const ColorInput = ({ label, value, onChange }: { label: string; value: string; onChange: (value: string) => void }) => (
   <div className="space-y-2">
@@ -62,13 +78,15 @@ export default function TopBannerPage() {
   const [updateTopBanner, { isLoading: isSaving }] = useUpdateTopBannerMutation();
   const [config, setConfig] = useState<TopBannerConfig>(defaultConfig);
   const [disabledUrlInput, setDisabledUrlInput] = useState('');
+  const session = useSession();
+  const isLoggedIn = !!session?.data?.session;
 
   useEffect(() => {
     if (bannerSettings) {
       setConfig({
         ...defaultConfig,
         ...bannerSettings,
-        topBannerSocialLinks: bannerSettings.topBannerSocialLinks ?? defaultSocialLinks,
+        topBannerActionLinks: bannerSettings.topBannerActionLinks ?? defaultActionLinks,
       });
     }
   }, [bannerSettings]);
@@ -77,22 +95,11 @@ export default function TopBannerPage() {
     if (isError) toast.error('Top banner sync failed');
   }, [isError]);
 
-  const updateSocialLink = (id: string, changes: Partial<TopBannerSocialLink>) => {
+  const updateActionLink = (id: TopBannerActionLink['id'], changes: Partial<TopBannerActionLink>) => {
     setConfig(prev => ({
       ...prev,
-      topBannerSocialLinks: prev.topBannerSocialLinks.map(item => (item.id === id ? { ...item, ...changes } : item)),
+      topBannerActionLinks: prev.topBannerActionLinks.map(item => (item.id === id ? { ...item, ...changes } : item)),
     }));
-  };
-
-  const addSocialLink = () => {
-    setConfig(prev => ({
-      ...prev,
-      topBannerSocialLinks: [...prev.topBannerSocialLinks, { id: `social-${Date.now()}`, label: 'Social', iconUrl: '', url: 'https://', isPublished: true }],
-    }));
-  };
-
-  const removeSocialLink = (id: string) => {
-    setConfig(prev => ({ ...prev, topBannerSocialLinks: prev.topBannerSocialLinks.filter(item => item.id !== id) }));
   };
 
   const addDisabledUrl = () => {
@@ -131,7 +138,7 @@ export default function TopBannerPage() {
         <header className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
             <h1 className="text-2xl font-black tracking-tight">Top Banner</h1>
-            <p className="text-xs text-white/50">Update contact details, social links, icons, colors, and banner behavior.</p>
+            <p className="text-xs text-white/50">Update action buttons, colors, links, and banner behavior.</p>
           </div>
           <div className="flex gap-3">
             <Button size="sm" variant="outlineGlassy" onClick={() => setConfig(defaultConfig)}>
@@ -152,84 +159,90 @@ export default function TopBannerPage() {
         </div>
 
         <div className="mb-6 rounded-sm border border-white/10 bg-white/5 p-4">
-          <h2 className="mb-4 text-sm font-bold">Contact Information</h2>
-          <div className="grid gap-5 md:grid-cols-3">
-            <div className="space-y-2">
-              <Label>Email Address</Label>
-              <Input
-                value={config.contactEmail}
-                onChange={e => setConfig(prev => ({ ...prev, contactEmail: e.target.value }))}
-                className="h-12 border-white/20 bg-white/5 text-white"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>Phone Number</Label>
-              <Input
-                value={config.contactPhone}
-                onChange={e => setConfig(prev => ({ ...prev, contactPhone: e.target.value }))}
-                className="h-12 border-white/20 bg-white/5 text-white"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>Office Hours</Label>
-              <Input
-                value={config.contactHours}
-                onChange={e => setConfig(prev => ({ ...prev, contactHours: e.target.value }))}
-                className="h-12 border-white/20 bg-white/5 text-white"
-              />
-            </div>
+          <div className="mb-5">
+            <h2 className="text-sm font-bold">Action Buttons</h2>
+            <p className="text-xs text-white/50">Configure the Call, Email, Location, Messager, and WhatsApp Lucide buttons.</p>
           </div>
-        </div>
+          <div className="grid gap-5 lg:grid-cols-2">
+            {config.topBannerActionLinks.map(action => {
+              const Icon = actionIcons[action.id];
 
-        <div className="mb-6 rounded-sm border border-white/10 bg-white/5 p-4">
-          <div className="mb-5 flex items-center justify-between gap-3">
-            <div>
-              <h2 className="text-sm font-bold">Social Media</h2>
-              <p className="text-xs text-white/50">Upload an icon and set its social profile link.</p>
-            </div>
-            <Button type="button" variant="outlineGlassy" size="sm" onClick={addSocialLink} disabled={config.topBannerSocialLinks.length >= 12}>
-              <Plus className="mr-2 h-4 w-4" /> Add Social
-            </Button>
-          </div>
-          <div className="grid gap-5 lg:grid-cols-3">
-            {config.topBannerSocialLinks.map(social => (
-              <article key={social.id} className="space-y-4 rounded-sm border border-white/15 bg-black/10 p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Switch checked={social.isPublished} onCheckedChange={value => updateSocialLink(social.id, { isPublished: value })} />
-                    <span className="text-xs font-bold">Visible</span>
+              return (
+                <article key={action.id} className="space-y-4 rounded-sm border border-white/15 bg-black/10 p-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="grid h-9 w-9 place-items-center rounded-full bg-white/10" style={{ color: action.fontColor }}>
+                        <Icon size={Math.min(action.size, 22)} />
+                      </span>
+                      <span className="text-sm font-bold">{action.label}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Label htmlFor={`${action.id}-public`} className="text-xs font-bold">Public</Label>
+                      <Switch id={`${action.id}-public`} checked={action.isPublished} onCheckedChange={value => updateActionLink(action.id, { isPublished: value })} />
+                    </div>
                   </div>
-                  <Button type="button" variant="outlineFire" size="sm" onClick={() => removeSocialLink(social.id)} aria-label={`Remove ${social.label}`}>
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-                <ImageUploadManagerSingle
-                  value={social.iconUrl}
-                  onChange={iconUrl => updateSocialLink(social.id, { iconUrl })}
-                  label={`${social.label || 'Social'} icon`}
-                  maxSizeMB={0.25}
-                  maxWidthOrHeight={256}
-                />
-                <div className="space-y-2">
-                  <Label>Social Name</Label>
-                  <Input
-                    value={social.label}
-                    onChange={e => updateSocialLink(social.id, { label: e.target.value })}
-                    placeholder="Facebook"
-                    className="h-11 border-white/20 bg-white/5 text-white"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>Profile URL</Label>
-                  <Input
-                    value={social.url}
-                    onChange={e => updateSocialLink(social.id, { url: e.target.value })}
-                    placeholder="https://facebook.com/your-page"
-                    className="h-11 border-white/20 bg-white/5 text-white"
-                  />
-                </div>
-              </article>
-            ))}
+
+                  <div className="grid gap-4 sm:grid-cols-3">
+                    <div className="space-y-2">
+                      <Label>Font Color</Label>
+                      <div className="flex h-11 overflow-hidden rounded-sm border border-white/20 bg-white/5">
+                        <input
+                          type="color"
+                          value={action.fontColor}
+                          onChange={e => updateActionLink(action.id, { fontColor: e.target.value })}
+                          className="h-full w-11 cursor-pointer border-0 bg-transparent p-1"
+                        />
+                        <Input
+                          value={action.fontColor}
+                          onChange={e => updateActionLink(action.id, { fontColor: e.target.value })}
+                          className="h-full rounded-none border-0 bg-transparent px-2 font-mono text-[10px] uppercase text-white"
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor={`${action.id}-size`}>Size</Label>
+                      <Input
+                        id={`${action.id}-size`}
+                        type="number"
+                        min={8}
+                        max={48}
+                        value={action.size}
+                        onChange={e => updateActionLink(action.id, { size: Number(e.target.value) })}
+                        className="h-11 border-white/20 bg-white/5 text-white"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor={`${action.id}-padding`}>Padding</Label>
+                      <Input
+                        id={`${action.id}-padding`}
+                        type="number"
+                        min={0}
+                        max={24}
+                        value={action.padding}
+                        onChange={e => updateActionLink(action.id, { padding: Number(e.target.value) })}
+                        className="h-11 border-white/20 bg-white/5 text-white"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor={`${action.id}-url`}>URL</Label>
+                    <Input
+                      id={`${action.id}-url`}
+                      value={action.url}
+                      onChange={e => updateActionLink(action.id, { url: e.target.value })}
+                      placeholder="https://example.com"
+                      className="h-11 border-white/20 bg-white/5 text-white"
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-between rounded-sm border border-white/10 bg-white/5 p-3">
+                    <Label htmlFor={`${action.id}-new-tab`} className="text-xs font-bold">Open In New Tab</Label>
+                    <Switch id={`${action.id}-new-tab`} checked={action.openInNewTab} onCheckedChange={value => updateActionLink(action.id, { openInNewTab: value })} />
+                  </div>
+                </article>
+              );
+            })}
           </div>
         </div>
 
@@ -296,34 +309,33 @@ export default function TopBannerPage() {
 
         <div className="rounded-sm border border-white/20 p-3">
           <p className="mb-2 text-[10px] font-black uppercase tracking-[0.2em] text-white/50">Live Preview</p>
-          <div
-            className="flex flex-col items-center justify-between gap-4 px-4 py-2.5 text-xs md:flex-row md:text-sm"
-            style={{ backgroundColor: config.topBannerBackgroundColor, color: config.topBannerTextColor }}
-          >
-            <div className="flex flex-wrap items-center justify-center gap-5 md:justify-start">
-              <span className="flex items-center gap-2">
-                <Mail size={14} /> {config.contactEmail}
+          <div className="text-[10px] font-semibold" style={{ backgroundColor: config.topBannerBackgroundColor, color: config.topBannerTextColor }}>
+            <div className="mx-auto flex max-w-[1080px] items-center justify-between gap-4 px-4 py-2.5 sm:px-6">
+              <div className="flex items-center gap-2">
+                {config.topBannerActionLinks
+                  .filter(action => action.isPublished)
+                  .map(action => {
+                    const Icon = actionIcons[action.id];
+
+                    return (
+                      <span
+                        key={action.id}
+                        title={action.label}
+                        className="group relative grid place-items-center rounded-full bg-white/10 transition hover:bg-[#ed1c24]"
+                        style={{ color: action.fontColor, padding: `${action.padding}px` }}
+                      >
+                        <Icon aria-hidden="true" size={action.size} />
+                        <span className="pointer-events-none absolute left-1/2 top-full z-50 mt-2 hidden -translate-x-1/2 whitespace-nowrap rounded bg-black px-2.5 py-1.5 text-[10px] font-semibold text-white shadow-lg group-hover:block">
+                          <span className="font-bold">{action.label}:</span> {getActionDisplayValue(action)}
+                        </span>
+                      </span>
+                    );
+                  })}
+              </div>
+              <span className="flex items-center gap-1.5 rounded-full bg-[#ed1c24] px-3 py-1.5 font-bold text-white">
+                {isLoggedIn ? <LayoutDashboard aria-hidden="true" size={12} /> : <LogIn aria-hidden="true" size={12} />}
+                {isLoggedIn ? 'Dashboard' : 'Login'}
               </span>
-              <span className="flex items-center gap-2">
-                <Phone size={14} /> {config.contactPhone}
-              </span>
-              <span className="flex items-center gap-2">
-                <Clock size={14} /> {config.contactHours}
-              </span>
-            </div>
-            <div className="flex items-center gap-3">
-              {config.topBannerSocialLinks
-                .filter(item => item.isPublished)
-                .map(social => (
-                  <span
-                    key={social.id}
-                    title={social.label}
-                    className="flex h-7 w-7 items-center justify-center rounded-full border border-white/20 bg-contain bg-center bg-no-repeat text-[10px] font-bold"
-                    style={social.iconUrl ? { backgroundImage: `url(${JSON.stringify(social.iconUrl)})` } : undefined}
-                  >
-                    {!social.iconUrl && social.label.slice(0, 2).toUpperCase()}
-                  </span>
-                ))}
             </div>
           </div>
         </div>
