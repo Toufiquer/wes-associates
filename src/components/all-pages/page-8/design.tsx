@@ -21,7 +21,7 @@ const ceo: TeamMember = {
   id: 'ceo',
   name: 'Tanvir Ahmed',
   title: 'Founder & CEO',
-  bio: "Steers TecBuzz's vision, from first client call to shipped product. Ten years turning Dhaka SMEs into brands people remember.",
+  bio: "Leads WES Associates with a clear vision: making international education guidance personal, reliable, and accessible.",
   image: 'https://i.pravatar.cc/600?img=13',
 };
 
@@ -33,7 +33,7 @@ const rows: TeamRow[] = [
         id: 'creative-director',
         name: 'Nusrat Jahan',
         title: 'Creative Director',
-        bio: 'Shapes every visual story TecBuzz tells, from brand identity to campaign art direction.',
+        bio: 'Guides the team and helps every student receive thoughtful support throughout the application journey.',
         image: 'https://i.pravatar.cc/500?img=47',
       },
       {
@@ -212,7 +212,7 @@ export default function TeamPage() {
           transition={{ duration: 0.6 }}
           className="mb-4 inline-block rounded-full border border-white/10 bg-white/[0.03] px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-white/50"
         >
-          TecBuzz
+          WES Associates
         </motion.span>
         <motion.h1
           initial={{ opacity: 0, y: 24 }}

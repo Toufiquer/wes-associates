@@ -30,15 +30,15 @@ export interface Page8Props {
 export const defaultDataPage8: IPage8Data = {
   pageUid: 'page-uid-8',
   pageName: 'Team',
-  eyebrow: 'TecBuzz',
-  title: 'The people behind the buzz',
-  description: 'Seven people, three disciplines, one goal: turning Bangladeshi businesses into brands worth talking about.',
+  eyebrow: 'WES Associates',
+  title: 'Meet the people behind WES Associates',
+  description: 'A dedicated team helping students make confident decisions and move closer to their international education goals.',
   founderLabel: 'Founder',
   ceo: {
     id: 'ceo',
     name: 'Tanvir Ahmed',
     title: 'Founder & CEO',
-    bio: "Steers TecBuzz's vision, from first client call to shipped product. Ten years turning Dhaka SMEs into brands people remember.",
+    bio: "Leads WES Associates with a clear vision: making international education guidance personal, reliable, and accessible.",
     image: 'https://i.pravatar.cc/600?img=13',
   },
   rows: [
@@ -50,7 +50,7 @@ export const defaultDataPage8: IPage8Data = {
           id: 'creative-director',
           name: 'Nusrat Jahan',
           title: 'Creative Director',
-          bio: 'Shapes every visual story TecBuzz tells, from brand identity to campaign art direction.',
+          bio: 'Guides the team and helps every student receive thoughtful support throughout the application journey.',
           image: 'https://i.pravatar.cc/500?img=47',
         },
         {

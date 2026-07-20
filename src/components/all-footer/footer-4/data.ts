@@ -7,6 +7,9 @@ export interface FooterLink {
 export interface IFooter4Data {
   brandName: string;
   tagline: string;
+  logoUrl: string;
+  logoIsPublished: boolean;
+  logoWidth: number;
 
   destinationsTitle: string;
   destinationsLinks: FooterLink[];
@@ -26,6 +29,9 @@ export const defaultDataFooter4: IFooter4Data = {
   brandName: 'WES Associates',
   tagline:
     'Professional study abroad consultancy for students from Bangladesh, with support for consultation, admission, scholarship, documentation, and visa guidance.',
+  logoUrl: '',
+  logoIsPublished: true,
+  logoWidth: 160,
 
   destinationsTitle: 'Destinations',
   destinationsLinks: [

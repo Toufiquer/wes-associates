@@ -1,8 +1,11 @@
 'use client';
 
-import { Plus, Save, Trash2, Loader2, RotateCcw } from 'lucide-react';
+import { Image as ImageIcon, Plus, Save, Trash2, Loader2, RotateCcw } from 'lucide-react';
 import { toast, ToastContainer } from 'react-toastify';
 import React, { useEffect, useState } from 'react';
+
+import { Switch } from '@/components/ui/switch';
+import ImageUploadManagerSingle from '@/components/dashboard-ui/ImageUploadManagerSingle';
 
 import { defaultDataFooter4, FooterLink, IFooter4Data } from './data';
 
@@ -127,6 +130,59 @@ const MutationFooter4 = ({ data, onSave }: MutationFooterProps) => {
                   value={settings.tagline}
                   onChange={e => setSettings(prev => ({ ...prev, tagline: e.target.value }))}
                   className={`${inputClass} mt-1 min-h-24`}
+                />
+              </div>
+            </div>
+          </section>
+
+          <section className={cardClass}>
+            <div className="mb-4 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <ImageIcon className="h-4 w-4 text-blue-300" />
+                <h2 className="text-sm font-black uppercase tracking-[0.2em] text-white">Logo</h2>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className={labelClass}>{settings.logoIsPublished ? 'Visible' : 'Hidden'}</span>
+                <Switch
+                  checked={settings.logoIsPublished}
+                  onCheckedChange={checked => setSettings(prev => ({ ...prev, logoIsPublished: checked }))}
+                  aria-label="Show footer logo"
+                  className="data-[state=checked]:bg-blue-600"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className={labelClass}>Logo URL</label>
+                <input
+                  value={settings.logoUrl}
+                  onChange={event => setSettings(prev => ({ ...prev, logoUrl: event.target.value }))}
+                  className={`${inputClass} mt-1`}
+                  placeholder="https://..."
+                />
+              </div>
+
+              <ImageUploadManagerSingle
+                value={settings.logoUrl}
+                onChange={logoUrl => setSettings(prev => ({ ...prev, logoUrl }))}
+                label="Upload or select footer logo"
+                maxSizeMB={1}
+                maxWidthOrHeight={1200}
+              />
+
+              <div>
+                <div className="mb-2 flex items-center justify-between gap-3">
+                  <label className={labelClass}>Logo Width</label>
+                  <span className="text-xs font-bold text-blue-300">{settings.logoWidth}px</span>
+                </div>
+                <input
+                  type="range"
+                  min="40"
+                  max="300"
+                  value={settings.logoWidth}
+                  onChange={event => setSettings(prev => ({ ...prev, logoWidth: Number(event.target.value) }))}
+                  className="h-1.5 w-full cursor-pointer appearance-none rounded-full bg-slate-700 accent-blue-500"
                 />
               </div>
             </div>

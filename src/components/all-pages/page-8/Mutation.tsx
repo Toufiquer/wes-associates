@@ -16,6 +16,7 @@ export interface Page8FormProps {
 }
 
 const createId = (prefix: string) => `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+const replaceLegacyBrand = (value: string) => value.replace(/TecBuzz/gi, 'WES Associates');
 
 const createEmptyMember = (): TeamMember => ({
   id: createId('member'),
@@ -33,8 +34,14 @@ const createEmptyRow = (): TeamRow => ({
 
 const cloneData = (data: IPage8Data): IPage8Data => ({
   ...data,
-  ceo: { ...data.ceo },
-  rows: data.rows.map(row => ({ ...row, members: row.members.map(member => ({ ...member })) })),
+  eyebrow: replaceLegacyBrand(data.eyebrow),
+  title: replaceLegacyBrand(data.title),
+  description: replaceLegacyBrand(data.description),
+  ceo: { ...data.ceo, bio: replaceLegacyBrand(data.ceo.bio) },
+  rows: data.rows.map(row => ({
+    ...row,
+    members: row.members.map(member => ({ ...member, bio: replaceLegacyBrand(member.bio) })),
+  })),
 });
 
 const normalizeData = (data?: IPage8Data): IPage8Data => {
@@ -164,7 +171,7 @@ const MutationPage8 = ({ data, onSubmit }: Page8FormProps) => {
                   <Input value={formData.pageName} onChange={event => updateField('pageName', event.target.value)} className="border-zinc-800 bg-zinc-900" />
                 </div>
                 <div className="space-y-2">
-                  <Label>Eyebrow</Label>
+                  <Label>Company Name</Label>
                   <Input value={formData.eyebrow} onChange={event => updateField('eyebrow', event.target.value)} className="border-zinc-800 bg-zinc-900" />
                 </div>
               </div>
@@ -201,7 +208,7 @@ const MutationPage8 = ({ data, onSubmit }: Page8FormProps) => {
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <h3 className="text-sm font-semibold uppercase tracking-wider text-zinc-300">Team Groups</h3>
-              <p className="mt-1 text-xs text-zinc-500">Each group becomes one labeled row in the public team layout.</p>
+              <p className="mt-1 text-xs text-zinc-500">Each group becomes one labeled row with generous spacing in the public team layout.</p>
             </div>
             <Button type="button" onClick={addRow} variant="outlineGlassy" size="sm">
               <Plus className="mr-2 h-4 w-4" /> Add Group

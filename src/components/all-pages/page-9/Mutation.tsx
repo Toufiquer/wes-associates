@@ -1,253 +1,191 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Plus, Save, Trash2, UsersRound } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+import { Flag, Plus, Save, Search, Trash2 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 
-import { defaultDataPage9, IPage9Data, TeamMember, TeamRow } from './data';
+import { CountryItem, defaultDataPage9, IPage9Data, PAGE9_REGIONS, Region } from './data';
 
 export interface Page9FormProps {
   data?: IPage9Data;
   onSubmit: (values: IPage9Data) => void;
 }
 
-const createId = (prefix: string) => `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-
-const createEmptyMember = (): TeamMember => ({
-  id: createId('member'),
-  name: 'New Team Member',
-  title: 'Role / Position',
-  bio: 'Write a short introduction for this team member.',
-  image: '',
-});
-
-const createEmptyRow = (): TeamRow => ({
-  id: createId('row'),
-  label: 'New Team Group',
-  members: [createEmptyMember()],
-});
-
-const cloneData = (data: IPage9Data): IPage9Data => ({
-  ...data,
-  ceo: { ...data.ceo },
-  rows: data.rows.map(row => ({ ...row, members: row.members.map(member => ({ ...member })) })),
-});
+const cloneData = (data: IPage9Data): IPage9Data => ({ ...data, countries: data.countries.map(country => ({ ...country })) });
 
 const normalizeData = (data?: IPage9Data): IPage9Data => {
-  if (!data?.ceo || !Array.isArray(data.rows)) return cloneData(defaultDataPage9);
+  if (!data || !Array.isArray(data.countries)) return cloneData(defaultDataPage9);
   return cloneData({
     ...defaultDataPage9,
     ...data,
-    ceo: { ...defaultDataPage9.ceo, ...data.ceo },
-    rows: data.rows.map((row, rowIndex) => ({
-      id: row.id || `row-${rowIndex + 1}`,
-      label: row.label || `Team Group ${rowIndex + 1}`,
-      members: Array.isArray(row.members)
-        ? row.members.map((member, memberIndex) => ({
-            ...member,
-            id: member.id || `member-${rowIndex + 1}-${memberIndex + 1}`,
-          }))
-        : [],
+    countries: data.countries.map((country, index) => ({
+      id: country.id || `country-${index + 1}`,
+      name: country.name || 'New Country',
+      flag: country.flag || '🏳️',
+      region: PAGE9_REGIONS.includes(country.region) ? country.region : 'Asia',
     })),
   });
 };
 
+const createCountry = (region: Region): CountryItem => ({
+  id: `country-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+  name: 'New Country',
+  flag: '🏳️',
+  region,
+});
+
 const MutationPage9 = ({ data, onSubmit }: Page9FormProps) => {
   const [formData, setFormData] = useState<IPage9Data>(() => normalizeData(data));
+  const [activeRegion, setActiveRegion] = useState<Region>('Asia');
+  const [countryQuery, setCountryQuery] = useState('');
 
   useEffect(() => {
     setFormData(normalizeData(data));
   }, [data]);
 
-  const updateField = (field: 'pageName' | 'eyebrow' | 'title' | 'description' | 'founderLabel', value: string) => {
+  const visibleCountries = useMemo(() => {
+    const query = countryQuery.trim().toLowerCase();
+    return formData.countries.filter(country => country.region === activeRegion && (!query || country.name.toLowerCase().includes(query)));
+  }, [activeRegion, countryQuery, formData.countries]);
+
+  const updateField = (field: 'pageName' | 'searchPlaceholder' | 'viewAllLabel' | 'sectionTitlePrefix' | 'emptyMessage', value: string) => {
     setFormData(current => ({ ...current, [field]: value }));
   };
 
-  const updateCeo = (field: keyof TeamMember, value: string) => {
-    setFormData(current => ({ ...current, ceo: { ...current.ceo, [field]: value } }));
-  };
-
-  const updateRowLabel = (rowIndex: number, value: string) => {
+  const updateCountry = (id: string, field: 'name' | 'flag' | 'region', value: string) => {
     setFormData(current => ({
       ...current,
-      rows: current.rows.map((row, index) => (index === rowIndex ? { ...row, label: value } : row)),
+      countries: current.countries.map(country => (country.id === id ? { ...country, [field]: value } as CountryItem : country)),
     }));
   };
 
-  const updateMember = (rowIndex: number, memberIndex: number, field: keyof TeamMember, value: string) => {
-    setFormData(current => ({
-      ...current,
-      rows: current.rows.map((row, index) =>
-        index === rowIndex
-          ? { ...row, members: row.members.map((member, position) => (position === memberIndex ? { ...member, [field]: value } : member)) }
-          : row,
-      ),
-    }));
+  const removeCountry = (id: string) => {
+    setFormData(current => ({ ...current, countries: current.countries.filter(country => country.id !== id) }));
   };
 
-  const addRow = () => setFormData(current => ({ ...current, rows: [...current.rows, createEmptyRow()] }));
-
-  const removeRow = (rowIndex: number) => {
-    setFormData(current => ({ ...current, rows: current.rows.filter((_, index) => index !== rowIndex) }));
+  const addCountry = () => {
+    setFormData(current => ({ ...current, countries: [...current.countries, createCountry(activeRegion)] }));
+    setCountryQuery('');
   };
-
-  const addMember = (rowIndex: number) => {
-    setFormData(current => ({
-      ...current,
-      rows: current.rows.map((row, index) => (index === rowIndex ? { ...row, members: [...row.members, createEmptyMember()] } : row)),
-    }));
-  };
-
-  const removeMember = (rowIndex: number, memberIndex: number) => {
-    setFormData(current => ({
-      ...current,
-      rows: current.rows.map((row, index) =>
-        index === rowIndex ? { ...row, members: row.members.filter((_, position) => position !== memberIndex) } : row,
-      ),
-    }));
-  };
-
-  const memberFields = (
-    member: TeamMember,
-    onChange: (field: keyof TeamMember, value: string) => void,
-  ) => (
-    <div className="grid gap-3">
-      <div className="grid gap-3 sm:grid-cols-2">
-        <div className="space-y-2">
-          <Label>Name</Label>
-          <Input value={member.name} onChange={event => onChange('name', event.target.value)} className="border-zinc-800 bg-zinc-900" />
-        </div>
-        <div className="space-y-2">
-          <Label>Role / Title</Label>
-          <Input value={member.title} onChange={event => onChange('title', event.target.value)} className="border-zinc-800 bg-zinc-900" />
-        </div>
-      </div>
-      <div className="space-y-2">
-        <Label>Image URL</Label>
-        <Input value={member.image} onChange={event => onChange('image', event.target.value)} className="border-zinc-800 bg-zinc-900" />
-      </div>
-      <div className="space-y-2">
-        <Label>Biography</Label>
-        <Textarea
-          value={member.bio}
-          onChange={event => onChange('bio', event.target.value)}
-          className="min-h-24 resize-none border-zinc-800 bg-zinc-900"
-        />
-      </div>
-    </div>
-  );
 
   return (
-    <div className="min-h-screen bg-zinc-950 p-4 text-zinc-100 md:p-8">
-      <div className="mx-auto max-w-6xl overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-900/60 shadow-2xl">
-        <div className="flex items-center gap-3 border-b border-zinc-800 bg-zinc-900/80 p-6">
-          <div className="rounded-lg bg-fuchsia-500/10 p-2">
-            <UsersRound className="text-fuchsia-400" size={24} />
+    <div className="min-h-screen bg-slate-950 p-4 text-slate-100 md:p-8">
+      <div className="mx-auto max-w-6xl overflow-hidden rounded-3xl border border-slate-800 bg-slate-900/70 shadow-2xl">
+        <div className="flex items-center gap-3 border-b border-slate-800 bg-slate-900 p-6">
+          <div className="rounded-lg bg-blue-500/10 p-2">
+            <Flag className="text-blue-400" size={24} />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-white">Edit Team Page</h2>
-            <p className="text-sm text-zinc-400">Edit the page introduction, founder profile, team groups, and every team member.</p>
+            <h2 className="text-xl font-bold text-white">Edit Embassy Countries Page</h2>
+            <p className="text-sm text-slate-400">Edit search text, region headings, flags, country names, and region assignments.</p>
           </div>
         </div>
 
-        <div className="grid gap-6 p-6 lg:grid-cols-2">
-          <section className="space-y-4 rounded-2xl border border-zinc-800 bg-zinc-950/30 p-5">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-zinc-400">Page Header</h3>
-            <div className="grid gap-4">
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="space-y-2">
-                  <Label>Page Name</Label>
-                  <Input value={formData.pageName} onChange={event => updateField('pageName', event.target.value)} className="border-zinc-800 bg-zinc-900" />
-                </div>
-                <div className="space-y-2">
-                  <Label>Eyebrow</Label>
-                  <Input value={formData.eyebrow} onChange={event => updateField('eyebrow', event.target.value)} className="border-zinc-800 bg-zinc-900" />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label>Title</Label>
-                <Input value={formData.title} onChange={event => updateField('title', event.target.value)} className="border-zinc-800 bg-zinc-900" />
-              </div>
-              <div className="space-y-2">
-                <Label>Description</Label>
-                <Textarea
-                  value={formData.description}
-                  onChange={event => updateField('description', event.target.value)}
-                  className="min-h-28 resize-none border-zinc-800 bg-zinc-900"
-                />
-              </div>
-            </div>
-          </section>
+        <section className="grid gap-4 border-b border-slate-800 p-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="space-y-2">
+            <Label>Page Name</Label>
+            <Input value={formData.pageName} onChange={event => updateField('pageName', event.target.value)} className="border-slate-800 bg-slate-950" />
+          </div>
+          <div className="space-y-2">
+            <Label>Search Placeholder</Label>
+            <Input
+              value={formData.searchPlaceholder}
+              onChange={event => updateField('searchPlaceholder', event.target.value)}
+              className="border-slate-800 bg-slate-950"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label>View All Label</Label>
+            <Input value={formData.viewAllLabel} onChange={event => updateField('viewAllLabel', event.target.value)} className="border-slate-800 bg-slate-950" />
+          </div>
+          <div className="space-y-2 md:col-span-2">
+            <Label>Region Heading Prefix</Label>
+            <Input
+              value={formData.sectionTitlePrefix}
+              onChange={event => updateField('sectionTitlePrefix', event.target.value)}
+              className="border-slate-800 bg-slate-950"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label>Empty Result Message</Label>
+            <Input value={formData.emptyMessage} onChange={event => updateField('emptyMessage', event.target.value)} className="border-slate-800 bg-slate-950" />
+          </div>
+        </section>
 
-          <section className="space-y-4 rounded-2xl border border-fuchsia-400/20 bg-fuchsia-500/5 p-5">
-            <div className="flex items-center justify-between gap-3">
-              <h3 className="text-sm font-semibold uppercase tracking-wider text-fuchsia-300">Founder Profile</h3>
-              <Input
-                aria-label="Founder badge label"
-                value={formData.founderLabel}
-                onChange={event => updateField('founderLabel', event.target.value)}
-                className="h-9 max-w-32 border-zinc-800 bg-zinc-900"
-              />
-            </div>
-            {memberFields(formData.ceo, updateCeo)}
-          </section>
-        </div>
-
-        <div className="space-y-5 px-6 pb-6">
+        <section className="space-y-5 p-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <h3 className="text-sm font-semibold uppercase tracking-wider text-zinc-300">Team Groups</h3>
-              <p className="mt-1 text-xs text-zinc-500">Each group becomes one labeled row in the public team layout.</p>
+              <h3 className="font-bold text-white">Countries</h3>
+              <p className="mt-1 text-xs text-slate-400">{formData.countries.length} countries across {PAGE9_REGIONS.length} regions.</p>
             </div>
-            <Button type="button" onClick={addRow} variant="outlineGlassy" size="sm">
-              <Plus className="mr-2 h-4 w-4" /> Add Group
+            <Button type="button" onClick={addCountry} variant="outlineGlassy" size="sm">
+              <Plus className="mr-2 h-4 w-4" /> Add to {activeRegion}
             </Button>
           </div>
 
-          {formData.rows.map((row, rowIndex) => (
-            <section key={row.id} className="space-y-4 rounded-2xl border border-zinc-800 bg-zinc-950/30 p-4 sm:p-5">
-              <div className="flex items-center gap-3">
-                <div className="flex-1 space-y-2">
-                  <Label>Group Label</Label>
-                  <Input value={row.label} onChange={event => updateRowLabel(rowIndex, event.target.value)} className="border-zinc-800 bg-zinc-900" />
+          <div className="flex flex-wrap gap-2">
+            {PAGE9_REGIONS.map(region => {
+              const count = formData.countries.filter(country => country.region === region).length;
+              return (
+                <Button
+                  key={region}
+                  type="button"
+                  size="sm"
+                  variant={activeRegion === region ? 'default' : 'outlineGlassy'}
+                  onClick={() => { setActiveRegion(region); setCountryQuery(''); }}
+                  className={activeRegion === region ? 'bg-blue-700 hover:bg-blue-600' : ''}
+                >
+                  {region} ({count})
+                </Button>
+              );
+            })}
+          </div>
+
+          <div className="relative max-w-sm">
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+            <Input
+              value={countryQuery}
+              onChange={event => setCountryQuery(event.target.value)}
+              placeholder={`Search ${activeRegion}`}
+              className="border-slate-800 bg-slate-950 pl-9"
+            />
+          </div>
+
+          <div className="grid gap-3">
+            {visibleCountries.map(country => (
+              <div key={country.id} className="grid items-end gap-3 rounded-xl border border-slate-800 bg-slate-950/60 p-3 sm:grid-cols-[90px_1fr_180px_40px]">
+                <div className="space-y-2">
+                  <Label>Flag</Label>
+                  <Input value={country.flag} onChange={event => updateCountry(country.id, 'flag', event.target.value)} className="border-slate-800 bg-slate-900 text-center text-xl" />
                 </div>
-                <Button type="button" onClick={() => removeRow(rowIndex)} variant="outlineFire" size="sm" className="mt-6 h-9 w-9 p-0">
+                <div className="space-y-2">
+                  <Label>Country Name</Label>
+                  <Input value={country.name} onChange={event => updateCountry(country.id, 'name', event.target.value)} className="border-slate-800 bg-slate-900" />
+                </div>
+                <div className="space-y-2">
+                  <Label>Region</Label>
+                  <select
+                    value={country.region}
+                    onChange={event => updateCountry(country.id, 'region', event.target.value)}
+                    className="h-10 w-full rounded-md border border-slate-800 bg-slate-900 px-3 text-sm text-white outline-none focus:border-blue-500"
+                  >
+                    {PAGE9_REGIONS.map(region => <option key={region}>{region}</option>)}
+                  </select>
+                </div>
+                <Button type="button" onClick={() => removeCountry(country.id)} variant="outlineFire" size="sm" className="h-10 w-10 p-0">
                   <Trash2 className="h-4 w-4" />
                 </Button>
               </div>
+            ))}
+          </div>
 
-              <div className="grid gap-4 lg:grid-cols-2">
-                {row.members.map((member, memberIndex) => (
-                  <div key={member.id} className="space-y-3 rounded-xl border border-zinc-800 bg-zinc-900/70 p-4">
-                    <div className="flex items-center justify-between gap-3">
-                      <p className="text-sm font-semibold text-zinc-300">Member {memberIndex + 1}</p>
-                      <Button
-                        type="button"
-                        onClick={() => removeMember(rowIndex, memberIndex)}
-                        variant="outlineFire"
-                        size="sm"
-                        className="h-8 w-8 p-0"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                    {memberFields(member, (field, value) => updateMember(rowIndex, memberIndex, field, value))}
-                  </div>
-                ))}
-              </div>
+          {visibleCountries.length === 0 && <p className="rounded-xl border border-dashed border-slate-700 p-8 text-center text-sm text-slate-500">No countries found in this editor view.</p>}
+        </section>
 
-              <Button type="button" onClick={() => addMember(rowIndex)} variant="outlineGlassy" size="sm">
-                <Plus className="mr-2 h-4 w-4" /> Add Member
-              </Button>
-            </section>
-          ))}
-        </div>
-
-        <div className="flex justify-end border-t border-zinc-800 bg-zinc-900/80 p-6">
+        <div className="flex justify-end border-t border-slate-800 bg-slate-900 p-6">
           <Button type="button" onClick={() => onSubmit(formData)} variant="outlineGlassy" size="sm">
             <Save className="mr-2 h-4 w-4" /> Save Changes
           </Button>

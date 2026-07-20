@@ -1,106 +1,200 @@
-export interface TeamMember {
+export const PAGE9_REGIONS = ['Asia', 'Africa', 'Europe', 'North America', 'South America', 'Oceania'] as const;
+
+export type Region = (typeof PAGE9_REGIONS)[number];
+
+export interface CountryItem {
   id: string;
   name: string;
-  title: string;
-  bio: string;
-  image: string;
-}
-
-export interface TeamRow {
-  id: string;
-  label: string;
-  members: TeamMember[];
+  flag: string;
+  region: Region;
 }
 
 export interface IPage9Data {
   pageUid: string;
   pageName: string;
-  eyebrow: string;
-  title: string;
-  description: string;
-  founderLabel: string;
-  ceo: TeamMember;
-  rows: TeamRow[];
+  searchPlaceholder: string;
+  viewAllLabel: string;
+  sectionTitlePrefix: string;
+  emptyMessage: string;
+  countries: CountryItem[];
 }
 
 export interface Page9Props {
   data?: IPage9Data | string;
 }
 
+const COUNTRY_SEED: Array<[string, string, Region]> = [
+  ['Hong Kong', '🇭🇰', 'Asia'],
+  ['Philippines', '🇵🇭', 'Asia'],
+  ['Thailand', '🇹🇭', 'Asia'],
+  ['Singapore', '🇸🇬', 'Asia'],
+  ['Myanmar', '🇲🇲', 'Asia'],
+  ['Lebanon', '🇱🇧', 'Asia'],
+  ['Kazakhstan', '🇰🇿', 'Asia'],
+  ['Laos', '🇱🇦', 'Asia'],
+  ['Iraq', '🇮🇶', 'Asia'],
+  ['Brunei', '🇧🇳', 'Asia'],
+  ['Bahrain', '🇧🇭', 'Asia'],
+  ['Malaysia', '🇲🇾', 'Asia'],
+  ['Pakistan', '🇵🇰', 'Asia'],
+  ['Turkey', '🇹🇷', 'Asia'],
+  ["The People's Republic of China", '🇨🇳', 'Asia'],
+  ['Sri Lanka', '🇱🇰', 'Asia'],
+  ['Qatar', '🇶🇦', 'Asia'],
+  ['Maldives', '🇲🇻', 'Asia'],
+  ['Japan', '🇯🇵', 'Asia'],
+  ['Kuwait', '🇰🇼', 'Asia'],
+  ['Indonesia', '🇮🇩', 'Asia'],
+  ['South Korea', '🇰🇷', 'Asia'],
+  ['Cambodia', '🇰🇭', 'Asia'],
+  ['Afghanistan', '🇦🇫', 'Asia'],
+  ['India', '🇮🇳', 'Asia'],
+  ['Taiwan', '🇹🇼', 'Asia'],
+  ['Vietnam', '🇻🇳', 'Asia'],
+  ['Tajikistan', '🇹🇯', 'Asia'],
+  ['Saudi Arabia', '🇸🇦', 'Asia'],
+  ['Oman', '🇴🇲', 'Asia'],
+  ['Mongolia', '🇲🇳', 'Asia'],
+  ['Jordan', '🇯🇴', 'Asia'],
+  ['Kyrgyzstan', '🇰🇬', 'Asia'],
+  ['Iran', '🇮🇷', 'Asia'],
+  ['East Timor', '🇹🇱', 'Asia'],
+  ['Armenia', '🇦🇲', 'Asia'],
+  ['Nepal', '🇳🇵', 'Asia'],
+  ['Bhutan', '🇧🇹', 'Asia'],
+  ['Gambia', '🇬🇲', 'Africa'],
+  ['Tanzania', '🇹🇿', 'Africa'],
+  ['Sudan', '🇸🇩', 'Africa'],
+  ['Seychelles', '🇸🇨', 'Africa'],
+  ['Morocco', '🇲🇦', 'Africa'],
+  ['Niger', '🇳🇪', 'Africa'],
+  ['Mauritania', '🇲🇷', 'Africa'],
+  ['Liberia', '🇱🇷', 'Africa'],
+  ['Kenya', '🇰🇪', 'Africa'],
+  ['Republic of the Congo', '🇨🇬', 'Africa'],
+  ['Somalia', '🇸🇴', 'Africa'],
+  ['Sao Tome and Principe', '🇸🇹', 'Africa'],
+  ['Nigeria', '🇳🇬', 'Africa'],
+  ['Mozambique', '🇲🇿', 'Africa'],
+  ['Malawi', '🇲🇼', 'Africa'],
+  ['Mauritius', '🇲🇺', 'Africa'],
+  ['Libya', '🇱🇾', 'Africa'],
+  ['Ivory Coast', '🇨🇮', 'Africa'],
+  ['Democratic Republic of the Congo', '🇨🇩', 'Africa'],
+  ['South Sudan', '🇸🇸', 'Africa'],
+  ['Senegal', '🇸🇳', 'Africa'],
+  ['South Africa', '🇿🇦', 'Africa'],
+  ['Namibia', '🇳🇦', 'Africa'],
+  ['Mali', '🇲🇱', 'Africa'],
+  ['Lesotho', '🇱🇸', 'Africa'],
+  ['Madagascar', '🇲🇬', 'Africa'],
+  ['Gabon', '🇬🇦', 'Africa'],
+  ['Ghana', '🇬🇭', 'Africa'],
+  ['Guinea', '🇬🇳', 'Africa'],
+  ['Guinea-Bissau', '🇬🇼', 'Africa'],
+  ['Equatorial Guinea', '🇬🇶', 'Africa'],
+  ['Eritrea', '🇪🇷', 'Africa'],
+  ['Ethiopia', '🇪🇹', 'Africa'],
+  ['Egypt', '🇪🇬', 'Africa'],
+  ['Djibouti', '🇩🇯', 'Africa'],
+  ['Dominica', '🇩🇲', 'Africa'],
+  ['Burkina Faso', '🇧🇫', 'Africa'],
+  ['Cameroon', '🇨🇲', 'Africa'],
+  ['Cape Verde', '🇨🇻', 'Africa'],
+  ['Chad', '🇹🇩', 'Africa'],
+  ['Burundi', '🇧🇮', 'Africa'],
+  ['Benin', '🇧🇯', 'Africa'],
+  ['Algeria', '🇩🇿', 'Africa'],
+  ['Angola', '🇦🇴', 'Africa'],
+  ['Czech Republic', '🇨🇿', 'Europe'],
+  ['Spain', '🇪🇸', 'Europe'],
+  ['Slovenia', '🇸🇮', 'Europe'],
+  ['Portugal', '🇵🇹', 'Europe'],
+  ['Montenegro', '🇲🇪', 'Europe'],
+  ['Monaco', '🇲🇨', 'Europe'],
+  ['Lithuania', '🇱🇹', 'Europe'],
+  ['Kosovo', '🇽🇰', 'Europe'],
+  ['Italy', '🇮🇹', 'Europe'],
+  ['Greece', '🇬🇷', 'Europe'],
+  ['France', '🇫🇷', 'Europe'],
+  ['Croatia', '🇭🇷', 'Europe'],
+  ['Austria', '🇦🇹', 'Europe'],
+  ['Belgium', '🇧🇪', 'Europe'],
+  ['Netherlands', '🇳🇱', 'Europe'],
+  ['United Kingdom', '🇬🇧', 'Europe'],
+  ['Switzerland', '🇨🇭', 'Europe'],
+  ['San Marino', '🇸🇲', 'Europe'],
+  ['Serbia', '🇷🇸', 'Europe'],
+  ['Russia', '🇷🇺', 'Europe'],
+  ['Malta', '🇲🇹', 'Europe'],
+  ['Latvia', '🇱🇻', 'Europe'],
+  ['Luxembourg', '🇱🇺', 'Europe'],
+  ['Hungary', '🇭🇺', 'Europe'],
+  ['Georgia', '🇬🇪', 'Europe'],
+  ['Estonia', '🇪🇪', 'Europe'],
+  ['Cyprus', '🇨🇾', 'Europe'],
+  ['Bosnia and Herzegovina', '🇧🇦', 'Europe'],
+  ['Azerbaijan', '🇦🇿', 'Europe'],
+  ['Andorra', '🇦🇩', 'Europe'],
+  ['Romania', '🇷🇴', 'Europe'],
+  ['Sweden', '🇸🇪', 'Europe'],
+  ['Slovakia', '🇸🇰', 'Europe'],
+  ['Poland', '🇵🇱', 'Europe'],
+  ['Norway', '🇳🇴', 'Europe'],
+  ['Moldova', '🇲🇩', 'Europe'],
+  ['Liechtenstein', '🇱🇮', 'Europe'],
+  ['North Macedonia', '🇲🇰', 'Europe'],
+  ['Iceland', '🇮🇸', 'Europe'],
+  ['Germany', '🇩🇪', 'Europe'],
+  ['Finland', '🇫🇮', 'Europe'],
+  ['Denmark', '🇩🇰', 'Europe'],
+  ['Bulgaria', '🇧🇬', 'Europe'],
+  ['Belarus', '🇧🇾', 'Europe'],
+  ['Ireland', '🇮🇪', 'Europe'],
+  ['Albania', '🇦🇱', 'Europe'],
+  ['United States', '🇺🇸', 'North America'],
+  ['Nicaragua', '🇳🇮', 'North America'],
+  ['Haiti', '🇭🇹', 'North America'],
+  ['El Salvador', '🇸🇻', 'North America'],
+  ['Barbados', '🇧🇧', 'North America'],
+  ['Canada', '🇨🇦', 'North America'],
+  ['The Dominican Republic', '🇩🇴', 'North America'],
+  ['Mexico', '🇲🇽', 'North America'],
+  ['Grenada', '🇬🇩', 'North America'],
+  ['Costa Rica', '🇨🇷', 'North America'],
+  ['Belize', '🇧🇿', 'North America'],
+  ['Panama', '🇵🇦', 'North America'],
+  ['Jamaica', '🇯🇲', 'North America'],
+  ['Guatemala', '🇬🇹', 'North America'],
+  ['Cuba', '🇨🇺', 'North America'],
+  ['Antigua and Barbuda', '🇦🇬', 'North America'],
+  ['Uruguay', '🇺🇾', 'South America'],
+  ['Paraguay', '🇵🇾', 'South America'],
+  ['Chile', '🇨🇱', 'South America'],
+  ['Brazil', '🇧🇷', 'South America'],
+  ['Suriname', '🇸🇷', 'South America'],
+  ['Guyana', '🇬🇾', 'South America'],
+  ['Colombia', '🇨🇴', 'South America'],
+  ['Argentina', '🇦🇷', 'South America'],
+  ['Peru', '🇵🇪', 'South America'],
+  ['Ecuador', '🇪🇨', 'South America'],
+  ['Bolivia', '🇧🇴', 'South America'],
+  ['Samoa', '🇼🇸', 'Oceania'],
+  ['Nauru', '🇳🇷', 'Oceania'],
+  ['Fiji', '🇫🇯', 'Oceania'],
+  ['Palau', '🇵🇼', 'Oceania'],
+  ['New Zealand', '🇳🇿', 'Oceania'],
+  ['Australia', '🇦🇺', 'Oceania'],
+  ['Papua New Guinea', '🇵🇬', 'Oceania'],
+  ['Kiribati', '🇰🇮', 'Oceania'],
+];
+
 export const defaultDataPage9: IPage9Data = {
-  pageUid: 'page-uid-8',
-  pageName: 'Team',
-  eyebrow: 'TecBuzz',
-  title: 'The people behind the buzz',
-  description: 'Seven people, three disciplines, one goal: turning Bangladeshi businesses into brands worth talking about.',
-  founderLabel: 'Founder',
-  ceo: {
-    id: 'ceo',
-    name: 'Tanvir Ahmed',
-    title: 'Founder & CEO',
-    bio: "Steers TecBuzz's vision, from first client call to shipped product. Ten years turning Dhaka SMEs into brands people remember.",
-    image: 'https://i.pravatar.cc/600?img=13',
-  },
-  rows: [
-    {
-      id: 'leadership',
-      label: 'Leadership',
-      members: [
-        {
-          id: 'creative-director',
-          name: 'Nusrat Jahan',
-          title: 'Creative Director',
-          bio: 'Shapes every visual story TecBuzz tells, from brand identity to campaign art direction.',
-          image: 'https://i.pravatar.cc/500?img=47',
-        },
-        {
-          id: 'lead-developer',
-          name: 'Rakibul Hasan',
-          title: 'Lead Developer',
-          bio: 'Builds the fast, reliable web platforms our clients run their business on.',
-          image: 'https://i.pravatar.cc/500?img=68',
-        },
-      ],
-    },
-    {
-      id: 'growth',
-      label: 'Growth',
-      members: [
-        {
-          id: 'marketing-lead',
-          name: 'Farhana Islam',
-          title: 'Marketing Lead',
-          bio: 'Turns ad budgets into measurable growth across Meta, Google, and TikTok.',
-          image: 'https://i.pravatar.cc/500?img=32',
-        },
-        {
-          id: 'content-strategist',
-          name: 'Shahriar Kabir',
-          title: 'Content Strategist',
-          bio: 'Writes and plans the content calendars that keep client audiences engaged weekly.',
-          image: 'https://i.pravatar.cc/500?img=51',
-        },
-      ],
-    },
-    {
-      id: 'product',
-      label: 'Product',
-      members: [
-        {
-          id: 'ui-ux-designer',
-          name: 'Mim Akter',
-          title: 'UI/UX Designer',
-          bio: 'Designs interfaces that feel effortless, tested with real users before every launch.',
-          image: 'https://i.pravatar.cc/500?img=25',
-        },
-        {
-          id: 'client-success',
-          name: 'Imran Chowdhury',
-          title: 'Client Success Manager',
-          bio: 'The steady voice clients call first, from onboarding through every project milestone.',
-          image: 'https://i.pravatar.cc/500?img=60',
-        },
-      ],
-    },
-  ],
+  pageUid: 'page-uid-9',
+  pageName: 'Embassy Countries',
+  searchPlaceholder: 'Search a country',
+  viewAllLabel: 'View All',
+  sectionTitlePrefix: 'List of embassy countries in',
+  emptyMessage: 'No countries match',
+  countries: COUNTRY_SEED.map(([name, flag, region], index) => ({ id: `country-${index + 1}`, name, flag, region })),
 };
