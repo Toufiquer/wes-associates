@@ -6,7 +6,9 @@ export interface CountryItem {
   id: string;
   name: string;
   flag: string;
+  flagImage: string;
   region: Region;
+  description: string;
 }
 
 export interface IPage9Data {
@@ -22,6 +24,19 @@ export interface IPage9Data {
 export interface Page9Props {
   data?: IPage9Data | string;
 }
+
+export const getFlagImageFromEmoji = (flag: string) => {
+  const code = Array.from(flag)
+    .map(character => character.codePointAt(0))
+    .filter((value): value is number => typeof value === 'number' && value >= 0x1f1e6 && value <= 0x1f1ff)
+    .map(value => String.fromCharCode(value - 0x1f1e6 + 97))
+    .join('');
+
+  return code.length === 2 ? `https://flagcdn.com/w160/${code}.png` : '';
+};
+
+export const getDefaultCountryDescription = (name: string, region: Region) =>
+  `${name} is located in ${region}. Open this country profile to review its location and embassy-related information. You can replace this text with detailed country, visa, embassy, or consular guidance from the Page Builder editor.`;
 
 const COUNTRY_SEED: Array<[string, string, Region]> = [
   ['Hong Kong', '🇭🇰', 'Asia'],
@@ -196,5 +211,12 @@ export const defaultDataPage9: IPage9Data = {
   viewAllLabel: 'View All',
   sectionTitlePrefix: 'List of embassy countries in',
   emptyMessage: 'No countries match',
-  countries: COUNTRY_SEED.map(([name, flag, region], index) => ({ id: `country-${index + 1}`, name, flag, region })),
+  countries: COUNTRY_SEED.map(([name, flag, region], index) => ({
+    id: `country-${index + 1}`,
+    name,
+    flag,
+    flagImage: getFlagImageFromEmoji(flag),
+    region,
+    description: getDefaultCountryDescription(name, region),
+  })),
 };

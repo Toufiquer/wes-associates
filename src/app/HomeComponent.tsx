@@ -96,66 +96,12 @@ function Marker({ children }: { children: React.ReactNode }) {
 }
 
 export default function HomeComponent() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState(0);
 
   return (
     <div className="overflow-hidden bg-white font-sans text-[#0b1222] selection:bg-red-200">
-      <div className="bg-[#080c14] text-[10px] font-semibold text-white/80">
-        <div className="mx-auto flex max-w-[1080px] items-center justify-between gap-4 px-4 py-2.5 sm:px-6">
-          <div className="flex flex-wrap items-center gap-x-5 gap-y-1">
-            <span>Email: info@wesassociates.com</span>
-            <span className="hidden sm:inline">Call now: +880 1303-537667</span>
-            <span className="hidden md:inline">Open: Sat-Thu, 10:00 AM - 7:00 PM</span>
-          </div>
-          <div className="flex gap-2">
-            {[Facebook, Youtube, Linkedin].map((Icon, i) => (
-              <a key={i} href="#" aria-label="Social media" className="grid h-6 w-6 place-items-center rounded-full bg-white/10 transition hover:bg-[#ed1c24]">
-                <Icon size={11} />
-              </a>
-            ))}
-          </div>
-        </div>
-      </div>
-
       <main>
-        <section
-          id="home"
-          className="relative border-b border-slate-100 bg-[linear-gradient(#e9edf2_1px,transparent_1px),linear-gradient(90deg,#e9edf2_1px,transparent_1px),radial-gradient(circle_at_50%_25%,#fff0f0,transparent_42%)] bg-[size:36px_36px,36px_36px,auto]"
-        >
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.75 }}
-            className="mx-auto max-w-[1080px] px-4 pb-32 pt-16 text-center sm:px-6 sm:pt-20 lg:pt-24"
-          >
-            <h1 className="mx-auto max-w-4xl text-[44px] font-black leading-[.94] tracking-[-.055em] sm:text-6xl lg:text-[78px]">
-              <span className="block">ভয়কে জয় করে</span>
-              <span className="block text-slate-500">STUDY</span>
-              <span className="block">
-                <span className="text-slate-500">ABROAD</span>-এ
-              </span>
-              <span className="block text-[#ed1c24]">সফল হোন</span>
-            </h1>
-            <p className="mx-auto mt-7 max-w-2xl text-base font-bold leading-7 text-slate-600 sm:text-lg">
-              সঠিক গাইডলাইন নিয়ে বিদেশে পড়াশোনার স্বপ্ন পূরণ করুন
-              <br className="hidden sm:block" /> - <span className="text-[#ed1c24]">WES Associates</span> আপনাকে দেশ, বিশ্ববিদ্যালয়, স্কলারশিপ ও ভিসা
-              প্রস্তুতিতে সহায়তা করবে।
-            </p>
-            <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-              <a href="#appointment" className="bg-[#ed1c24] px-7 py-3.5 text-sm font-black text-white transition hover:-translate-y-1 hover:shadow-xl">
-                অ্যাডমিশন ওপেন
-              </a>
-              <a
-                href="#countries"
-                className="border border-slate-300 bg-white px-7 py-3.5 text-sm font-black transition hover:border-[#ed1c24] hover:text-[#ed1c24]"
-              >
-                দেশ দেখুন
-              </a>
-            </div>
-          </motion.div>
-        </section>
-
+        {/* Section-50 */}
         <div className="relative z-10 mx-auto -mt-16 max-w-[850px] px-4 sm:px-6">
           <motion.div
             {...reveal}
@@ -169,7 +115,7 @@ export default function HomeComponent() {
             ))}
           </motion.div>
         </div>
-
+        {/* Section-51 */}
         <section className="mx-auto max-w-[850px] px-4 py-20 sm:px-6 lg:py-24">
           <motion.div {...reveal} className="grid gap-10 md:grid-cols-[.8fr_1.2fr] md:items-center">
             <div>
@@ -196,7 +142,7 @@ export default function HomeComponent() {
             </div>
           </motion.div>
         </section>
-
+        {/* Section-52 */}
         <section className="bg-[#f4f6f8] py-20 lg:py-24">
           <div className="mx-auto max-w-[850px] px-4 sm:px-6">
             <SectionTitle
@@ -220,7 +166,7 @@ export default function HomeComponent() {
             </div>
           </div>
         </section>
-
+        {/* Section-53 */}
         <section id="countries" className="py-20 lg:py-24">
           <div className="mx-auto max-w-[850px] px-4 sm:px-6">
             <SectionTitle
@@ -249,7 +195,7 @@ export default function HomeComponent() {
             </div>
           </div>
         </section>
-
+        {/* Section-54 */}
         <section className="bg-[#f4f6f8] px-4 py-14 sm:px-6">
           <motion.div
             {...reveal}
@@ -299,7 +245,7 @@ export default function HomeComponent() {
             </div>
           </motion.div>
         </section>
-
+        {/* Section-55 */}
         <section id="services" className="bg-[#080c14] py-20 text-white lg:py-24">
           <div className="mx-auto max-w-[850px] px-4 sm:px-6">
             <SectionTitle
@@ -324,7 +270,7 @@ export default function HomeComponent() {
             </div>
           </div>
         </section>
-
+        {/* Section-56 */}
         <section id="process" className="py-20 lg:py-24">
           <div className="mx-auto max-w-[850px] px-4 sm:px-6">
             <SectionTitle
@@ -350,7 +296,7 @@ export default function HomeComponent() {
             </div>
           </div>
         </section>
-
+        {/* Section-57 */}
         <section id="scholarships" className="bg-[#f4f6f8] py-20">
           <div className="mx-auto grid max-w-[850px] gap-8 px-4 sm:px-6 md:grid-cols-[1fr_1.15fr] md:items-center">
             <SectionTitle
@@ -373,7 +319,7 @@ export default function HomeComponent() {
             </div>
           </div>
         </section>
-
+        {/* Section-58 */}
         <section className="py-20">
           <div className="mx-auto max-w-[850px] px-4 sm:px-6">
             <SectionTitle
@@ -396,7 +342,7 @@ export default function HomeComponent() {
             </div>
           </div>
         </section>
-
+        {/* Section-59 */}
         <section className="bg-[#080c14] py-20 text-white">
           <div className="mx-auto grid max-w-[850px] gap-10 px-4 sm:px-6 md:grid-cols-[.9fr_1.1fr] md:items-center">
             <SectionTitle
@@ -420,7 +366,7 @@ export default function HomeComponent() {
             </div>
           </div>
         </section>
-
+        {/* Section-60 */}
         <section className="py-20">
           <div className="mx-auto max-w-[850px] px-4 sm:px-6">
             <SectionTitle
@@ -442,7 +388,7 @@ export default function HomeComponent() {
             </div>
           </div>
         </section>
-
+        {/* Section-61 */}
         <section id="appointment" className="bg-[#f4f6f8] py-20">
           <div className="mx-auto grid max-w-[850px] gap-10 px-4 sm:px-6 md:grid-cols-[.85fr_1.15fr] md:items-center">
             <motion.div {...reveal}>
@@ -530,7 +476,7 @@ export default function HomeComponent() {
             </motion.form>
           </div>
         </section>
-
+        {/* Section-62 */}
         <section className="py-20">
           <div className="mx-auto max-w-[850px] px-4 sm:px-6">
             <SectionTitle
@@ -552,7 +498,7 @@ export default function HomeComponent() {
             </div>
           </div>
         </section>
-
+        {/* Section-63 */}
         <section id="blog" className="bg-[#f4f6f8] py-20">
           <div className="mx-auto max-w-[850px] px-4 sm:px-6">
             <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
@@ -579,7 +525,7 @@ export default function HomeComponent() {
             </div>
           </div>
         </section>
-
+        {/* Section-64 */}
         <section className="py-20">
           <div className="mx-auto grid max-w-[850px] gap-10 px-4 sm:px-6 md:grid-cols-[.8fr_1.2fr]">
             <SectionTitle

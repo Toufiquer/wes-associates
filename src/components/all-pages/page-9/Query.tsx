@@ -1,14 +1,25 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+/* eslint-disable @next/next/no-img-element -- flag URLs are editable Page Builder data and can use arbitrary hosts. */
+
+import { useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Search } from 'lucide-react';
+import { Globe2, MapPin, Search, X } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 
-import { CountryItem, defaultDataPage9, IPage9Data, PAGE9_REGIONS, Page9Props, Region } from './data';
+import {
+  CountryItem,
+  defaultDataPage9,
+  getDefaultCountryDescription,
+  getFlagImageFromEmoji,
+  IPage9Data,
+  PAGE9_REGIONS,
+  Page9Props,
+  Region,
+} from './data';
 
 const normalizeData = (value: unknown): IPage9Data => {
   if (!value || typeof value !== 'object') return defaultDataPage9;
@@ -18,12 +29,20 @@ const normalizeData = (value: unknown): IPage9Data => {
   return {
     ...defaultDataPage9,
     ...data,
-    countries: data.countries.map((country, index) => ({
-      id: country.id || `country-${index + 1}`,
-      name: country.name || 'Unnamed Country',
-      flag: country.flag || '🏳️',
-      region: PAGE9_REGIONS.includes(country.region) ? country.region : 'Asia',
-    })),
+    countries: data.countries.map((country, index) => {
+      const name = country.name || 'Unnamed Country';
+      const flag = country.flag || '🏳️';
+      const region = PAGE9_REGIONS.includes(country.region) ? country.region : 'Asia';
+
+      return {
+        id: country.id || `country-${index + 1}`,
+        name,
+        flag,
+        flagImage: country.flagImage || getFlagImageFromEmoji(flag),
+        region,
+        description: country.description || getDefaultCountryDescription(name, region),
+      };
+    }),
   };
 };
 
@@ -43,11 +62,13 @@ const RegionSection = ({
   countries,
   index,
   titlePrefix,
+  onSelect,
 }: {
   region: Region;
   countries: CountryItem[];
   index: number;
   titlePrefix: string;
+  onSelect: (country: CountryItem) => void;
 }) => (
   <motion.div
     initial={{ opacity: 0, y: 24 }}
@@ -64,10 +85,26 @@ const RegionSection = ({
     </div>
     <div className="mx-auto grid max-w-4xl grid-cols-1 gap-x-10 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
       {countries.map(country => (
-        <div key={country.id} className="group flex cursor-pointer items-center gap-3 rounded-lg px-2 py-1.5 transition-colors hover:bg-slate-100">
-          <span className="text-xl leading-none">{country.flag}</span>
+        <button
+          key={country.id}
+          type="button"
+          onClick={() => onSelect(country)}
+          className="group flex w-full cursor-pointer items-center gap-3 rounded-lg px-2 py-1.5 text-left transition-all hover:-translate-y-0.5 hover:bg-white hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+        >
+          <span className="relative flex h-10 w-14 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-slate-200 bg-slate-100 text-xl leading-none shadow-sm">
+            {country.flag}
+            {country.flagImage && (
+              <img
+                src={country.flagImage}
+                alt={`${country.name} flag`}
+                className="absolute inset-0 h-full w-full object-cover"
+                loading="lazy"
+                onError={event => { event.currentTarget.style.display = 'none'; }}
+              />
+            )}
+          </span>
           <span className="text-sm text-slate-700 transition-colors group-hover:text-blue-600">{country.name}</span>
-        </div>
+        </button>
       ))}
     </div>
   </motion.div>
@@ -77,6 +114,23 @@ const QueryPage9 = ({ data }: Page9Props) => {
   const pageData = parseData(data);
   const [query, setQuery] = useState('');
   const [activeRegion, setActiveRegion] = useState<Region | 'All'>('All');
+  const [selectedCountry, setSelectedCountry] = useState<CountryItem | null>(null);
+
+  useEffect(() => {
+    if (!selectedCountry) return;
+
+    const previousOverflow = document.body.style.overflow;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setSelectedCountry(null);
+    };
+
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', closeOnEscape);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', closeOnEscape);
+    };
+  }, [selectedCountry]);
 
   const filteredByRegion = useMemo(
     () => (activeRegion === 'All' ? pageData.countries : pageData.countries.filter(country => country.region === activeRegion)),
@@ -147,6 +201,7 @@ const QueryPage9 = ({ data }: Page9Props) => {
                   countries={group.countries}
                   index={index}
                   titlePrefix={pageData.sectionTitlePrefix}
+                  onSelect={setSelectedCountry}
                 />
               ))}
             </motion.div>
@@ -157,6 +212,69 @@ const QueryPage9 = ({ data }: Page9Props) => {
           )}
         </AnimatePresence>
       </div>
+
+      <AnimatePresence>
+        {selectedCountry && (
+          <motion.div
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/65 p-4 backdrop-blur-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onMouseDown={event => {
+              if (event.target === event.currentTarget) setSelectedCountry(null);
+            }}
+          >
+            <motion.div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="country-dialog-title"
+              initial={{ opacity: 0, scale: 0.92, y: 24 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 16 }}
+              transition={{ type: 'spring', stiffness: 320, damping: 28 }}
+              className="relative max-h-[90vh] w-full max-w-xl overflow-y-auto rounded-2xl border border-white/70 bg-white shadow-2xl"
+            >
+              <button
+                type="button"
+                onClick={() => setSelectedCountry(null)}
+                aria-label="Close country information"
+                className="absolute right-3 top-3 z-10 grid h-9 w-9 place-items-center rounded-full border border-slate-200 bg-white/90 text-slate-600 shadow-sm backdrop-blur transition hover:rotate-90 hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+              >
+                <X className="h-5 w-5" />
+              </button>
+
+              <div className="h-2 bg-gradient-to-r from-blue-700 via-blue-500 to-cyan-400" />
+              <div className="p-5 sm:p-7">
+                <div className="flex flex-col gap-4 pr-10 sm:flex-row sm:items-center">
+                  <div className="relative flex h-20 w-28 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-slate-100 text-4xl shadow-md">
+                    {selectedCountry.flag}
+                    {selectedCountry.flagImage && (
+                      <img
+                        src={selectedCountry.flagImage}
+                        alt={`${selectedCountry.name} flag`}
+                        className="absolute inset-0 h-full w-full object-cover"
+                        onError={event => { event.currentTarget.style.display = 'none'; }}
+                      />
+                    )}
+                  </div>
+                  <div>
+                    <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-blue-700">
+                      <Globe2 className="h-3.5 w-3.5" /> Country information
+                    </span>
+                    <h3 id="country-dialog-title" className="mt-2 text-2xl font-bold tracking-tight text-slate-950">{selectedCountry.name}</h3>
+                    <p className="mt-1 flex items-center gap-1.5 text-sm font-medium text-slate-500"><MapPin className="h-4 w-4 text-blue-600" /> {selectedCountry.region}</p>
+                  </div>
+                </div>
+
+                <div className="mt-6 rounded-xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
+                  <h4 className="text-xs font-bold uppercase tracking-[0.18em] text-slate-400">About the country</h4>
+                  <p className="mt-2 whitespace-pre-line text-sm leading-7 text-slate-700">{selectedCountry.description}</p>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 };
