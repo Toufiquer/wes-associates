@@ -12,7 +12,11 @@ export const applicationApi = apiSlice.injectEndpoints({
       query: body => ({ url: '/api/applicaton/v1', method: 'PUT', body }),
       invalidatesTags: ['tagTypeApplication'],
     }),
+    deleteApplication: builder.mutation({
+      query: id => ({ url: '/api/applicaton/v1', method: 'DELETE', body: { id } }),
+      invalidatesTags: ['tagTypeApplication'],
+    }),
   }),
 });
 
-export const { useGetMyApplicationsQuery, useGetAllApplicationsQuery, useAddApplicationMutation, useUpdateApplicationMutation } = applicationApi;
+export const { useGetMyApplicationsQuery, useGetAllApplicationsQuery, useAddApplicationMutation, useUpdateApplicationMutation, useDeleteApplicationMutation } = applicationApi;
