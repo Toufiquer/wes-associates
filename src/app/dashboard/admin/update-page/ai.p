@@ -23,3 +23,11 @@ I want to create a revalication page inside the page there is list of Page, Comp
 12. Whatsapp.
 13. List of page [fetch data like 'src/app/dashboard/admin/page-builder/page.tsx']
 
+* Design the page as the following instructions.
+- use white creamy background.
+- use eye-catching style.
+- use stunning animation.
+- make it responsive for Mobile, Tablet, and Desktop.
+- use border-sm.
+- use less padding.
+- use less speace/margin.
