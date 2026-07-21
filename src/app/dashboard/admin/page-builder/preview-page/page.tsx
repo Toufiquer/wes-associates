@@ -20,6 +20,7 @@ import { AllPages, AllPagesKeys } from '@/components/all-pages/all-page-index/al
 import { AllAssets, AllAssetsKeys } from '@/components/all-assets/all-assets-index/all-page';
 
 import { PageContent } from '../utils';
+import PreviewPageTracking from './tracking-event-fire';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const COMPONENT_MAP: Record<string, { collection: any; keys: string[]; label: string; icon: any; color: string }> = {
@@ -155,6 +156,7 @@ function PreviewPageContent() {
 
   return (
     <main className="min-h-screen w-full bg-slate-950">
+      <PreviewPageTracking pageId={currentPage._id} pageName={currentPage.pageName} pagePath={currentPage.path} />
       {items.length === 0 ? (
         <div className="min-h-screen flex items-center justify-center bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-purple-950 to-slate-950 text-white/50 font-black tracking-tight">
           Empty Page

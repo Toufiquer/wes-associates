@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 
 import { UploadButton } from '@/lib/uploadthing';
 import { useSession } from '@/lib/auth-client';
+import { trackApplicationSubmission } from '@/lib/fbp-and-gtm';
 import { useAddApplicationMutation } from '@/redux/features/application/applicationSlice';
 
 interface UploadedDocument { kind: string; label: string; name: string; url: string; key: string; type: string; size: number }
@@ -42,7 +43,14 @@ export default function StudentApplicationPage() {
     event.preventDefault();
     if (!session.data?.user) return toast.error('Please sign in before submitting');
     try {
-      await addApplication({ ...form, documents }).unwrap();
+      const response = (await addApplication({ ...form, documents }).unwrap()) as { data?: { _id?: string } };
+      trackApplicationSubmission({
+        applicationId: response.data?._id,
+        selectedCountry: form.selectedCountry,
+        selectedUniversity: form.selectedUniversity,
+        selectedCourseName: form.selectedCourseName,
+        documentCount: documents.length,
+      });
       setSubmitted(true);
       toast.success('Application submitted successfully');
     } catch (error) {
