@@ -145,7 +145,7 @@ export default async function HomePage() {
 
   return (
     <main className="min-h-screen w-full bg-slate-950  ">
-      <HomeComponent />
+      {/* <HomeComponent /> */}
       {items.length === 0 ? (
         <div>
           <div className="min-h-[50vh] flex flex-col items-center justify-center text-slate-500 space-y-4">
