@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef } from 'react';
 
 import { trackPreviewPageView } from '@/lib/fbp-and-gtm';
+import { trackTikTokEvent } from '@/lib/tiktok-pixel';
 
 interface PreviewPageTrackingProps {
   pageId?: string;
@@ -27,6 +28,12 @@ const PreviewPageTracking = ({ pageId, pageName, pagePath }: PreviewPageTracking
       pageName,
       pagePath,
       previewPath: window.location.pathname,
+    });
+    trackTikTokEvent('ViewContent', {
+      content_id: pageId || pagePath,
+      content_type: 'page_preview',
+      content_name: pageName,
+      page_path: pagePath,
     });
   }, [eventKey, pageId, pageName, pagePath]);
 

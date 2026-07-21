@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import { UploadButton } from '@/lib/uploadthing';
 import { useSession } from '@/lib/auth-client';
 import { trackApplicationSubmission } from '@/lib/fbp-and-gtm';
+import { TIKTOK_PIXEL_CURRENCY, trackTikTokEvent } from '@/lib/tiktok-pixel';
 import { useAddApplicationMutation } from '@/redux/features/application/applicationSlice';
 
 interface UploadedDocument { kind: string; label: string; name: string; url: string; key: string; type: string; size: number }
@@ -50,6 +51,17 @@ export default function StudentApplicationPage() {
         selectedUniversity: form.selectedUniversity,
         selectedCourseName: form.selectedCourseName,
         documentCount: documents.length,
+      });
+      trackTikTokEvent('SubmitForm', {
+        content_id: response.data?._id,
+        content_type: 'application',
+        content_name: 'Student Application',
+        selected_country: form.selectedCountry || undefined,
+        selected_university: form.selectedUniversity || undefined,
+        selected_course: form.selectedCourseName || undefined,
+        document_count: documents.length,
+        value: 0,
+        currency: TIKTOK_PIXEL_CURRENCY,
       });
       setSubmitted(true);
       toast.success('Application submitted successfully');

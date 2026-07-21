@@ -20,6 +20,7 @@ import WhatsAppButton from '@/components/common/WhatsAppButton';
 import FacebookPixel from '@/components/facebook-pixel';
 import FacebookPixelPageView from '@/components/facebook-pixel-pageview';
 import GtmRouteChange from '@/components/gtm-route-change';
+import TikTokPixel from '@/components/tiktok-pixel';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import './globals.css';
 import TecBuzzFooter from '@/components/TecBuzzFooter';
@@ -40,11 +41,13 @@ export default async function RootLayout({
 }>) {
   const gtmId = process.env.NEXT_PUBLIC_GTM_ID;
   const pixelId = process.env.NEXT_PUBLIC_FB_PIXEL_ID;
+  const tiktokPixelId = process.env.NEXT_PUBLIC_TIKTOK_PIXEL_ID;
 
   return (
     <html lang="en" className="scroll-smooth" data-scroll-behavior="smooth">
       {gtmId ? <GoogleTagManager gtmId={gtmId} /> : null}
       {pixelId ? <FacebookPixel pixelId={pixelId} /> : null}
+      {tiktokPixelId ? <TikTokPixel pixelId={tiktokPixelId} /> : null}
       <SpeedInsights />
       <body className="antialiased font-sans bg-slate-50 text-slate-900 selection:bg-indigo-500 selection:text-white min-h-screen flex flex-col">
         <ReduxProvider>
