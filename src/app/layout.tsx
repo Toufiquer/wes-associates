@@ -22,6 +22,7 @@ import FacebookPixelPageView from '@/components/facebook-pixel-pageview';
 import GtmRouteChange from '@/components/gtm-route-change';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import './globals.css';
+import TecBuzzFooter from '@/components/TecBuzzFooter';
 
 export const metadata: Metadata = {
   title: 'Wes Associates',
@@ -50,6 +51,7 @@ export default async function RootLayout({
           <MenuComponentWithSession />
           <main className=" animate-in fade-in duration-500">{children}</main>
           <FooterServer />
+          <TecBuzzFooter />
           <PWAPopup />
           <WhatsAppButton />
         </ReduxProvider>

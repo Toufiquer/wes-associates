@@ -32,14 +32,12 @@ const QueryFooter4 = ({ data }: QueryFooterProps) => {
                 width={settings.logoWidth}
                 height={100}
                 unoptimized
-                className="h-auto max-h-24 object-contain object-left"
+                className="h-auto max-h-24 object-contain object-left -mt-8"
                 style={{ width: `${settings.logoWidth}px`, maxWidth: '100%' }}
               />
             )}
             <h3 className="text-xl font-bold text-stone-950">{settings.brandName}</h3>
-            <p className="leading-relaxed text-sm">
-              {settings.tagline}
-            </p>
+            <p className="leading-relaxed text-sm">{settings.tagline}</p>
           </div>
 
           <div className="space-y-4">
@@ -48,7 +46,9 @@ const QueryFooter4 = ({ data }: QueryFooterProps) => {
               {settings.destinationsLinks.map(item => (
                 <li key={item.id}>
                   {item.link !== '#' ? (
-                    <a href={item.link} className="block cursor-pointer transition-colors hover:text-red-600">{item.title}</a>
+                    <a href={item.link} className="block cursor-pointer transition-colors hover:text-red-600">
+                      {item.title}
+                    </a>
                   ) : (
                     <span className="block cursor-pointer transition-colors hover:text-red-600">{item.title}</span>
                   )}
@@ -63,7 +63,9 @@ const QueryFooter4 = ({ data }: QueryFooterProps) => {
               {settings.servicesLinks.map(item => (
                 <li key={item.id}>
                   {item.link !== '#' ? (
-                    <a href={item.link} className="block cursor-pointer transition-colors hover:text-red-600">{item.title}</a>
+                    <a href={item.link} className="block cursor-pointer transition-colors hover:text-red-600">
+                      {item.title}
+                    </a>
                   ) : (
                     <span className="block cursor-pointer transition-colors hover:text-red-600">{item.title}</span>
                   )}
@@ -80,13 +82,12 @@ const QueryFooter4 = ({ data }: QueryFooterProps) => {
             </div>
           </div>
         </div>
-
       </div>
 
       <div className="bg-black text-stone-300">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 py-6 text-xs md:flex-row md:px-12 lg:px-24">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 py-6 pb-0 text-xs md:flex-row md:px-12 lg:px-24">
           <p>{settings.copyrightText}</p>
-          <p>{settings.bottomRightText}</p>
+          {/* <p>{settings.bottomRightText}</p> */}
         </div>
       </div>
     </footer>
