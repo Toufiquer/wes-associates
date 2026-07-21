@@ -296,11 +296,9 @@ function EditPageContent() {
   const [isSaving, setIsSaving] = useState(false);
 
   const [selectedSectionCategory, setSelectedSectionCategory] = useState<string>('All');
-  const [sectionPreviewKey, setSectionPreviewKey] = useState<string | null>(null);
+  const [componentPreview, setComponentPreview] = useState<{ type: ItemType; key: string } | null>(null);
   const [paginationPage, setPaginationPage] = useState(1);
-  const [previewGridSize, setPreviewGridSize] = useState<1 | 2 | 3>(3);
-  const ITEMS_PER_PAGE = previewGridSize;
-  const previewGridColumnsClass = previewGridSize === 1 ? 'grid-cols-1' : previewGridSize === 2 ? 'grid-cols-2' : 'grid-cols-3';
+  const ITEMS_PER_PAGE = 6;
 
   useEffect(() => {
     if (currentPage?.content) {
@@ -310,7 +308,7 @@ function EditPageContent() {
 
   useEffect(() => {
     setPaginationPage(1);
-  }, [activeAddType, selectedSectionCategory, previewGridSize]);
+  }, [activeAddType, selectedSectionCategory]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
@@ -365,7 +363,7 @@ function EditPageContent() {
     toast.success(`${key} added to page`);
     setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 100);
 
-    setSectionPreviewKey(null);
+    setComponentPreview(null);
     if (type !== 'section') setActiveAddType(null);
   };
 
@@ -430,6 +428,14 @@ function EditPageContent() {
       return section?.category === selectedSectionCategory;
     });
   }, [activeAddType, selectedSectionCategory]);
+
+  const renderComponentPreview = (type: ItemType, key: string) => {
+    const config = COMPONENT_MAP[type].collection[key];
+    const DisplayComponent = type === 'form' ? config?.preview : config?.query;
+
+    if (!DisplayComponent) return <div className="grid h-full min-h-40 place-items-center text-sm text-slate-500">Preview unavailable</div>;
+    return type === 'form' ? <DisplayComponent /> : <DisplayComponent data={JSON.stringify(config.data)} />;
+  };
 
   if (error) {
     const errorMessage =
@@ -630,12 +636,8 @@ function EditPageContent() {
         </div>
       </div>
 
-      <Dialog open={!!activeAddType} onOpenChange={() => setActiveAddType(null)}>
-        <DialogContent
-          className={`
-            p-0 overflow-hidden bg-blue-400 rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-30 border border-gray-100 shadow-2xl text-white gap-0 flex flex-col max-w-[90vw] min-w-[90vw] h-[85vh] mt-10
-        `}
-        >
+      <Dialog open={!!activeAddType} onOpenChange={open => !open && setActiveAddType(null)}>
+        <DialogContent className="mt-8 flex h-[calc(100dvh-6rem)] max-h-[820px] w-[calc(100vw-1rem)] max-w-[calc(100vw-1rem)] flex-col gap-0 overflow-hidden rounded-xl border border-white/15 bg-slate-950/95 p-0 text-white shadow-2xl backdrop-blur-xl sm:w-[calc(100vw-2rem)] sm:max-w-[calc(100vw-2rem)] xl:max-w-[1440px]">
           {activeAddType &&
             (() => {
               const meta = COMPONENT_MAP[activeAddType];
@@ -648,169 +650,102 @@ function EditPageContent() {
 
               return (
                 <>
-                  <div className="shrink-0 flex flex-col bg-white/10 border-b border-white/10">
-                    <div className="flex items-center justify-between p-6 pb-4">
-                      <div className="flex items-center gap-4">
-                        <div className={`p-3 rounded-sm bg-gradient-to-br ${meta.color} shadow-lg`}>
-                          <meta.icon className="h-6 w-6 text-white" />
-                        </div>
-                        <div>
-                          <DialogTitle className="text-2xl font-black tracking-tight text-white flex items-center gap-3">
-                            Add {meta.label}
-                            {isSectionMode && <span className="text-xs bg-white/10 px-2 py-0.5 rounded-sm text-slate-300 font-mono">{totalItems} Total</span>}
-                          </DialogTitle>
-                          <p className="text-slate-200 text-sm mt-1">
-                            {isSectionMode ? 'Browse and filter professional sections to build your page.' : 'Choose a component to add.'}
-                          </p>
-                        </div>
+                  <div className="flex shrink-0 flex-col border-b border-white/10 bg-white/[0.06]">
+                    <div className="flex items-center gap-3 px-3 py-3 pr-12 sm:px-5">
+                      <div className={`rounded-lg bg-gradient-to-br p-2.5 ${meta.color} shadow-lg`}>
+                        <meta.icon className="h-5 w-5 text-white" />
                       </div>
-                      <div className="flex items-center gap-2">
-                        {[1, 2, 3].map(size => (
-                          <Button
-                            key={size}
-                            size="sm"
-                            variant="outlineGlassy"
-                            onClick={() => setPreviewGridSize(size as 1 | 2 | 3)}
-                            className={previewGridSize === size ? 'bg-white/10' : ''}
-                          >
-                            {size}
-                          </Button>
-                        ))}
-                      </div>
+                      <DialogTitle className="truncate text-lg font-black tracking-tight text-white sm:text-xl">
+                        {meta.label}
+                      </DialogTitle>
                     </div>
 
                     {isSectionMode && (
-                      <div className="px-6 -mt-6 pb-0 flex overflow-x-auto no-scrollbar gap-2">
+                      <div className="flex gap-1 overflow-x-auto px-2 no-scrollbar sm:px-4">
                         {sectionCategories.map(cat => (
                           <button
                             key={cat}
+                            type="button"
                             onClick={() => setSelectedSectionCategory(cat)}
-                            className={`
-                                relative px-4 py-3 text-sm font-bold transition-colors whitespace-nowrap
-                                ${selectedSectionCategory === cat ? 'text-white' : 'text-slate-200 hover:text-slate-300'}
-                              `}
+                            className={`relative shrink-0 px-3 py-2.5 text-xs font-bold transition-colors sm:px-4 sm:text-sm ${
+                              selectedSectionCategory === cat ? 'text-white' : 'text-slate-400 hover:text-slate-200'
+                            }`}
                           >
                             {cat}
-                            {selectedSectionCategory === cat && (
-                              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-white shadow-[0_0_10px_rgba(255,255,255,0.35)]" />
-                            )}
+                            {selectedSectionCategory === cat && <span className="absolute inset-x-2 bottom-0 h-0.5 rounded-full bg-white" />}
                           </button>
                         ))}
                       </div>
                     )}
                   </div>
 
-                  <div className="">
-                    {isSectionMode ? (
-                      <div className={`grid ${previewGridColumnsClass} gap-2`}>
-                        {paginatedItems.map(key => {
-                          const config = TypedAllSections[key];
-                          const PreviewComp = config.query;
+                  <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-3 sm:p-4 lg:p-5">
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 2xl:grid-cols-3">
+                      {paginatedItems.map(key => {
+                        const config = meta.collection[key];
+                        const category = isSectionMode ? (config as SectionConfig).category : meta.label;
 
-                          return (
-                            <div
-                              key={key}
-                              className="group relative bg-white/10 border border-white/20 rounded-sm overflow-hidden hover:border-white/40 hover:shadow-2xl transition-all duration-300 flex flex-col h-[calc(62vh)] min-h-100"
-                            >
-                              <ScrollArea className="flex-1 h-100 w-ful">
-                                {PreviewComp ? <PreviewComp data={JSON.stringify(config.data)} /> : <div className="text-slate-600">No Preview</div>}
-                              </ScrollArea>
-
-                              <div className="absolute top-3 left-3">
-                                <span className="bg-black/60 backdrop-blur text-[10px] text-white/80 px-2 py-1 rounded-sm border border-white/5">
-                                  {config.category}
-                                </span>
-                              </div>
-
-                              <div className="p-4 bg-white/5 border-t border-white/5 flex items-center jsutify-between w-full gap-3 z-10">
-                                <div className="flex justify-between items-center w-full">
-                                  <h4 className="text-sm font-black tracking-tight text-slate-200 truncate pr-2">{key}</h4>
-                                </div>
-                                <div className="flex gap-2 justify-end">
-                                  <Button onClick={() => setSectionPreviewKey(key)} size="sm" variant="outlineGlassy">
-                                    <Eye className="mr-2 h-3.5 w-3.5" /> Preview
-                                  </Button>
-                                  <Button
-                                    onClick={() => {
-                                      handleAddItem('section', key);
-                                      setActiveAddType(null);
-                                    }}
-                                    size="sm"
-                                    variant="outlineGlassy"
-                                  >
-                                    <Plus className="mr-2 h-3.5 w-3.5" /> Add
-                                  </Button>
-                                </div>
-                              </div>
+                        return (
+                          <article
+                            key={key}
+                            className="group flex min-w-0 flex-col overflow-hidden rounded-xl border border-white/15 bg-white/[0.06] shadow-lg transition duration-300 hover:border-white/35 hover:shadow-2xl"
+                          >
+                            <div className="relative h-52 overflow-hidden bg-slate-900/70 sm:h-60 lg:h-64">
+                              <div className="pointer-events-none h-full w-full overflow-hidden">{renderComponentPreview(activeAddType, key)}</div>
+                              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-slate-950/80 to-transparent" />
                             </div>
-                          );
-                        })}
-                        {paginatedItems.length === 0 && (
-                          <div className="col-span-full flex flex-col items-center justify-center py-20 text-slate-500">
-                            <Search className="h-10 w-10 mb-4 opacity-50" />
-                            <p>No sections found in this category.</p>
-                          </div>
-                        )}
-                      </div>
-                    ) : (
-                      <div className={`grid ${previewGridColumnsClass} gap-6 pb-10`}>
-                        {paginatedItems.map(key => {
-                          const config = meta.collection[key];
-                          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                          const DisplayComponent = activeAddType === 'form' ? (config as any).preview : (config as any).query;
 
-                          return (
-                            <div
-                              key={key}
-                              onClick={() => handleAddItem(activeAddType, key)}
-                              className="group cursor-pointer rounded-sm border border-white/20 bg-black/20 overflow-hidden hover:border-white/40 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 h-[calc(85vh-220px)]"
-                            >
-                              <div className="h-[calc(85vh-300px)] bg-slate-900/50 relative overflow-hidden p-4 flex items-center justify-center border-b border-white/5">
-                                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10"></div>
-                                <div className="scale-[0.6] w-full h-full origin-center flex items-center justify-center pointer-events-none">
-                                  {DisplayComponent ? (
-                                    activeAddType === 'form' ? (
-                                      <DisplayComponent />
-                                    ) : (
-                                      <DisplayComponent data={JSON.stringify(config.data)} />
-                                    )
-                                  ) : (
-                                    <span className="text-slate-500">Preview</span>
-                                  )}
-                                </div>
-                                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
-                                  <div className="bg-white text-black px-4 py-2 rounded-sm font-black flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-transform">
-                                    <Plus className="h-4 w-4" /> Add This
-                                  </div>
-                                </div>
+                            <div className="mt-auto flex flex-wrap items-center gap-2 border-t border-white/10 bg-slate-950/90 p-3">
+                              <div className="min-w-0 flex-1">
+                                <h4 className="truncate text-sm font-black tracking-tight text-white">{key}</h4>
+                                <p className="mt-0.5 truncate text-[10px] font-bold uppercase tracking-wider text-slate-500">{category}</p>
                               </div>
-                              <div className="p-4 bg-white/5 flex justify-between items-center">
-                                <span className="font-black tracking-tight text-slate-200 text-sm">{key}</span>
-                                <span className="text-[10px] bg-white/10 px-2 py-1 rounded-sm text-slate-400 uppercase tracking-tight">{meta.label}</span>
-                              </div>
+                              <Button
+                                type="button"
+                                onClick={() => setComponentPreview({ type: activeAddType, key })}
+                                size="sm"
+                                variant="outlineGlassy"
+                                className="h-9 px-3"
+                              >
+                                <Eye className="mr-1.5 h-3.5 w-3.5" /> Preview
+                              </Button>
+                              <Button
+                                type="button"
+                                onClick={() => {
+                                  handleAddItem(activeAddType, key);
+                                  setActiveAddType(null);
+                                }}
+                                size="sm"
+                                className="h-9 bg-blue-600 px-3 text-white hover:bg-blue-500"
+                              >
+                                <Plus className="mr-1.5 h-3.5 w-3.5" /> Add
+                              </Button>
                             </div>
-                          );
-                        })}
-                      </div>
-                    )}
+                          </article>
+                        );
+                      })}
+
+                      {paginatedItems.length === 0 && (
+                        <div className="col-span-full grid min-h-56 place-items-center rounded-xl border border-dashed border-white/15 text-slate-500">
+                          <Search className="h-9 w-9 opacity-50" />
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   {totalPages > 1 && (
-                    <div className="shrink-0 p-4 border-t border-white/10 bg-white/10 backdrop-blur-md flex items-center justify-between z-20 py-2">
-                      <div className="text-xs text-slate-300 font-mono hidden sm:block">
-                        Showing {(paginationPage - 1) * ITEMS_PER_PAGE + 1} - {Math.min(paginationPage * ITEMS_PER_PAGE, totalItems)} of {totalItems}
-                      </div>
-                      <div className="flex items-center gap-2 mx-auto sm:mx-0">
+                    <div className="z-20 flex shrink-0 items-center justify-center border-t border-white/10 bg-slate-950/95 px-3 py-2 backdrop-blur-md">
+                      <div className="flex items-center gap-2">
                         <Button
                           variant="outlineGlassy"
                           size="sm"
                           onClick={() => setPaginationPage(p => Math.max(1, p - 1))}
                           disabled={paginationPage === 1}
-                          className="w-10 h-10 p-0 rounded-full"
+                          className="h-9 w-9 rounded-full p-0"
                         >
                           <ChevronLeft className="h-4 w-4" />
                         </Button>
-                        <span className="text-sm font-medium text-slate-300 min-w-[3rem] text-center">
+                        <span className="min-w-[3rem] text-center text-sm font-medium text-slate-300">
                           {paginationPage} / {totalPages}
                         </span>
                         <Button
@@ -818,7 +753,7 @@ function EditPageContent() {
                           size="sm"
                           onClick={() => setPaginationPage(p => Math.min(totalPages, p + 1))}
                           disabled={paginationPage === totalPages}
-                          className="w-10 h-10 p-0 rounded-full"
+                          className="h-9 w-9 rounded-full p-0"
                         >
                           <ChevronRight className="h-4 w-4" />
                         </Button>
@@ -830,34 +765,36 @@ function EditPageContent() {
             })()}
         </DialogContent>
       </Dialog>
-      <Dialog open={!!sectionPreviewKey} onOpenChange={() => setSectionPreviewKey(null)}>
-        <DialogContent className="max-w-[90vw] p-0 bg-blue-400 rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-30 border border-gray-100 flex flex-col min-w-[90vw] h-[80vh] mt-10 text-white">
-          {sectionPreviewKey &&
+      <Dialog open={!!componentPreview} onOpenChange={open => !open && setComponentPreview(null)}>
+        <DialogContent className="mt-8 flex h-[calc(100dvh-6rem)] max-h-[820px] w-[calc(100vw-1rem)] max-w-[calc(100vw-1rem)] flex-col gap-0 overflow-hidden rounded-xl border border-white/15 bg-slate-950/95 p-0 text-white shadow-2xl backdrop-blur-xl sm:w-[calc(100vw-2rem)] sm:max-w-[calc(100vw-2rem)] xl:max-w-[1440px]">
+          {componentPreview &&
             (() => {
-              const config = TypedAllSections[sectionPreviewKey];
-              const QueryComp = config.query;
+              const meta = COMPONENT_MAP[componentPreview.type];
 
               return (
                 <>
-                  <div className="flex items-center justify-between p-4 border-b border-white/10 bg-white/5">
-                    <div className="flex items-center gap-3">
-                      <h3 className="text-white font-black tracking-tight text-lg">{sectionPreviewKey}</h3>
-                      <span className="text-xs px-2 py-1 rounded-sm bg-blue-500/20 text-blue-100 border border-blue-400/30">{config.category}</span>
+                  <div className="flex shrink-0 items-center gap-3 border-b border-white/10 bg-white/[0.06] px-3 py-3 pr-12 sm:px-5">
+                    <div className={`rounded-lg bg-gradient-to-br p-2 ${meta.color}`}>
+                      <meta.icon className="h-4 w-4 text-white" />
                     </div>
-                    <div className="flex items-center gap-3 mr-8">
-                      <Button onClick={() => handleAddItem('section', sectionPreviewKey)} variant="outlineGlassy">
-                        <Plus className="mr-2 h-4 w-4" /> Add Section
-                      </Button>
-                    </div>
+                    <DialogTitle className="min-w-0 flex-1 truncate text-base font-black tracking-tight text-white sm:text-lg">
+                      {componentPreview.key}
+                    </DialogTitle>
+                    <Button
+                      type="button"
+                      onClick={() => {
+                        handleAddItem(componentPreview.type, componentPreview.key);
+                        setComponentPreview(null);
+                        setActiveAddType(null);
+                      }}
+                      size="sm"
+                      className="mr-1 shrink-0 bg-blue-600 text-white hover:bg-blue-500 sm:mr-4"
+                    >
+                      <Plus className="mr-1.5 h-4 w-4" /> Add
+                    </Button>
                   </div>
-                  <ScrollArea className="h-[68vh] w-full bg-black -mt-4">
-                    <div className="min-h-full flex flex-col">
-                      {QueryComp ? (
-                        <QueryComp data={JSON.stringify(config.data)} />
-                      ) : (
-                        <div className="flex-1 flex items-center justify-center text-slate-500">Preview not available</div>
-                      )}
-                    </div>
+                  <ScrollArea className="min-h-0 flex-1 w-full bg-white">
+                    <div className="min-h-full w-full">{renderComponentPreview(componentPreview.type, componentPreview.key)}</div>
                   </ScrollArea>
                 </>
               );
@@ -866,7 +803,7 @@ function EditPageContent() {
       </Dialog>
 
       <Dialog open={!!movingItem} onOpenChange={() => setMovingItem(null)}>
-        <DialogContent className="bg-blue-400 rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-30 border border-gray-100 text-white">
+        <DialogContent className="mt-8 max-h-[calc(100dvh-6rem)] overflow-y-auto bg-blue-400 rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-30 border border-gray-100 text-white">
           <DialogHeader>
             <DialogTitle className="text-center font-black tracking-tight">Reorder {movingItem?.key}</DialogTitle>
           </DialogHeader>
@@ -882,7 +819,7 @@ function EditPageContent() {
       </Dialog>
 
       <Dialog open={!!deletingItem} onOpenChange={() => setDeletingItem(null)}>
-        <DialogContent className="bg-blue-400 rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-30 border border-gray-100 text-white max-w-md">
+        <DialogContent className="mt-8 max-h-[calc(100dvh-6rem)] overflow-y-auto bg-blue-400 rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-30 border border-gray-100 text-white max-w-md">
           <div className="flex flex-col items-center text-center p-4">
             <div className="w-16 h-16 rounded-full bg-red-500/10 flex items-center justify-center mb-4">
               <AlertTriangle className="h-8 w-8 text-red-500" />
@@ -906,7 +843,7 @@ function EditPageContent() {
       </Dialog>
 
       <Dialog open={!!editingItem} onOpenChange={() => setEditingItem(null)}>
-        <DialogContent className="max-w-4xl md:max-w-6xl h-[85vh] mt-10 p-0 bg-blue-400 rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-30 border border-gray-100 text-white flex flex-col">
+        <DialogContent className="mt-8 flex h-[calc(100dvh-6rem)] max-h-[820px] max-w-4xl flex-col rounded-md border border-gray-100 bg-blue-400 bg-clip-padding p-0 text-white backdrop-blur-md md:max-w-6xl bg-opacity-30">
           <DialogHeader className="p-4 border-b border-white/10 bg-white/5 shrink-0">
             <DialogTitle className="flex items-center gap-2 text-xl font-black tracking-tight">
               <Edit className="h-5 w-5 text-blue-200" />
@@ -933,7 +870,7 @@ function EditPageContent() {
       </Dialog>
 
       <Dialog open={!!previewingItem} onOpenChange={() => setPreviewingItem(null)}>
-        <DialogContent className="max-w-4xl h-[85vh] mt-10 p-0 bg-blue-400 rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-30 border border-gray-100 text-white flex flex-col">
+        <DialogContent className="mt-8 flex h-[calc(100dvh-6rem)] max-h-[820px] max-w-4xl flex-col rounded-md border border-gray-100 bg-blue-400 bg-clip-padding p-0 text-white backdrop-blur-md bg-opacity-30">
           <DialogHeader className="p-6 border-b border-white/10 bg-white/5 shrink-0">
             <DialogTitle className="flex items-center gap-2 font-black tracking-tight">
               <Eye className="h-5 w-5 text-blue-200" /> Live Preview
