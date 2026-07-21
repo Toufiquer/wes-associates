@@ -16,6 +16,7 @@ import { defaultDataPage6 } from '../page-6/data';
 import { defaultDataPage7 } from '../page-7/data';
 import { defaultDataPage8 } from '../page-8/data';
 import { defaultDataPage9 } from '../page-9/data';
+import { defaultDataPage10 } from '../page-10/data';
 
 import MutationPage1 from '../page-1/Mutation';
 import MutationPage101 from '../page-101/Mutation';
@@ -27,6 +28,7 @@ import MutationPage6 from '../page-6/Mutation';
 import MutationPage7 from '../page-7/Mutation';
 import MutationPage8 from '../page-8/Mutation';
 import MutationPage9 from '../page-9/Mutation';
+import MutationPage10 from '../page-10/Mutation';
 
 import QueryPage1 from '../page-1/Query';
 import QueryPage101 from '../page-101/Query';
@@ -38,6 +40,7 @@ import QueryPage6 from '../page-6/Query';
 import QueryPage7 from '../page-7/Query';
 import QueryPage8 from '../page-8/Query';
 import QueryPage9 from '../page-9/Query';
+import QueryPage10 from '../page-10/Query';
 
 export const allPageCategory = ['Page', 'Details'];
 
@@ -51,7 +54,8 @@ export const AllPages = {
   'page-uid-6': { name: 'Delivery Policy', category: allPageCategory[0], mutation: MutationPage6, query: QueryPage6, data: defaultDataPage6 },
   'page-uid-7': { name: 'Refund Policy', category: allPageCategory[0], mutation: MutationPage7, query: QueryPage7, data: defaultDataPage7 },
   'page-uid-8': { name: 'About WES Associates', category: allPageCategory[0], mutation: MutationPage8, query: QueryPage8, data: defaultDataPage8 },
-  'page-uid-9': { name: 'All Country', category: allPageCategory[0], mutation: MutationPage9, query: QueryPage9, data: defaultDataPage9 },
+  'page-uid-9': { name: 'All Country Embassy', category: allPageCategory[0], mutation: MutationPage9, query: QueryPage9, data: defaultDataPage9 },
+  'page-uid-10': { name: 'All Country Information', category: allPageCategory[0], mutation: MutationPage10, query: QueryPage10, data: defaultDataPage10 },
 };
 
 export const AllPagesKeys = Object.keys(AllPages);

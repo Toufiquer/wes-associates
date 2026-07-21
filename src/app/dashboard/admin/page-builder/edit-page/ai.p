@@ -1,0 +1,3 @@
+Look at the page.tsx 'src/app/dashboard/admin/page-builder/edit-page/page.tsx' 
+Problem: When I Open Froms, Sections, Pages, Assets in tablet View I can not see Add button because of screen height is too short. 
+Now your task is Update the Modal and remove unwanted Text and redesign it so user Can Open, Preview, Add each section from Mobile, Tablet, and Desktop device. Now change the layout of the Model. 

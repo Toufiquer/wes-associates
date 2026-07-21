@@ -1,45 +1,43 @@
-/*
-|-----------------------------------------
-| Frequently asked questions data for Section 64
-|-----------------------------------------
-*/
-
-export interface ISection64Faq {
-  question: string;
-  answer: string;
-}
-
-export interface ISection64Data {
+export interface ISection70Data {
   eyebrow: string;
   title: string;
-  description: string;
-  faqs: ISection64Faq[];
+  highlightedTitle: string;
+  paragraphs: string[];
+  primaryButtonText: string;
+  primaryButtonUrl: string;
+  secondaryButtonText: string;
+  secondaryButtonUrl: string;
+  onlineAppointmentImage: string;
+  physicalAppointmentImage: string;
   backgroundColor: string;
-  cardColor: string;
-  accentColor: string;
   headingColor: string;
+  accentColor: string;
   textColor: string;
-  borderColor: string;
+  buttonColor: string;
 }
 
-export interface Section64Props {
-  data?: ISection64Data | string;
+export interface Section70Props {
+  data?: ISection70Data | string;
 }
 
-export const defaultDataSection64: ISection64Data = {
-  eyebrow: 'FAQ',
-  title: 'Common student questions.',
-  description: 'These quick answers help students understand what to expect before booking counselling.',
-  faqs: [
-    { question: 'Can I apply without IELTS?', answer: 'Some universities may accept MOI, PTE, or no-test pathways depending on your country, institution, and academic background.' },
-    { question: 'Which country is best for me?', answer: 'The right destination depends on your budget, subject, academic profile, career goal, and preferred post-study options.' },
-    { question: 'Do you help with scholarships?', answer: 'Yes. We identify suitable merit-based, university-funded, and country-specific scholarship opportunities.' },
-    { question: 'What should I bring for counselling?', answer: 'Bring your academic documents, passport if available, English test result, and an idea of your preferred subject and budget.' },
+export const defaultDataSection70: ISection70Data = {
+  eyebrow: 'VISATHing! Appointment',
+  title: 'Get VISATHing!',
+  highlightedTitle: 'Free Appointment',
+  paragraphs: [
+    'Make your appointment with VISATHing through the appointment portal. Click on appointment, choose your visa type, and pick an available slot. Attend the VISATHing office on time with the required documents. Stay updated for smooth visa processing with VISATHing.',
+    'You can start your visa application journey by contacting VISATHing. There is only one branch of VISATHing in Dhaka, Bangladesh. You can also apply to the VISATHing online portal to reduce your visa processing time.',
+    "VISATHing Bangladesh's opening hour is 9:30 AM to 6:30 PM.",
   ],
+  primaryButtonText: 'Book Appointment',
+  primaryButtonUrl: '#',
+  secondaryButtonText: 'Ask Question',
+  secondaryButtonUrl: '#',
+  onlineAppointmentImage: '/globe.svg',
+  physicalAppointmentImage: '/globe.svg',
   backgroundColor: '#ffffff',
-  cardColor: '#ffffff',
-  accentColor: '#ed1c24',
-  headingColor: '#0b1222',
-  textColor: '#64748b',
-  borderColor: '#e2e8f0',
+  headingColor: '#050505',
+  accentColor: '#2477f2',
+  textColor: '#5f6780',
+  buttonColor: '#303374',
 };

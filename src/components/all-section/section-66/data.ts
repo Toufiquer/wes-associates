@@ -1,25 +1,21 @@
-/*
-|-----------------------------------------
-| Frequently asked questions data for Section 64
-|-----------------------------------------
-*/
-
-export interface ISection66Faq {
-  question: string;
-  answer: string;
+export interface ISection66Stat {
+  value: string;
+  label: string;
 }
 
 export interface ISection66Data {
   eyebrow: string;
   title: string;
-  description: string;
-  faqs: ISection66Faq[];
+  highlightedTitle: string;
+  paragraphs: string[];
+  stats: ISection66Stat[];
+  cardBackgroundImage: string;
   backgroundColor: string;
   cardColor: string;
-  accentColor: string;
   headingColor: string;
+  accentColor: string;
+  statColor: string;
   textColor: string;
-  borderColor: string;
 }
 
 export interface Section66Props {
@@ -27,19 +23,24 @@ export interface Section66Props {
 }
 
 export const defaultDataSection66: ISection66Data = {
-  eyebrow: 'FAQ',
-  title: 'Common student questions.',
-  description: 'These quick answers help students understand what to expect before booking counselling.',
-  faqs: [
-    { question: 'Can I apply without IELTS?', answer: 'Some universities may accept MOI, PTE, or no-test pathways depending on your country, institution, and academic background.' },
-    { question: 'Which country is best for me?', answer: 'The right destination depends on your budget, subject, academic profile, career goal, and preferred post-study options.' },
-    { question: 'Do you help with scholarships?', answer: 'Yes. We identify suitable merit-based, university-funded, and country-specific scholarship opportunities.' },
-    { question: 'What should I bring for counselling?', answer: 'Bring your academic documents, passport if available, English test result, and an idea of your preferred subject and budget.' },
+  eyebrow: 'Our History',
+  title: 'What We',
+  highlightedTitle: 'Do?',
+  paragraphs: [
+    'We aggressively target any issues in the global travel scenario and don’t rest until we find a solution. As VISATHing was founded in Bangladesh, we started from scratch by eliminating recurring visa hassles one by one for Bangladeshi travelers. Over the years we have successfully eradicated the lack of accurate travel/visa information by building the largest visa database www.visathing.com with accurate visa and travel information.',
+    'We tried to answer the questions of Bangladeshi travelers through a dedicated visa hotline and social media.',
+    'We have developed services that would guide a traveler to prepare a visa application with proper documentation with our premium consultancy. With our Visa Processing Service, we have enabled travelers to avoid unnecessary cross-country trips to non-resident embassies for visa processing.',
   ],
-  backgroundColor: '#ffffff',
+  stats: [
+    { value: '196+', label: 'Countries Visa Information' },
+    { value: '1,000+', label: 'Organization Relying on Us' },
+    { value: '5.7M+', label: 'Travelers Served from Bangladesh' },
+  ],
+  cardBackgroundImage: '/globe.svg',
+  backgroundColor: '#f8f8fc',
   cardColor: '#ffffff',
-  accentColor: '#ed1c24',
-  headingColor: '#0b1222',
-  textColor: '#64748b',
-  borderColor: '#e2e8f0',
+  headingColor: '#050505',
+  accentColor: '#2477f2',
+  statColor: '#ff9400',
+  textColor: '#5f6780',
 };

@@ -1,14 +1,7 @@
-/*
-|-----------------------------------------
-| Animated FAQ accordion for Section 64
-|-----------------------------------------
-*/
-
 'use client';
 
-import { useId, useState } from 'react';
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { ChevronDown, HelpCircle, MessageCircleQuestion } from 'lucide-react';
+import Image from 'next/image';
+import { motion, useReducedMotion } from 'framer-motion';
 
 import { defaultDataSection65, type ISection65Data, type Section65Props } from './data';
 
@@ -17,109 +10,98 @@ const getSectionData = (data?: ISection65Data | string): ISection65Data => {
 
   if (typeof data === 'string') {
     try {
-      const parsed = JSON.parse(data) as Partial<ISection65Data>;
-      return { ...defaultDataSection65, ...parsed, faqs: parsed.faqs || defaultDataSection65.faqs };
+      return { ...defaultDataSection65, ...(JSON.parse(data) as Partial<ISection65Data>) };
     } catch {
       return defaultDataSection65;
     }
   }
 
-  return { ...defaultDataSection65, ...data, faqs: data.faqs || defaultDataSection65.faqs };
+  return { ...defaultDataSection65, ...data };
 };
 
 const QuerySection65 = ({ data }: Section65Props) => {
   const sectionData = getSectionData(data);
   const reduceMotion = useReducedMotion();
-  const [openFaq, setOpenFaq] = useState(0);
-  const sectionId = useId();
 
   return (
-    <section className="relative isolate overflow-hidden px-4 py-20 sm:px-6 lg:py-28" style={{ backgroundColor: sectionData.backgroundColor }}>
-      <div className="pointer-events-none absolute -left-32 top-1/2 -z-10 h-80 w-80 -translate-y-1/2 rounded-full opacity-10 blur-3xl" style={{ backgroundColor: sectionData.accentColor }} />
+    <section className="relative isolate overflow-hidden px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24" style={{ backgroundColor: sectionData.backgroundColor }}>
       <motion.div
         aria-hidden="true"
-        animate={reduceMotion ? undefined : { rotate: [0, 8, -8, 0], y: [0, -12, 0] }}
-        transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
-        className="pointer-events-none absolute -right-16 bottom-8 -z-10 opacity-[0.05]"
-        style={{ color: sectionData.accentColor }}
-      >
-        <MessageCircleQuestion className="h-64 w-64" />
-      </motion.div>
+        className="pointer-events-none absolute -left-28 top-0 -z-10 h-72 w-72 rounded-full opacity-10 blur-3xl"
+        style={{ backgroundColor: sectionData.accentColor }}
+        animate={reduceMotion ? undefined : { x: [0, 36, 0], y: [0, 24, 0], scale: [1, 1.1, 1] }}
+        transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+      />
 
-      <div className="mx-auto grid w-full max-w-[850px] gap-11 md:grid-cols-[0.8fr_1.2fr] md:items-start lg:gap-14">
-        <motion.header
-          initial={reduceMotion ? false : { opacity: 0, x: -34 }}
+      <div className="mx-auto grid w-full max-w-7xl items-center gap-14 lg:grid-cols-2 lg:gap-20">
+        <motion.div
+          initial={reduceMotion ? false : { opacity: 0, x: -46, scale: 0.96 }}
+          whileInView={reduceMotion ? undefined : { opacity: 1, x: 0, scale: 1 }}
+          viewport={{ once: true, amount: 0.25 }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          className="relative mx-auto h-[390px] w-full max-w-[560px] sm:h-[480px] lg:mx-0"
+        >
+          <motion.div
+            className="absolute left-0 top-0 h-[48%] w-[72%] overflow-hidden rounded-[2.25rem_0.5rem_0.5rem_0.5rem] bg-slate-100 shadow-[0_24px_70px_rgba(30,64,175,0.12)]"
+            animate={reduceMotion ? undefined : { y: [0, -8, 0] }}
+            transition={{ duration: 5.5, repeat: Infinity, ease: 'easeInOut' }}
+          >
+            <Image src={sectionData.topImage} alt="" fill sizes="(max-width: 1024px) 70vw, 36vw" className="object-cover" unoptimized />
+          </motion.div>
+
+          <motion.div
+            className="absolute bottom-0 left-0 h-[53%] w-[53%] overflow-hidden rounded-2xl bg-slate-100 shadow-[0_24px_70px_rgba(30,64,175,0.12)]"
+            animate={reduceMotion ? undefined : { y: [0, 9, 0] }}
+            transition={{ duration: 6.25, repeat: Infinity, ease: 'easeInOut', delay: 0.35 }}
+          >
+            <Image src={sectionData.bottomImage} alt="" fill sizes="(max-width: 1024px) 52vw, 27vw" className="object-cover" unoptimized />
+          </motion.div>
+
+          <motion.div
+            initial={reduceMotion ? false : { opacity: 0, scale: 0.78, rotate: -5 }}
+            whileInView={reduceMotion ? undefined : { opacity: 1, scale: 1, rotate: 0 }}
+            viewport={{ once: true, amount: 0.4 }}
+            transition={{ duration: 0.75, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
+            className="absolute right-[2%] top-[28%] z-10 h-[47%] w-[55%] overflow-hidden rounded-2xl border border-white/80 bg-white shadow-[0_28px_80px_rgba(15,23,42,0.16)] sm:right-[3%]"
+          >
+            <Image src={sectionData.centerImage} alt="" fill sizes="(max-width: 1024px) 55vw, 28vw" className="object-contain p-7 sm:p-10" unoptimized />
+          </motion.div>
+        </motion.div>
+
+        <motion.div
+          initial={reduceMotion ? false : { opacity: 0, x: 46 }}
           whileInView={reduceMotion ? undefined : { opacity: 1, x: 0 }}
           viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="md:sticky md:top-24"
+          transition={{ duration: 0.8, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
+          className="mx-auto w-full max-w-2xl lg:mx-0"
         >
-          <span className="mb-5 grid h-11 w-11 place-items-center rounded-2xl text-white shadow-lg" style={{ backgroundColor: sectionData.accentColor }}><HelpCircle className="h-5 w-5" aria-hidden="true" /></span>
-          <p className="text-[11px] font-black uppercase tracking-[0.16em]" style={{ color: sectionData.accentColor }}>{sectionData.eyebrow}</p>
-          <h2 className="mt-4 text-[clamp(2.25rem,5vw,3.25rem)] font-black leading-[0.96] tracking-[-0.05em]" style={{ color: sectionData.headingColor }}>{sectionData.title}</h2>
-          <p className="mt-5 text-sm font-semibold leading-7" style={{ color: sectionData.textColor }}>{sectionData.description}</p>
-          <span className="mt-7 block h-1 w-20 rounded-full" style={{ backgroundColor: sectionData.accentColor }} />
-        </motion.header>
+          <motion.p
+            initial={reduceMotion ? false : { opacity: 0, y: 14 }}
+            whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.55, delay: 0.25 }}
+            className="text-base font-medium"
+            style={{ color: sectionData.textColor }}
+          >
+            {sectionData.eyebrow}
+          </motion.p>
 
-        <div className="space-y-3">
-          {sectionData.faqs.map((faq, index) => {
-            const isOpen = openFaq === index;
-            const panelId = `${sectionId}-panel-${index}`;
-            const buttonId = `${sectionId}-button-${index}`;
+          <h2 className="mt-4 text-[clamp(2rem,4.5vw,3.15rem)] font-bold leading-[1.08] tracking-[-0.035em]" style={{ color: sectionData.headingColor }}>
+            {sectionData.title}{' '}
+            <span style={{ color: sectionData.accentColor }}>{sectionData.highlightedTitle}</span>
+          </h2>
 
-            return (
-              <motion.article
-                key={`${faq.question}-${index}`}
-                initial={reduceMotion ? false : { opacity: 0, x: 28 }}
-                whileInView={reduceMotion ? undefined : { opacity: 1, x: 0 }}
-                viewport={{ once: true, amount: 0.35 }}
-                transition={{ duration: 0.52, delay: reduceMotion ? 0 : index * 0.07, ease: [0.22, 1, 0.36, 1] }}
-                className="relative overflow-hidden rounded-2xl border shadow-sm transition-shadow duration-300 hover:shadow-lg"
-                style={{ backgroundColor: sectionData.cardColor, borderColor: isOpen ? sectionData.accentColor : sectionData.borderColor }}
-              >
-                <span className="absolute inset-y-0 left-0 w-1 origin-bottom transition-transform duration-300" style={{ backgroundColor: sectionData.accentColor, transform: isOpen ? 'scaleY(1)' : 'scaleY(0)' }} />
-                <button
-                  id={buttonId}
-                  type="button"
-                  aria-expanded={isOpen}
-                  aria-controls={panelId}
-                  onClick={() => setOpenFaq(isOpen ? -1 : index)}
-                  className="flex w-full items-center justify-between gap-4 p-4 text-left sm:p-5"
-                >
-                  <span className="flex min-w-0 items-center gap-3">
-                    <span className="text-[10px] font-black tabular-nums opacity-35" style={{ color: sectionData.headingColor }}>{String(index + 1).padStart(2, '0')}</span>
-                    <span className="text-sm font-black leading-5 sm:text-base" style={{ color: sectionData.headingColor }}>{faq.question}</span>
-                  </span>
-                  <motion.span
-                    animate={{ rotate: isOpen ? 180 : 0 }}
-                    transition={{ duration: reduceMotion ? 0 : 0.25 }}
-                    className="grid h-8 w-8 shrink-0 place-items-center rounded-full"
-                    style={{ backgroundColor: isOpen ? `${sectionData.accentColor}14` : `${sectionData.headingColor}0d`, color: isOpen ? sectionData.accentColor : sectionData.headingColor }}
-                  >
-                    <ChevronDown className="h-4 w-4" aria-hidden="true" />
-                  </motion.span>
-                </button>
-
-                <AnimatePresence initial={false}>
-                  {isOpen && (
-                    <motion.div
-                      id={panelId}
-                      role="region"
-                      aria-labelledby={buttonId}
-                      initial={reduceMotion ? { opacity: 1 } : { height: 0, opacity: 0 }}
-                      animate={reduceMotion ? { opacity: 1 } : { height: 'auto', opacity: 1 }}
-                      exit={reduceMotion ? { opacity: 0 } : { height: 0, opacity: 0 }}
-                      transition={{ duration: reduceMotion ? 0 : 0.3, ease: 'easeOut' }}
-                      className="overflow-hidden"
-                    >
-                      <p className="px-5 pb-5 pl-[3.75rem] text-sm font-semibold leading-7" style={{ color: sectionData.textColor }}>{faq.answer}</p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.article>
-            );
-          })}
-        </div>
+          <motion.p
+            initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+            whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.65, delay: 0.38 }}
+            className="mt-7 text-base leading-8 sm:text-lg sm:leading-9"
+            style={{ color: sectionData.textColor }}
+          >
+            {sectionData.description}
+          </motion.p>
+        </motion.div>
       </div>
     </section>
   );

@@ -1,25 +1,15 @@
-/*
-|-----------------------------------------
-| Frequently asked questions data for Section 64
-|-----------------------------------------
-*/
-
-export interface ISection65Faq {
-  question: string;
-  answer: string;
-}
-
 export interface ISection65Data {
   eyebrow: string;
   title: string;
+  highlightedTitle: string;
   description: string;
-  faqs: ISection65Faq[];
+  topImage: string;
+  bottomImage: string;
+  centerImage: string;
   backgroundColor: string;
-  cardColor: string;
-  accentColor: string;
   headingColor: string;
+  accentColor: string;
   textColor: string;
-  borderColor: string;
 }
 
 export interface Section65Props {
@@ -27,19 +17,16 @@ export interface Section65Props {
 }
 
 export const defaultDataSection65: ISection65Data = {
-  eyebrow: 'FAQ',
-  title: 'Common student questions.',
-  description: 'These quick answers help students understand what to expect before booking counselling.',
-  faqs: [
-    { question: 'Can I apply without IELTS?', answer: 'Some universities may accept MOI, PTE, or no-test pathways depending on your country, institution, and academic background.' },
-    { question: 'Which country is best for me?', answer: 'The right destination depends on your budget, subject, academic profile, career goal, and preferred post-study options.' },
-    { question: 'Do you help with scholarships?', answer: 'Yes. We identify suitable merit-based, university-funded, and country-specific scholarship opportunities.' },
-    { question: 'What should I bring for counselling?', answer: 'Bring your academic documents, passport if available, English test result, and an idea of your preferred subject and budget.' },
-  ],
+  eyebrow: 'About VISATHing!',
+  title: 'What is',
+  highlightedTitle: 'VISATHing!',
+  description:
+    'VISATHing is a registered trademark of VISATHing Global Holding LLC based out of UAE operating business in Bangladesh, India, Nepal, and UAE. We are a travel technology company striving to build a convenient travel ecosystem by connecting different immigration/consular authorities to the global population of travelers with the help of innovative services and the latest technologies.',
+  topImage: '/globe.svg',
+  bottomImage: '/globe.svg',
+  centerImage: '/globe.svg',
   backgroundColor: '#ffffff',
-  cardColor: '#ffffff',
-  accentColor: '#ed1c24',
-  headingColor: '#0b1222',
-  textColor: '#64748b',
-  borderColor: '#e2e8f0',
+  headingColor: '#050505',
+  accentColor: '#2477f2',
+  textColor: '#5f6780',
 };

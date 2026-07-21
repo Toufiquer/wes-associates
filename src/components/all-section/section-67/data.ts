@@ -1,45 +1,47 @@
-/*
-|-----------------------------------------
-| Frequently asked questions data for Section 64
-|-----------------------------------------
-*/
-
-export interface ISection64Faq {
-  question: string;
-  answer: string;
-}
-
-export interface ISection64Data {
-  eyebrow: string;
-  title: string;
-  description: string;
-  faqs: ISection64Faq[];
+export interface ISection67Data {
+  missionEyebrow: string;
+  missionTitle: string;
+  missionHighlightedTitle: string;
+  missionDescription: string;
+  visionEyebrow: string;
+  visionTitle: string;
+  visionHighlightedTitle: string;
+  visionDescription: string;
+  missionPrimaryImage: string;
+  missionTopImage: string;
+  missionBottomImage: string;
+  visionPrimaryImage: string;
+  visionTopImage: string;
+  visionBottomImage: string;
   backgroundColor: string;
-  cardColor: string;
-  accentColor: string;
   headingColor: string;
+  accentColor: string;
   textColor: string;
-  borderColor: string;
 }
 
-export interface Section64Props {
-  data?: ISection64Data | string;
+export interface Section67Props {
+  data?: ISection67Data | string;
 }
 
-export const defaultDataSection64: ISection64Data = {
-  eyebrow: 'FAQ',
-  title: 'Common student questions.',
-  description: 'These quick answers help students understand what to expect before booking counselling.',
-  faqs: [
-    { question: 'Can I apply without IELTS?', answer: 'Some universities may accept MOI, PTE, or no-test pathways depending on your country, institution, and academic background.' },
-    { question: 'Which country is best for me?', answer: 'The right destination depends on your budget, subject, academic profile, career goal, and preferred post-study options.' },
-    { question: 'Do you help with scholarships?', answer: 'Yes. We identify suitable merit-based, university-funded, and country-specific scholarship opportunities.' },
-    { question: 'What should I bring for counselling?', answer: 'Bring your academic documents, passport if available, English test result, and an idea of your preferred subject and budget.' },
-  ],
+export const defaultDataSection67: ISection67Data = {
+  missionEyebrow: 'Our Journey',
+  missionTitle: 'Our',
+  missionHighlightedTitle: 'Mission',
+  missionDescription:
+    'Our mission is to eliminate the fear of complicated processing systems for acquiring visa/travel permits from every international traveler and help every government to make efficient & informed visa decisions.',
+  visionEyebrow: 'Our Journey',
+  visionTitle: 'Our',
+  visionHighlightedTitle: 'Vision',
+  visionDescription:
+    'Our Vision is to significantly minimize human intervention, maximize virtual communications, and include computerized service processes in the travel document acquisition system. We believe it will create a borderless travel experience for every international traveler.',
+  missionPrimaryImage: '/globe.svg',
+  missionTopImage: '/globe.svg',
+  missionBottomImage: '/globe.svg',
+  visionPrimaryImage: '/globe.svg',
+  visionTopImage: '/globe.svg',
+  visionBottomImage: '/globe.svg',
   backgroundColor: '#ffffff',
-  cardColor: '#ffffff',
-  accentColor: '#ed1c24',
-  headingColor: '#0b1222',
-  textColor: '#64748b',
-  borderColor: '#e2e8f0',
+  headingColor: '#050505',
+  accentColor: '#2477f2',
+  textColor: '#5f6780',
 };

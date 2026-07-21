@@ -69,6 +69,12 @@ import { defaultDataSection61 } from '../section-61/data';
 import { defaultDataSection62 } from '../section-62/data';
 import { defaultDataSection63 } from '../section-63/data';
 import { defaultDataSection64 } from '../section-64/data';
+import { defaultDataSection65 } from '../section-65/data';
+import { defaultDataSection66 } from '../section-66/data';
+import { defaultDataSection67 } from '../section-67/data';
+import { defaultDataSection68 } from '../section-68/data';
+import { defaultDataSection69 } from '../section-69/data';
+import { defaultDataSection70 } from '../section-70/data';
 
 import MutationSection1 from '../section-1/Mutation';
 import MutationSection2 from '../section-2/Mutation';
@@ -133,6 +139,12 @@ import MutationSection61 from '../section-61/Mutation';
 import MutationSection62 from '../section-62/Mutation';
 import MutationSection63 from '../section-63/Mutation';
 import MutationSection64 from '../section-64/Mutation';
+import MutationSection65 from '../section-65/Mutation';
+import MutationSection66 from '../section-66/Mutation';
+import MutationSection67 from '../section-67/Mutation';
+import MutationSection68 from '../section-68/Mutation';
+import MutationSection69 from '../section-69/Mutation';
+import MutationSection70 from '../section-70/Mutation';
 
 import QuerySection1 from '../section-1/Query';
 import QuerySection2 from '../section-2/Query';
@@ -197,6 +209,12 @@ import QuerySection61 from '../section-61/Query';
 import QuerySection62 from '../section-62/Query';
 import QuerySection63 from '../section-63/Query';
 import QuerySection64 from '../section-64/Query';
+import QuerySection65 from '../section-65/Query';
+import QuerySection66 from '../section-66/Query';
+import QuerySection67 from '../section-67/Query';
+import QuerySection68 from '../section-68/Query';
+import QuerySection69 from '../section-69/Query';
+import QuerySection70 from '../section-70/Query';
 
 export const allSectionCagegory = ['wes', 'section', 'accordion', 'scroll', 'blog', 'map', 'tag', 'gallery', 'carousel', 'icons', 'modern'];
 
@@ -312,6 +330,12 @@ export const AllSections = {
   },
   'section-uid-63': { name: 'News and Blog', category: allSectionCagegory[0], mutation: MutationSection63, query: QuerySection63, data: defaultDataSection63 },
   'section-uid-64': { name: 'FAQ', category: allSectionCagegory[0], mutation: MutationSection64, query: QuerySection64, data: defaultDataSection64 },
+  'section-uid-65': { name: 'Bio', category: allSectionCagegory[0], mutation: MutationSection65, query: QuerySection65, data: defaultDataSection65 },
+  'section-uid-66': { name: 'What We Do', category: allSectionCagegory[0], mutation: MutationSection66, query: QuerySection66, data: defaultDataSection66 },
+  'section-uid-67': { name: 'Our Mission', category: allSectionCagegory[0], mutation: MutationSection67, query: QuerySection67, data: defaultDataSection67 },
+  'section-uid-68': { name: 'Why Choose Us', category: allSectionCagegory[0], mutation: MutationSection68, query: QuerySection68, data: defaultDataSection68 },
+  'section-uid-69': { name: 'Our Journey', category: allSectionCagegory[0], mutation: MutationSection69, query: QuerySection69, data: defaultDataSection69 },
+  'section-uid-70': { name: 'Applintment', category: allSectionCagegory[0], mutation: MutationSection70, query: QuerySection70, data: defaultDataSection70 },
 };
 
 export const AllSectionsKeys = Object.keys(AllSections);
