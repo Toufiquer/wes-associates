@@ -13,7 +13,7 @@ import { AlertTriangle } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 
 import { AllFooter } from '@/components/all-footer/all-footer-index/all-footer';
-import MobileNaviation from './MobileNaviation';
+import MobileNavigation from './MobileNavigation';
 
 interface DisabledPath {
   path: string;
@@ -54,7 +54,7 @@ const FooterClient: React.FC<FooterClientProps> = ({ initialFooter }) => {
             <p className="text-sm font-medium">Footer not configured</p>
           </div>
         </div>
-        <MobileNaviation />
+        <MobileNavigation />
       </>
     );
   }
@@ -62,7 +62,7 @@ const FooterClient: React.FC<FooterClientProps> = ({ initialFooter }) => {
   const isPathDisabled = initialFooter.disabledPaths?.some(rule => rule.isExcluded && rule.path === pathname);
 
   if (isPathDisabled) {
-    return <MobileNaviation />;
+    return <MobileNavigation />;
   }
 
   const { templateKey, content } = initialFooter.data;
@@ -78,7 +78,7 @@ const FooterClient: React.FC<FooterClientProps> = ({ initialFooter }) => {
             Template <strong>{templateKey}</strong> not found.
           </p>
         </div>
-        <MobileNaviation />
+        <MobileNavigation />
       </>
     );
   }
@@ -88,7 +88,7 @@ const FooterClient: React.FC<FooterClientProps> = ({ initialFooter }) => {
   return (
     <>
       <QueryComponent data={content} />
-      <MobileNaviation />
+      <MobileNavigation />
     </>
   );
 };

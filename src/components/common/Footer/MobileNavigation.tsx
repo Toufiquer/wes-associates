@@ -1,6 +1,6 @@
 /*
 |-----------------------------------------
-| setting up MobileNaviation for the App
+| setting up MobileNavigation for the App
 | @author: Toufiquer Rahman<toufiquer.0@gmail.com>
 | @copyright: WebApp, June, 2026
 |-----------------------------------------
@@ -110,9 +110,9 @@ const MobileMenuLogo = ({ item, fallbackIcon, className }: { item: MobileMenuCon
 
 const getCartQuantity = () => getAssetCart().reduce((total, item) => total + Math.max(0, Number(item.quantity) || 0), 0);
 
-const MobileNaviation = () => {
+const MobileNavigation = () => {
   const pathname = usePathname() || '/';
-  const [settings, setSettings] = useState<MobileBottomMenuConfig>(defaultConfig);
+  const [settings, setSettings] = useState<MobileBottomMenuConfig | null>(null);
   const [cartQuantity, setCartQuantity] = useState(0);
 
   useEffect(() => {
@@ -121,7 +121,7 @@ const MobileNaviation = () => {
         const response = await fetch(MOBILE_BOTTOM_MENU_API, { cache: 'no-store' });
         if (!response.ok) return;
         const data = (await response.json()) as MobileBottomMenuConfig;
-        setSettings(previous => ({ ...previous, ...data }));
+        setSettings({ ...defaultConfig, ...data });
       } catch (error) {
         console.error('Mobile bottom menu sync failed', error);
       }
@@ -143,7 +143,7 @@ const MobileNaviation = () => {
     };
   }, []);
 
-  if (settings.mobileBottomMenuIsPublished === false) return null;
+  if (!settings || settings.mobileBottomMenuIsPublished === false) return null;
   if (pathname.toLowerCase().includes('dashboard')) return null;
 
   const columns = settings.mobileMenuVariant === '5-icon' ? 5 : 4;
@@ -189,4 +189,4 @@ const MobileNaviation = () => {
   );
 };
 
-export default MobileNaviation;
+export default MobileNavigation;

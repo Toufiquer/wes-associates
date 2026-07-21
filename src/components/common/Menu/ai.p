@@ -14,3 +14,9 @@ Look at the menu file only for Tablet and Desktop version. 'src/components/commo
 3. If I hover the menu or Click from the tab then It will display sub-menu like the picture.
 and also Update admin UI : 
 'src/app/dashboard/admin/menu-editor/page.tsx' and inside theme tabs. there you found three Font Family please add this one too. and also add font size 16 px. 
+
+
+Look at the Mobile Naviation 'src/components/common/Footer/Mobilenaviation.tsx' Now your task is make it SSR. In mobile If I change route then it first load default and then it load Updated. I want first empty then load updated. and Pelase rename the component with currect spealling Navigation.
+
+
+Look at the section 'src/components/all-section/...' please only read data.ts and your task is update placeholder image for section-65,66,67,68,69, and 70.

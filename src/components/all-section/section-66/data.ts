@@ -36,7 +36,7 @@ export const defaultDataSection66: ISection66Data = {
     { value: '1,000+', label: 'Organization Relying on Us' },
     { value: '5.7M+', label: 'Travelers Served from Bangladesh' },
   ],
-  cardBackgroundImage: '/globe.svg',
+  cardBackgroundImage: 'https://placehold.co/1200x720/e2e8f0/475569?text=Our+History',
   backgroundColor: '#f8f8fc',
   cardColor: '#ffffff',
   headingColor: '#050505',

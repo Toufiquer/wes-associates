@@ -22,9 +22,9 @@ export const defaultDataSection65: ISection65Data = {
   highlightedTitle: 'VISATHing!',
   description:
     'VISATHing is a registered trademark of VISATHing Global Holding LLC based out of UAE operating business in Bangladesh, India, Nepal, and UAE. We are a travel technology company striving to build a convenient travel ecosystem by connecting different immigration/consular authorities to the global population of travelers with the help of innovative services and the latest technologies.',
-  topImage: '/globe.svg',
-  bottomImage: '/globe.svg',
-  centerImage: '/globe.svg',
+  topImage: 'https://placehold.co/480x320/e2e8f0/475569?text=About+Top',
+  bottomImage: 'https://placehold.co/480x320/e2e8f0/475569?text=About+Bottom',
+  centerImage: 'https://placehold.co/720x520/dbeafe/1d4ed8?text=About+VISATHing',
   backgroundColor: '#ffffff',
   headingColor: '#050505',
   accentColor: '#2477f2',
