@@ -55,6 +55,20 @@ import { defaultDataSection46 } from '../section-46/data';
 import { defaultDataSection47 } from '../section-47/data';
 import { defaultDataSection48 } from '../section-48/data';
 import { defaultDataSection49 } from '../section-49/data';
+import { defaultDataSection50 } from '../section-50/data';
+import { defaultDataSection51 } from '../section-51/data';
+import { defaultDataSection52 } from '../section-52/data';
+import { defaultDataSection53 } from '../section-53/data';
+import { defaultDataSection54 } from '../section-54/data';
+import { defaultDataSection55 } from '../section-55/data';
+import { defaultDataSection56 } from '../section-56/data';
+import { defaultDataSection57 } from '../section-57/data';
+import { defaultDataSection59 } from '../section-59/data';
+import { defaultDataSection60 } from '../section-60/data';
+import { defaultDataSection61 } from '../section-61/data';
+import { defaultDataSection62 } from '../section-62/data';
+import { defaultDataSection63 } from '../section-63/data';
+import { defaultDataSection64 } from '../section-64/data';
 
 import MutationSection1 from '../section-1/Mutation';
 import MutationSection2 from '../section-2/Mutation';
@@ -105,6 +119,20 @@ import MutationSection46 from '../section-46/Mutation';
 import MutationSection47 from '../section-47/Mutation';
 import MutationSection48 from '../section-48/Mutation';
 import MutationSection49 from '../section-49/Mutation';
+import MutationSection50 from '../section-50/Mutation';
+import MutationSection51 from '../section-51/Mutation';
+import MutationSection52 from '../section-52/Mutation';
+import MutationSection53 from '../section-53/Mutation';
+import MutationSection54 from '../section-54/Mutation';
+import MutationSection55 from '../section-55/Mutation';
+import MutationSection56 from '../section-56/Mutation';
+import MutationSection57 from '../section-57/Mutation';
+import MutationSection59 from '../section-59/Mutation';
+import MutationSection60 from '../section-60/Mutation';
+import MutationSection61 from '../section-61/Mutation';
+import MutationSection62 from '../section-62/Mutation';
+import MutationSection63 from '../section-63/Mutation';
+import MutationSection64 from '../section-64/Mutation';
 
 import QuerySection1 from '../section-1/Query';
 import QuerySection2 from '../section-2/Query';
@@ -155,6 +183,20 @@ import QuerySection46 from '../section-46/Query';
 import QuerySection47 from '../section-47/Query';
 import QuerySection48 from '../section-48/Query';
 import QuerySection49 from '../section-49/Query';
+import QuerySection50 from '../section-50/Query';
+import QuerySection51 from '../section-51/Query';
+import QuerySection52 from '../section-52/Query';
+import QuerySection53 from '../section-53/Query';
+import QuerySection54 from '../section-54/Query';
+import QuerySection55 from '../section-55/Query';
+import QuerySection56 from '../section-56/Query';
+import QuerySection57 from '../section-57/Query';
+import QuerySection59 from '../section-59/Query';
+import QuerySection60 from '../section-60/Query';
+import QuerySection61 from '../section-61/Query';
+import QuerySection62 from '../section-62/Query';
+import QuerySection63 from '../section-63/Query';
+import QuerySection64 from '../section-64/Query';
 
 export const allSectionCagegory = ['wes', 'section', 'accordion', 'scroll', 'blog', 'map', 'tag', 'gallery', 'carousel', 'icons', 'modern'];
 
@@ -214,6 +256,20 @@ export const AllSections = {
   },
   'section-uid-48': { name: 'Name', category: allSectionCagegory[0], mutation: MutationSection48, query: QuerySection48, data: defaultDataSection48 },
   'section-uid-49': { name: 'Name', category: allSectionCagegory[0], mutation: MutationSection49, query: QuerySection49, data: defaultDataSection49 },
+  'section-uid-50': { name: 'Statistics', category: allSectionCagegory[10], mutation: MutationSection50, query: QuerySection50, data: defaultDataSection50 },
+  'section-uid-51': { name: 'About WES', category: allSectionCagegory[10], mutation: MutationSection51, query: QuerySection51, data: defaultDataSection51 },
+  'section-uid-52': { name: 'Why Choose Us', category: allSectionCagegory[10], mutation: MutationSection52, query: QuerySection52, data: defaultDataSection52 },
+  'section-uid-53': { name: 'Study Destinations', category: allSectionCagegory[10], mutation: MutationSection53, query: QuerySection53, data: defaultDataSection53 },
+  'section-uid-54': { name: 'Student Journey', category: allSectionCagegory[10], mutation: MutationSection54, query: QuerySection54, data: defaultDataSection54 },
+  'section-uid-55': { name: 'Student Services', category: allSectionCagegory[10], mutation: MutationSection55, query: QuerySection55, data: defaultDataSection55 },
+  'section-uid-56': { name: 'Admission Process', category: allSectionCagegory[10], mutation: MutationSection56, query: QuerySection56, data: defaultDataSection56 },
+  'section-uid-57': { name: 'Scholarships', category: allSectionCagegory[10], mutation: MutationSection57, query: QuerySection57, data: defaultDataSection57 },
+  'section-uid-59': { name: 'Visa Support', category: allSectionCagegory[10], mutation: MutationSection59, query: QuerySection59, data: defaultDataSection59 },
+  'section-uid-60': { name: 'Student Success', category: allSectionCagegory[10], mutation: MutationSection60, query: QuerySection60, data: defaultDataSection60 },
+  'section-uid-61': { name: 'Appointment Form', category: allSectionCagegory[10], mutation: MutationSection61, query: QuerySection61, data: defaultDataSection61 },
+  'section-uid-62': { name: 'Document Checklist', category: allSectionCagegory[10], mutation: MutationSection62, query: QuerySection62, data: defaultDataSection62 },
+  'section-uid-63': { name: 'News and Blog', category: allSectionCagegory[10], mutation: MutationSection63, query: QuerySection63, data: defaultDataSection63 },
+  'section-uid-64': { name: 'FAQ', category: allSectionCagegory[10], mutation: MutationSection64, query: QuerySection64, data: defaultDataSection64 },
 };
 
 export const AllSectionsKeys = Object.keys(AllSections);
