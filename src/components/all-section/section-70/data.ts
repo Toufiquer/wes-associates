@@ -21,20 +21,20 @@ export interface Section70Props {
 }
 
 export const defaultDataSection70: ISection70Data = {
-  eyebrow: 'VISATHing! Appointment',
-  title: 'Get VISATHing!',
-  highlightedTitle: 'Free Appointment',
+  eyebrow: 'WES Associates Consultation',
+  title: 'Get Your',
+  highlightedTitle: 'Free Consultation',
   paragraphs: [
-    'Make your appointment with VISATHing through the appointment portal. Click on appointment, choose your visa type, and pick an available slot. Attend the VISATHing office on time with the required documents. Stay updated for smooth visa processing with VISATHing.',
-    'You can start your visa application journey by contacting VISATHing. There is only one branch of VISATHing in Dhaka, Bangladesh. You can also apply to the VISATHing online portal to reduce your visa processing time.',
-    "VISATHing Bangladesh's opening hour is 9:30 AM to 6:30 PM.",
+    'Book a free consultation with WES Associates to discuss your study-abroad goals. Our experienced counselors will help you understand suitable destinations, courses, universities, and the next steps for your application.',
+    'WES Associates supports students across Bangladesh. Whether you live in Dhaka or anywhere else in the country, you can connect with our team through an online consultation and receive personalized guidance without unnecessary travel.',
+    'Bring your academic information and questions to your consultation so our team can provide clear, relevant guidance for your international education journey.',
   ],
-  primaryButtonText: 'Book Appointment',
+  primaryButtonText: 'Book Consultation',
   primaryButtonUrl: '#',
   secondaryButtonText: 'Ask Question',
   secondaryButtonUrl: '#',
   onlineAppointmentImage: 'https://placehold.co/720x520/dbeafe/1d4ed8?text=Online+Appointment',
-  physicalAppointmentImage: 'https://placehold.co/720x520/e2e8f0/475569?text=Physical+Appointment',
+  physicalAppointmentImage: 'https://placehold.co/720x520/e2e8f0/475569?text=In-Person+Consultation',
   backgroundColor: '#ffffff',
   headingColor: '#050505',
   accentColor: '#2477f2',

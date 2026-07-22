@@ -23,18 +23,18 @@ export interface Section66Props {
 }
 
 export const defaultDataSection66: ISection66Data = {
-  eyebrow: 'Our History',
+  eyebrow: 'About WES Associates',
   title: 'What We',
   highlightedTitle: 'Do?',
   paragraphs: [
-    'We aggressively target any issues in the global travel scenario and don’t rest until we find a solution. As VISATHing was founded in Bangladesh, we started from scratch by eliminating recurring visa hassles one by one for Bangladeshi travelers. Over the years we have successfully eradicated the lack of accurate travel/visa information by building the largest visa database www.visathing.com with accurate visa and travel information.',
-    'We tried to answer the questions of Bangladeshi travelers through a dedicated visa hotline and social media.',
-    'We have developed services that would guide a traveler to prepare a visa application with proper documentation with our premium consultancy. With our Visa Processing Service, we have enabled travelers to avoid unnecessary cross-country trips to non-resident embassies for visa processing.',
+    'WES Associates is a Bangladesh-based education consultancy committed to helping students confidently pursue higher education opportunities abroad. We provide clear, reliable, and personalized guidance at every stage of the study-abroad journey.',
+    'Our experienced team supports students with course and university selection, applications, documentation, visa guidance, and pre-departure preparation according to their individual goals.',
+    'We work with students from every part of Bangladesh. Wherever you live in the country, WES Associates is ready to provide accessible, professional support and help turn your international education plans into reality.',
   ],
   stats: [
-    { value: '196+', label: 'Countries Visa Information' },
-    { value: '1,000+', label: 'Organization Relying on Us' },
-    { value: '5.7M+', label: 'Travelers Served from Bangladesh' },
+    { value: 'Nationwide', label: 'Support Across Bangladesh' },
+    { value: 'End-to-End', label: 'Study Abroad Guidance' },
+    { value: 'Personalized', label: 'Student Support' },
   ],
   cardBackgroundImage: 'https://placehold.co/1200x720/e2e8f0/475569?text=Our+History',
   backgroundColor: '#f8f8fc',

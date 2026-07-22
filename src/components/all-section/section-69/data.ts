@@ -12,15 +12,15 @@ export interface Section69Props {
 }
 
 export const defaultDataSection69: ISection69Data = {
-  eyebrow: 'Our Journey',
-  title: 'Our Corporate Clients',
+  eyebrow: 'WES Associates Across Bangladesh',
+  title: 'Our Trusted Education Partners',
   logos: [
-    'https://placehold.co/240x120/ffffff/64748b?text=Client+1',
-    'https://placehold.co/240x120/ffffff/64748b?text=Client+2',
-    'https://placehold.co/240x120/ffffff/64748b?text=Client+3',
-    'https://placehold.co/240x120/ffffff/64748b?text=Client+4',
-    'https://placehold.co/240x120/ffffff/64748b?text=Client+5',
-    'https://placehold.co/240x120/ffffff/64748b?text=Client+6',
+    'https://placehold.co/240x120/ffffff/64748b?text=Education+Partner+1',
+    'https://placehold.co/240x120/ffffff/64748b?text=Education+Partner+2',
+    'https://placehold.co/240x120/ffffff/64748b?text=Education+Partner+3',
+    'https://placehold.co/240x120/ffffff/64748b?text=Education+Partner+4',
+    'https://placehold.co/240x120/ffffff/64748b?text=Education+Partner+5',
+    'https://placehold.co/240x120/ffffff/64748b?text=Education+Partner+6',
   ],
   backgroundColor: '#f8f8fc',
   headingColor: '#050505',

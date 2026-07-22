@@ -17,15 +17,15 @@ export interface Section68Props {
 }
 
 export const defaultDataSection68: ISection68Data = {
-  titlePrefix: 'Why choose VISATHing for your',
-  highlightedTitle: 'visa processing',
+  titlePrefix: 'Why choose WES Associates for your',
+  highlightedTitle: 'study-abroad',
   titleSuffix: 'needs?',
   paragraphs: [
-    'Some visa processing centers have reliability issues because they don’t have a secure server system. This creates the possibility of visa rejection.',
-    "There are lots of visa processing support centers in Bangladesh. When you look for expertise and experience, few of them are worthy to qualify. In terms of expertise and experience, VISATHing is the only place where people can get reliable service. VISATHing's knowledge of different visa policies is authentic and professional.",
-    'VISATHing is a technology-based visa service provider in Bangladesh. You can get an A to Z visa processing service through VISATHing online visa processing for Bangladesh.',
+    'Choosing the right course, university, and destination can shape your future. WES Associates provides clear, personalized guidance so you can make informed decisions with confidence.',
+    'Our experienced team supports you throughout the entire process, including university selection, applications, documentation, visa guidance, and pre-departure preparation.',
+    'WES Associates is based in Bangladesh and works with students across the entire country. Wherever you live, you can access reliable, professional support for your international education journey.',
   ],
-  primaryImage: 'https://placehold.co/720x520/dbeafe/1d4ed8?text=Visa+Processing',
+  primaryImage: 'https://placehold.co/720x520/dbeafe/1d4ed8?text=Study+Abroad+Guidance',
   topImage: 'https://placehold.co/480x320/e2e8f0/475569?text=Why+Choose+Us',
   bottomImage: 'https://placehold.co/480x320/e2e8f0/475569?text=Reliable+Service',
   backgroundColor: '#ffffff',

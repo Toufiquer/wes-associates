@@ -17,14 +17,14 @@ export interface Section65Props {
 }
 
 export const defaultDataSection65: ISection65Data = {
-  eyebrow: 'About VISATHing!',
-  title: 'What is',
-  highlightedTitle: 'VISATHing!',
+  eyebrow: 'About WES Associates',
+  title: 'Who are',
+  highlightedTitle: 'WES Associates?',
   description:
-    'VISATHing is a registered trademark of VISATHing Global Holding LLC based out of UAE operating business in Bangladesh, India, Nepal, and UAE. We are a travel technology company striving to build a convenient travel ecosystem by connecting different immigration/consular authorities to the global population of travelers with the help of innovative services and the latest technologies.',
+    'WES Associates is a Bangladesh-based education consultancy dedicated to helping students pursue their study-abroad goals with trusted guidance and personalized support. From university selection and applications to visa guidance and pre-departure preparation, our experienced team supports students across Bangladesh, wherever they are in the country.',
   topImage: 'https://placehold.co/480x320/e2e8f0/475569?text=About+Top',
   bottomImage: 'https://placehold.co/480x320/e2e8f0/475569?text=About+Bottom',
-  centerImage: 'https://placehold.co/720x520/dbeafe/1d4ed8?text=About+VISATHing',
+  centerImage: 'https://placehold.co/720x520/dbeafe/1d4ed8?text=About+WES+Associates',
   backgroundColor: '#ffffff',
   headingColor: '#050505',
   accentColor: '#2477f2',
