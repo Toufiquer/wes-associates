@@ -92,6 +92,7 @@ const QuerySection49 = ({ data }: Section49Props) => {
         animate={reduceMotion ? undefined : { opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
         className="mx-auto w-full max-w-[1040px] text-center"
+        style={{ fontFamily: "'Noto Sans Bengali', 'Hind Siliguri', 'Nirmala UI', sans-serif" }}
       >
         <h1 className="font-black leading-[0.98] tracking-[-0.045em]" style={{ color: sectionData.headingColor }}>
           <motion.span
@@ -108,8 +109,8 @@ const QuerySection49 = ({ data }: Section49Props) => {
             transition={{ duration: 0.78, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
             className="mt-5 block text-[clamp(3rem,6.5vw,5.5rem)] sm:mt-6"
           >
-            <span className="font-sans tracking-[-0.055em]">{sectionData.titleEnglish}</span>
-            <span className={`${liAlinurBanglaborno.className} text-slate-600`}>{renderBanglaText(sectionData.titleEnglishSuffix)}</span>{' '}
+            <span className="font-sans tracking-[-0.055em]">{sectionData.titleEnglish}</span>{' '}
+            <span className="font-sans text-slate-600">{sectionData.titleEnglishSuffix}</span>{' '}
             <span className={`${liAlinurBanglaborno.className} relative inline-block`} style={{ color: sectionData.accentColor }}>
               {renderBanglaText(sectionData.titleHighlight)}
               <motion.span

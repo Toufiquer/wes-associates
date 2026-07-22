@@ -41,7 +41,11 @@ export const whatsAppApi = createApi({
   tagTypes: ['WhatsAppSettings'],
   endpoints: builder => ({
     getWhatsAppSettings: builder.query<WhatsAppSettings, void>({
-      query: () => '',
+      query: () => ({
+        url: '',
+        method: 'GET',
+        cache: 'no-store',
+      }),
       providesTags: [{ type: 'WhatsAppSettings', id: 'CURRENT' }],
     }),
     updateWhatsAppSettings: builder.mutation<WhatsAppSettingsUpdateResponse, Partial<WhatsAppSettings>>({

@@ -15,18 +15,25 @@ import { handleRateLimit } from '../utils/rate-limit';
 import { isUserHasAccessByRole, IWantAccess } from '../utils/is-user-has-access-by-role';
 import { getWhatsAppSettings, updateWhatsAppSettings } from './controller';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export async function GET(req: NextRequest) {
   try {
     await connectDB();
     const rateLimitResponse = handleRateLimit(req);
     if (rateLimitResponse) return rateLimitResponse;
-    if (process.env.AuthorizationEnable === 'true') {
-      const wantToAccess: IWantAccess = { db_name: 'whatsapp', access: 'read' };
-      const isAccess = await isUserHasAccessByRole(wantToAccess);
-      if (isAccess) return isAccess;
-    }
+    // The floating button is rendered for public visitors, including signed-out
+    // and incognito sessions. Only writes below require dashboard authorization.
     const settings = await getWhatsAppSettings();
-    return NextResponse.json(settings, { status: 200 });
+    return NextResponse.json(settings, {
+      status: 200,
+      headers: {
+        'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+        'CDN-Cache-Control': 'no-store',
+        'Vercel-CDN-Cache-Control': 'no-store',
+      },
+    });
   } catch (error) {
     console.error('API Error:', error);
     return NextResponse.json({ error: 'Failed to fetch WhatsApp settings' }, { status: 500 });

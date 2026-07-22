@@ -63,6 +63,7 @@ import { defaultDataSection54 } from '../section-54/data';
 import { defaultDataSection55 } from '../section-55/data';
 import { defaultDataSection56 } from '../section-56/data';
 import { defaultDataSection57 } from '../section-57/data';
+import { defaultDataSection58 } from '../section-58/data';
 import { defaultDataSection59 } from '../section-59/data';
 import { defaultDataSection60 } from '../section-60/data';
 import { defaultDataSection61 } from '../section-61/data';
@@ -133,6 +134,7 @@ import MutationSection54 from '../section-54/Mutation';
 import MutationSection55 from '../section-55/Mutation';
 import MutationSection56 from '../section-56/Mutation';
 import MutationSection57 from '../section-57/Mutation';
+import MutationSection58 from '../section-58/Mutation';
 import MutationSection59 from '../section-59/Mutation';
 import MutationSection60 from '../section-60/Mutation';
 import MutationSection61 from '../section-61/Mutation';
@@ -203,6 +205,7 @@ import QuerySection54 from '../section-54/Query';
 import QuerySection55 from '../section-55/Query';
 import QuerySection56 from '../section-56/Query';
 import QuerySection57 from '../section-57/Query';
+import QuerySection58 from '../section-58/Query';
 import QuerySection59 from '../section-59/Query';
 import QuerySection60 from '../section-60/Query';
 import QuerySection61 from '../section-61/Query';
@@ -306,6 +309,7 @@ export const AllSections = {
     data: defaultDataSection56,
   },
   'section-uid-57': { name: 'Scholarships', category: allSectionCagegory[0], mutation: MutationSection57, query: QuerySection57, data: defaultDataSection57 },
+  'section-uid-58': { name: 'Hero', category: allSectionCagegory[0], mutation: MutationSection58, query: QuerySection58, data: defaultDataSection58 },
   'section-uid-59': { name: 'Visa Support', category: allSectionCagegory[0], mutation: MutationSection59, query: QuerySection59, data: defaultDataSection59 },
   'section-uid-60': {
     name: 'Student Success',

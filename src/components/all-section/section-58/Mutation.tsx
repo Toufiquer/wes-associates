@@ -14,14 +14,14 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 
-import { defaultDataSection49, type ISection49Data } from './data';
+import { defaultDataSection58, type ISection58Data } from './data';
 
-export interface Section49FormProps {
-  data?: ISection49Data;
-  onSubmit: (values: ISection49Data) => void;
+export interface Section58FormProps {
+  data?: ISection58Data;
+  onSubmit: (values: ISection58Data) => void;
 }
 
-const colorFields: { field: keyof ISection49Data; label: string }[] = [
+const colorFields: { field: keyof ISection58Data; label: string }[] = [
   { field: 'backgroundColor', label: 'Background' },
   { field: 'gridColor', label: 'Grid lines' },
   { field: 'headingColor', label: 'Heading' },
@@ -29,14 +29,14 @@ const colorFields: { field: keyof ISection49Data; label: string }[] = [
   { field: 'descriptionColor', label: 'Description' },
 ];
 
-const MutationSection49 = ({ data, onSubmit }: Section49FormProps) => {
-  const [formData, setFormData] = useState<ISection49Data>({ ...defaultDataSection49 });
+const MutationSection58 = ({ data, onSubmit }: Section58FormProps) => {
+  const [formData, setFormData] = useState<ISection58Data>({ ...defaultDataSection58 });
 
   useEffect(() => {
-    setFormData({ ...defaultDataSection49, ...(data || {}) });
+    setFormData({ ...defaultDataSection58, ...(data || {}) });
   }, [data]);
 
-  const updateField = <Field extends keyof ISection49Data>(field: Field, value: ISection49Data[Field]) => {
+  const updateField = <Field extends keyof ISection58Data>(field: Field, value: ISection58Data[Field]) => {
     setFormData(current => ({ ...current, [field]: value }));
   };
 
@@ -71,27 +71,23 @@ const MutationSection49 = ({ data, onSubmit }: Section49FormProps) => {
                 <Input value={formData.titleEnglish} onChange={event => updateField('titleEnglish', event.target.value)} className={fieldClassName} />
               </div>
               <div className="space-y-2">
-                <Label>English heading connector</Label>
-                <Input
-                  value={formData.titleEnglishSuffix}
-                  onChange={event => updateField('titleEnglishSuffix', event.target.value)}
-                  className={fieldClassName}
-                />
+                <Label>Bangla heading suffix</Label>
+                <Input value={formData.titleEnglishSuffix} onChange={event => updateField('titleEnglishSuffix', event.target.value)} className={fieldClassName} />
               </div>
               <div className="space-y-2 md:col-span-2">
-                <Label>Highlighted English heading</Label>
+                <Label>Highlighted Bangla heading</Label>
                 <Input value={formData.titleHighlight} onChange={event => updateField('titleHighlight', event.target.value)} className={fieldClassName} />
               </div>
               <div className="space-y-2 md:col-span-2">
-                <Label>Bangla description</Label>
+                <Label>Bangla description lead</Label>
                 <Input value={formData.descriptionLead} onChange={event => updateField('descriptionLead', event.target.value)} className={fieldClassName} />
               </div>
               <div className="space-y-2 md:col-span-2">
-                <Label>English experience highlight</Label>
+                <Label>Experience badge (start with a number)</Label>
                 <Input value={formData.descriptionAccent} onChange={event => updateField('descriptionAccent', event.target.value)} className={fieldClassName} />
               </div>
               <div className="space-y-2 md:col-span-2">
-                <Label>English description</Label>
+                <Label>Short description</Label>
                 <Textarea
                   value={formData.descriptionTail}
                   onChange={event => updateField('descriptionTail', event.target.value)}
@@ -118,19 +114,11 @@ const MutationSection49 = ({ data, onSubmit }: Section49FormProps) => {
               </div>
               <div className="space-y-2">
                 <Label>Secondary button text</Label>
-                <Input
-                  value={formData.secondaryButtonText}
-                  onChange={event => updateField('secondaryButtonText', event.target.value)}
-                  className={fieldClassName}
-                />
+                <Input value={formData.secondaryButtonText} onChange={event => updateField('secondaryButtonText', event.target.value)} className={fieldClassName} />
               </div>
               <div className="space-y-2">
                 <Label>Secondary button link</Label>
-                <Input
-                  value={formData.secondaryButtonLink}
-                  onChange={event => updateField('secondaryButtonLink', event.target.value)}
-                  className={fieldClassName}
-                />
+                <Input value={formData.secondaryButtonLink} onChange={event => updateField('secondaryButtonLink', event.target.value)} className={fieldClassName} />
               </div>
             </div>
           </section>
@@ -171,4 +159,4 @@ const MutationSection49 = ({ data, onSubmit }: Section49FormProps) => {
   );
 };
 
-export default MutationSection49;
+export default MutationSection58;

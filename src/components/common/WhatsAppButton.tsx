@@ -31,7 +31,10 @@ const normalizePath = (path?: string) => {
 
 const WhatsAppButton = () => {
   const pathname = usePathname();
-  const { data: settings } = useGetWhatsAppSettingsQuery();
+  const { data: settings } = useGetWhatsAppSettingsQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+    refetchOnFocus: true,
+  });
   const phoneNumber = (settings?.whatsAppButtonNumber || '').replace(/[^\d]/g, '');
   const showOnDesktop = settings?.whatsAppButtonShowOnDesktop ?? settings?.whatsAppButtonIsPublished;
   const showOnMobile = settings?.whatsAppButtonShowOnMobile ?? settings?.whatsAppButtonIsPublished;

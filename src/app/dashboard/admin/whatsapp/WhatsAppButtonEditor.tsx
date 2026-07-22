@@ -77,7 +77,9 @@ const sizePreviewClasses = {
 const WhatsAppButtonEditor = () => {
   const [config, setConfig] = useState<WhatsAppButtonConfig>(defaultConfig);
   const [disabledUrlsText, setDisabledUrlsText] = useState(defaultConfig.whatsAppButtonDisabledUrls.join('\n'));
-  const { data: whatsAppSettings, isLoading } = useGetWhatsAppSettingsQuery();
+  const { data: whatsAppSettings, isLoading, refetch } = useGetWhatsAppSettingsQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
   const [updateWhatsAppSettings, { isLoading: isSaving }] = useUpdateWhatsAppSettingsMutation();
 
   useEffect(() => {
@@ -123,7 +125,8 @@ const WhatsAppButtonEditor = () => {
       };
       const data = await updateWhatsAppSettings(payload).unwrap();
       if (data?.data) setConfig(prev => ({ ...prev, ...data.data }));
-      toast.success('WhatsApp button updated successfully');
+      await refetch();
+      toast.success('WhatsApp button updated for all visitors');
     } catch {
       toast.error('WhatsApp button update failed');
     }

@@ -4,7 +4,7 @@
 |-----------------------------------------
 */
 
-export interface ISection49Data {
+export interface ISection58Data {
   titleLineOne: string;
   titleEnglish: string;
   titleEnglishSuffix: string;
@@ -23,18 +23,18 @@ export interface ISection49Data {
   descriptionColor: string;
 }
 
-export interface Section49Props {
-  data?: ISection49Data | string;
+export interface Section58Props {
+  data?: ISection58Data | string;
 }
 
-export const defaultDataSection49: ISection49Data = {
-  titleLineOne: '১৬ বছরের আস্থার পথচলা',
+export const defaultDataSection58: ISection58Data = {
+  titleLineOne: '১৬ বছরের অভিজ্ঞতায়',
   titleEnglish: 'STUDY ABROAD',
-  titleEnglishSuffix: 'WITH',
-  titleHighlight: 'CONFIDENCE',
-  descriptionLead: 'স্বপ্ন আপনার, গাইডেন্স আমাদের।',
-  descriptionAccent: '16 YEARS OF TRUST.',
-  descriptionTail: 'From application to visa — we are with you.',
+  titleEnglishSuffix: 'START',
+  titleHighlight: 'YOUR STORY.',
+  descriptionLead: 'স্বপ্ন আপনার,',
+  descriptionAccent: '16 YEARS OF TRUST',
+  descriptionTail: 'সঠিক পথ দেখানোর দায়িত্ব আমাদের।',
   primaryButtonText: 'ফ্রি কাউন্সেলিং',
   primaryButtonLink: '/application',
   secondaryButtonText: 'Apply Now',
