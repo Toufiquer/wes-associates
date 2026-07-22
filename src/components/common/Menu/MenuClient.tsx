@@ -8,15 +8,7 @@
 
 'use client';
 
-import {
-  X,
-  Menu,
-  Phone,
-  User,
-  LogIn,
-  ChevronDown,
-  LayoutDashboard,
-} from 'lucide-react';
+import { X, Menu, Phone, User, LogIn, ChevronDown, LayoutDashboard } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
@@ -28,10 +20,10 @@ import { ASSET_CART_UPDATED_EVENT, getAssetCart } from '@/lib/asset-cart';
 import { iconMap as sharedIconMap } from '@/components/all-icons/all-icons-jsx';
 
 import TopBanner, { TopBannerBrandConfig } from './TopBanner';
-import CartLink from './CartLink';
+// import CartLink from './CartLink';
 import PrimaryMenu from './PrimaryMenu';
 import MobileMainMenu from './MobileMainMenu';
-import SearchMenuButton from './SearchMenuButton';
+// import SearchMenuButton from './SearchMenuButton';
 
 type BrandFontSize = 'text-base' | 'text-lg' | 'text-xl' | 'text-2xl' | 'text-3xl';
 type BrandFontFamily = 'font-sans' | 'font-serif' | 'font-mono' | 'font-noto-sans';
@@ -466,7 +458,7 @@ const MenuClient: React.FC<MenuClientProps> = ({ initialBrandConfig, initialMenu
 
             <div className="flex items-center gap-4">
               <div className="hidden lg:flex items-center gap-1">
-                <SearchMenuButton
+                {/* <SearchMenuButton
                   config={brandConfig}
                   productQuantity={productQuantity}
                   searchQuery={searchQuery}
@@ -474,11 +466,11 @@ const MenuClient: React.FC<MenuClientProps> = ({ initialBrandConfig, initialMenu
                   onToggle={() => setIsSearchOpen(prev => !prev)}
                   onClose={() => setIsSearchOpen(false)}
                   onQueryChange={handleSearchQueryChange}
-                />
-                <CartLink config={brandConfig} quantity={cartQuantity} />
+                /> */}
+                {/* <CartLink config={brandConfig} quantity={cartQuantity} /> */}
                 <MenuActionButton config={brandConfig} isLoggedIn={isLoggedIn} />
               </div>
-              <div className="md:hidden">
+              {/* <div className="md:hidden">
                 <SearchMenuButton
                   config={brandConfig}
                   productQuantity={productQuantity}
@@ -491,7 +483,7 @@ const MenuClient: React.FC<MenuClientProps> = ({ initialBrandConfig, initialMenu
                   onClose={() => setIsSearchOpen(false)}
                   onQueryChange={handleSearchQueryChange}
                 />
-              </div>
+              </div> */}
               <button
                 className="md:hidden p-3 rounded-2xl transition-all active:scale-90"
                 style={{ color: brandConfig.menuTextColor, backgroundColor: parseColorToRgba(brandConfig.menuTextColor, 12) }}

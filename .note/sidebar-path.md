@@ -38,6 +38,9 @@
 => WhatsApp
 -> /dashboard/admin/whatsapp
 
+=> Top Banner
+-> /dashboard/admin/top-banner
+
 ## Assets
 
 => Campaign

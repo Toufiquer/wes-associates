@@ -8,11 +8,7 @@
 
 'use client';
 
-import {
-  ChevronDown,
-  ChevronRight,
-  GraduationCap,
-} from 'lucide-react';
+import { ChevronDown, ChevronRight, GraduationCap } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Noto_Sans } from 'next/font/google';
@@ -110,8 +106,8 @@ const DesktopMenuItem = ({
         className={`
           group flex items-center gap-2 px-2 py-2 transition-all duration-300 rounded-full lg:px-5
           ${desktopFontSize} ${desktopFontFamilyClass}
-          ${depth === 1 && 'h-auto min-h-[84px] w-full justify-between rounded-xl px-5 py-4 text-slate-950 hover:bg-slate-100'}
-          ${depth > 1 && 'h-auto w-full justify-between rounded-lg px-4 py-3 text-slate-950 hover:bg-slate-100'}
+          ${depth === 1 && 'h-auto min-h-[84px] w-full justify-between rounded-xl px-3 py-2 text-slate-950 hover:bg-slate-200 bg-slate-100'}
+          ${depth > 1 && 'h-auto w-full justify-between rounded-lg px-2 py-1 text-slate-950 hover:bg-slate-200 bg-slate-100'}
           ${active ? ' underline ' : ''}
         `}
         style={{ color: isRoot ? (active ? config.textColor : config.menuTextColor) : '#0f172a' }}
