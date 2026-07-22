@@ -1,6 +1,6 @@
 /*
 |-----------------------------------------
-| IELTS hero data for Section 49
+| Study Abroad experience hero data for Section 49
 |-----------------------------------------
 */
 
@@ -28,18 +28,18 @@ export interface Section49Props {
 }
 
 export const defaultDataSection49: ISection49Data = {
-  titleLineOne: 'ভয়কে জয় করে',
-  titleEnglish: 'IELTS',
-  titleEnglishSuffix: '-এ',
-  titleHighlight: 'সফল হোন',
-  descriptionLead: 'রাশেদ ভাইয়ের ইউটিউব ক্লাস দেখে',
-  descriptionAccent: 'IELTS-এ',
+  titleLineOne: '১৬ বছরের বিশ্বস্ত পথচলা',
+  titleEnglish: 'STUDY ABROAD',
+  titleEnglishSuffix: 'সেবায়',
+  titleHighlight: 'আপনার স্বপ্নের সঙ্গী',
+  descriptionLead: 'গত ১৬ বছর ধরে আমরা শিক্ষার্থীদের পাশে আছি।',
+  descriptionAccent: '16 YEARS OF EXPERIENCE',
   descriptionTail:
-    'সফল হয়েছেন হাজারো শিক্ষার্থী - এবার আপনার পালা! IELTS পরীক্ষায় সফলতার জন্য প্রয়োজন সঠিক দিকনির্দেশনা ও প্রস্তুতির কৌশল।',
-  primaryButtonText: 'অ্যাডমিশন ওপেন',
+    '— বিশ্বমানের বিশ্ববিদ্যালয় নির্বাচন থেকে শুরু করে আবেদন, ভিসা ও প্রি-ডিপার্চার সহায়তা পর্যন্ত। Your global education journey starts with trusted guidance.',
+  primaryButtonText: 'ফ্রি কাউন্সেলিং',
   primaryButtonLink: '/application',
-  secondaryButtonText: 'মক টেস্ট',
-  secondaryButtonLink: '/test',
+  secondaryButtonText: 'Apply Now',
+  secondaryButtonLink: '/application',
   backgroundColor: '#fafaf9',
   gridColor: '#e5e7eb',
   headingColor: '#111827',

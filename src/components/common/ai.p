@@ -68,3 +68,7 @@ Now your task is implement those features as the following instructions.
 
 
 Look at the file 'src/components/common/SearchMenuButton.tsx' and Look at the products 'src/app/dashboard/assets/products/page.tsx' Now implement Search functionality with products. and if there is more then 10 products then add pagination. If I click one product then it will redirect to '/template?title=LiteBox-NextJS-Proper-Theme'  And make sure it working well in mobile device.
+
+
+Look at the file 'src/components/common/WhatsAppButton.tsx' and 'src/app/dashboard/admin/whatsapp/page.tsx' and 'src/app/dashboard/admin/whatsapp/WhatsAppButtonEditor.tsx'
+Now your task is implement those features as the following instructions. When I edit in my browser it working. But If I open in ignore tap then it is not working fix it.

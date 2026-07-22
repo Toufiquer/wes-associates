@@ -1,6 +1,6 @@
 /*
 |-----------------------------------------
-| IELTS hero editor for Section 49
+| Study Abroad experience hero editor for Section 49
 |-----------------------------------------
 */
 
@@ -50,8 +50,8 @@ const MutationSection49 = ({ data, onSubmit }: Section49FormProps) => {
             <LayoutTemplate className="h-6 w-6 text-red-400" />
           </div>
           <div>
-            <h2 className="text-xl font-bold">Edit IELTS Hero</h2>
-            <p className="text-sm text-zinc-400">Update the Bengali headline, supporting copy, links, and colors.</p>
+            <h2 className="text-xl font-bold">Edit Study Abroad Hero</h2>
+            <p className="text-sm text-zinc-400">Update the Bangla and English content, calls to action, and colors.</p>
           </div>
         </header>
 
@@ -63,31 +63,31 @@ const MutationSection49 = ({ data, onSubmit }: Section49FormProps) => {
 
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2 md:col-span-2">
-                <Label>First heading line</Label>
+                <Label>Bangla experience heading</Label>
                 <Input value={formData.titleLineOne} onChange={event => updateField('titleLineOne', event.target.value)} className={fieldClassName} />
               </div>
               <div className="space-y-2">
-                <Label>English heading</Label>
+                <Label>English service heading</Label>
                 <Input value={formData.titleEnglish} onChange={event => updateField('titleEnglish', event.target.value)} className={fieldClassName} />
               </div>
               <div className="space-y-2">
-                <Label>English suffix</Label>
+                <Label>Bangla heading suffix</Label>
                 <Input value={formData.titleEnglishSuffix} onChange={event => updateField('titleEnglishSuffix', event.target.value)} className={fieldClassName} />
               </div>
               <div className="space-y-2 md:col-span-2">
-                <Label>Highlighted heading</Label>
+                <Label>Highlighted Bangla heading</Label>
                 <Input value={formData.titleHighlight} onChange={event => updateField('titleHighlight', event.target.value)} className={fieldClassName} />
               </div>
               <div className="space-y-2 md:col-span-2">
-                <Label>Bold description lead</Label>
+                <Label>Bangla description lead</Label>
                 <Input value={formData.descriptionLead} onChange={event => updateField('descriptionLead', event.target.value)} className={fieldClassName} />
               </div>
               <div className="space-y-2 md:col-span-2">
-                <Label>Red description text</Label>
+                <Label>English experience highlight</Label>
                 <Input value={formData.descriptionAccent} onChange={event => updateField('descriptionAccent', event.target.value)} className={fieldClassName} />
               </div>
               <div className="space-y-2 md:col-span-2">
-                <Label>Description</Label>
+                <Label>Bangla and English description</Label>
                 <Textarea
                   value={formData.descriptionTail}
                   onChange={event => updateField('descriptionTail', event.target.value)}

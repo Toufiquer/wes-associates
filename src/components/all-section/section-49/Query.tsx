@@ -1,6 +1,6 @@
 /*
 |-----------------------------------------
-| IELTS hero renderer for Section 49
+| Study Abroad experience hero renderer for Section 49
 |-----------------------------------------
 */
 
@@ -17,6 +17,17 @@ const liAlinurBanglaborno = localFont({
   src: './Li Alinur Banglaborno ANSI V2 Italic.ttf',
   display: 'swap',
 });
+
+const renderBanglaText = (text: string) =>
+  text.split(/([A-Za-z0-9]+(?:[+./&'-][A-Za-z0-9]+)*)/g).map((part, index) =>
+    /[A-Za-z0-9]/.test(part) ? (
+      <span key={`${part}-${index}`} className="font-sans">
+        {part}
+      </span>
+    ) : (
+      part
+    ),
+  );
 
 const getSectionData = (data?: ISection49Data | string): ISection49Data => {
   if (!data) return defaultDataSection49;
@@ -81,7 +92,6 @@ const QuerySection49 = ({ data }: Section49Props) => {
         animate={reduceMotion ? undefined : { opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
         className="mx-auto w-full max-w-[1040px] text-center"
-        style={{ fontFamily: "'Noto Sans Bengali', 'Hind Siliguri', 'Nirmala UI', sans-serif" }}
       >
         <h1 className="font-black leading-[0.98] tracking-[-0.045em]" style={{ color: sectionData.headingColor }}>
           <motion.span
@@ -90,7 +100,7 @@ const QuerySection49 = ({ data }: Section49Props) => {
             transition={{ duration: 0.75, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
             className={`${liAlinurBanglaborno.className} block text-[clamp(3.1rem,6vw,5.25rem)]`}
           >
-            {sectionData.titleLineOne}
+            {renderBanglaText(sectionData.titleLineOne)}
           </motion.span>
           <motion.span
             initial={reduceMotion ? false : { opacity: 0, y: 32, filter: 'blur(9px)' }}
@@ -99,9 +109,9 @@ const QuerySection49 = ({ data }: Section49Props) => {
             className="mt-5 block text-[clamp(3rem,6.5vw,5.5rem)] sm:mt-6"
           >
             <span className="font-sans tracking-[-0.055em]">{sectionData.titleEnglish}</span>
-            <span className={`${liAlinurBanglaborno.className} text-slate-600`}>{sectionData.titleEnglishSuffix}</span>{' '}
+            <span className={`${liAlinurBanglaborno.className} text-slate-600`}>{renderBanglaText(sectionData.titleEnglishSuffix)}</span>{' '}
             <span className={`${liAlinurBanglaborno.className} relative inline-block`} style={{ color: sectionData.accentColor }}>
-              {sectionData.titleHighlight}
+              {renderBanglaText(sectionData.titleHighlight)}
               <motion.span
                 aria-hidden="true"
                 initial={reduceMotion ? false : { scaleX: 0 }}
@@ -122,12 +132,12 @@ const QuerySection49 = ({ data }: Section49Props) => {
           style={{ color: sectionData.descriptionColor }}
         >
           <strong className={`${liAlinurBanglaborno.className} font-extrabold`} style={{ color: sectionData.headingColor }}>
-            {sectionData.descriptionLead}
+            {renderBanglaText(sectionData.descriptionLead)}
           </strong>{' '}
           <strong className="font-extrabold" style={{ color: sectionData.accentColor }}>
             {sectionData.descriptionAccent}
           </strong>{' '}
-          <span className={liAlinurBanglaborno.className}>{sectionData.descriptionTail}</span>
+          <span className={liAlinurBanglaborno.className}>{renderBanglaText(sectionData.descriptionTail)}</span>
         </motion.p>
 
         <motion.div
