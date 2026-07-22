@@ -160,7 +160,7 @@ export default async function HomePage() {
           ))}
         </div>
       )}
-      <div className="hidden">Wes associates</div>
+      
     </main>
   );
 }
