@@ -2,26 +2,40 @@
 
 import { Suspense, useEffect, useRef } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { sendGTMEvent } from '@next/third-parties/google';
+
+type GtmPageViewEvent = {
+  event: 'page_view';
+  page_path: string;
+  page_query: string;
+  page_location: string;
+  page_title: string;
+};
+
+type WindowWithDataLayer = Window & {
+  dataLayer?: GtmPageViewEvent[];
+};
 
 const GtmRouteChangeInner = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const hasSkippedInitialPageView = useRef(false);
+  const lastTrackedUrl = useRef<string | null>(null);
 
   useEffect(() => {
     if (!process.env.NEXT_PUBLIC_GTM_ID) return;
 
-    if (!hasSkippedInitialPageView.current) {
-      hasSkippedInitialPageView.current = true;
-      return;
-    }
-
     const query = searchParams.toString();
+    const pagePath = query ? `${pathname}?${query}` : pathname;
 
-    sendGTMEvent({
+    if (lastTrackedUrl.current === pagePath) return;
+
+    lastTrackedUrl.current = pagePath;
+
+    const gtmWindow = window as WindowWithDataLayer;
+    gtmWindow.dataLayer = gtmWindow.dataLayer || [];
+
+    gtmWindow.dataLayer.push({
       event: 'page_view',
-      page_path: pathname,
+      page_path: pagePath,
       page_query: query,
       page_location: window.location.href,
       page_title: document.title,

@@ -21,6 +21,7 @@ import FacebookPixel from '@/components/facebook-pixel';
 import FacebookPixelPageView from '@/components/facebook-pixel-pageview';
 import GtmRouteChange from '@/components/gtm-route-change';
 import TikTokPixel from '@/components/tiktok-pixel';
+import TikTokRouteChangeTracker from '@/components/tiktok-route-change-tracker';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import './globals.css';
 import TecBuzzFooter from '@/components/TecBuzzFooter';
@@ -62,6 +63,7 @@ export default async function RootLayout({
         <ToastContainer style={{ top: '80px', zIndex: 9999 }} toastClassName="backdrop-blur-md bg-white/90 shadow-xl border border-slate-100 rounded-xl" />
         <FacebookPixelPageView />
         <GtmRouteChange />
+        <TikTokRouteChangeTracker />
       </body>
     </html>
   );

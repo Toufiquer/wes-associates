@@ -3,43 +3,36 @@
 import { Suspense, useEffect, useRef } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 
-import { trackMetaEvent } from '@/lib/facebook-pixel';
-
-const FacebookPixelPageViewInner = () => {
+const TikTokRouteChangeTrackerInner = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const lastTrackedUrl = useRef<string | null>(null);
 
   useEffect(() => {
-    if (!process.env.NEXT_PUBLIC_FB_PIXEL_ID) return;
+    if (!process.env.NEXT_PUBLIC_TIKTOK_PIXEL_ID) return;
 
     const query = searchParams.toString();
     const pagePath = query ? `${pathname}?${query}` : pathname;
 
-    // The FacebookPixel bootstrap script tracks the initial PageView.
+    // The TikTokPixel bootstrap script tracks the initial PageView.
     if (lastTrackedUrl.current === null) {
       lastTrackedUrl.current = pagePath;
       return;
     }
 
-    if (lastTrackedUrl.current === pagePath) return;
+    if (lastTrackedUrl.current === pagePath || typeof window.ttq?.page !== 'function') return;
 
     lastTrackedUrl.current = pagePath;
-
-    trackMetaEvent('PageView', {
-      page_path: pagePath,
-      page_location: window.location.href,
-      page_title: document.title,
-    });
+    window.ttq.page();
   }, [pathname, searchParams]);
 
   return null;
 };
 
-const FacebookPixelPageView = () => (
+const TikTokRouteChangeTracker = () => (
   <Suspense fallback={null}>
-    <FacebookPixelPageViewInner />
+    <TikTokRouteChangeTrackerInner />
   </Suspense>
 );
 
-export default FacebookPixelPageView;
+export default TikTokRouteChangeTracker;
