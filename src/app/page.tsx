@@ -17,8 +17,6 @@ import { AllPages, AllPagesKeys } from '@/components/all-pages/all-page-index/al
 import { AllAssets, AllAssetsKeys } from '@/components/all-assets/all-assets-index/all-page';
 
 import { getAllPages } from './api/page-builder/v1/controller';
-import HomeComponent from './HomeComponent';
-
 interface PageApiResponse {
   data: {
     pages: NormalizedPage[];
@@ -61,6 +59,32 @@ const getCachedAllPages = cache(async (): Promise<NormalizedPage[]> => {
     return [];
   }
 });
+
+const organizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': 'https://www.wesassociates.com/#organization',
+      name: 'WES Associates',
+      alternateName: ['WES', 'wesassociates'],
+      url: 'https://www.wesassociates.com',
+      logo: 'https://www.wesassociates.com/icons/icon-1280x720.png',
+      description:
+        'WES Associates is a Bangladesh-based study abroad consultancy firm helping students plan their international education.',
+    },
+    {
+      '@type': 'WebSite',
+      '@id': 'https://www.wesassociates.com/#website',
+      url: 'https://www.wesassociates.com',
+      name: 'WES Associates',
+      alternateName: ['WES', 'wesassociates'],
+      publisher: {
+        '@id': 'https://www.wesassociates.com/#organization',
+      },
+    },
+  ],
+};
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getNormalizedPages(rawPages: any[]): NormalizedPage[] {
@@ -121,14 +145,22 @@ const SSRItemRenderer = ({ item }: { item: PageContent }) => {
 export async function generateMetadata() {
   const pages = await getCachedAllPages();
   const homePage = pages.find(p => p.path === '/');
+  const title = 'WES Associates | Study Abroad Consultancy Firm in Bangladesh';
+  const description =
+    'WES Associates is a Bangladesh-based study abroad consultancy firm helping students choose universities, prepare applications, and plan their international education.';
 
   if (!homePage) {
-    return { title: 'Home' };
+    return {
+      title: { absolute: title },
+      description,
+      alternates: { canonical: '/' },
+    };
   }
 
   return {
-    title: homePage.pageName,
-    description: homePage.description || 'Welcome to our website',
+    title: { absolute: title },
+    description: homePage.description || description,
+    alternates: { canonical: '/' },
   };
 }
 
@@ -145,7 +177,10 @@ export default async function HomePage() {
 
   return (
     <main className="min-h-screen w-full bg-slate-950  ">
-      {/* <HomeComponent /> */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd).replace(/</g, '\\u003c') }}
+      />
       {items.length === 0 ? (
         <div>
           <div className="min-h-[50vh] flex flex-col items-center justify-center text-slate-500 space-y-4">

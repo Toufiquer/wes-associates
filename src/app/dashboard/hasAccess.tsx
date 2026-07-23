@@ -119,7 +119,8 @@ const HasAccess = ({ children }: { children: React.ReactNode }) => {
       router.push('/login');
     }
   }, [isPending, isAuthenticated, router]);
-  const isUniversalRoute = currentPath === '/dashboard' || currentPath === '/dashboard/profile';
+  const isUniversalRoute =
+    currentPath === '/dashboard' || currentPath === '/dashboard/profile' || currentPath === '/dashboard/my-application';
 
   const hasPermission = useMemo(() => {
     if (!isAuthenticated || isPending) return false;

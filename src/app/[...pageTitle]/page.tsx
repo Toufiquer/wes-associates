@@ -171,11 +171,18 @@ export async function generateMetadata({ params }: { params: Promise<{ pageTitle
   const currentPage = pages.find(p => p.path === pathString);
 
   if (!currentPage) {
-    return { title: 'Hello Page' };
+    return {
+      title: 'Page not found',
+      robots: { index: false, follow: false },
+    };
   }
 
   return {
     title: currentPage.pageName,
+    description: currentPage.description || undefined,
+    alternates: {
+      canonical: pathString,
+    },
   };
 }
 

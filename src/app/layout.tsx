@@ -26,11 +26,74 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import './globals.css';
 import TecBuzzFooter from '@/components/TecBuzzFooter';
 
+const siteUrl = 'https://www.wesassociates.com';
+const siteTitle = 'WES Associates | Study Abroad Consultancy Firm in Bangladesh';
+const siteDescription =
+  'WES Associates is a Bangladesh-based study abroad consultancy firm helping students choose universities, prepare applications, and plan their international education.';
+
 export const metadata: Metadata = {
-  title: 'Wes Associates',
-  description: 'Wes Associates || Study Abroad || consultancy firm in bangladesh',
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: siteTitle,
+    template: '%s | WES Associates',
+  },
+  description: siteDescription,
+  applicationName: 'WES Associates',
+  keywords: [
+    'WES',
+    'wesassociates',
+    'WES Associates',
+    'consultancy firm in Bangladesh',
+    'best consultancy firm in Bangladesh',
+    'best consultancy firm',
+    'study abroad consultancy Bangladesh',
+    'education consultancy Bangladesh',
+  ],
+  authors: [{ name: 'WES Associates', url: siteUrl }],
+  creator: 'WES Associates',
+  publisher: 'WES Associates',
+  category: 'Education',
+  openGraph: {
+    type: 'website',
+    locale: 'en_BD',
+    url: siteUrl,
+    siteName: 'WES Associates',
+    title: siteTitle,
+    description: siteDescription,
+    images: [
+      {
+        url: '/icons/icon-1280x720.png',
+        width: 1280,
+        height: 720,
+        alt: 'WES Associates',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: siteTitle,
+    description: siteDescription,
+    images: ['/icons/icon-1280x720.png'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
+  },
+  verification: process.env.GOOGLE_SITE_VERIFICATION
+    ? {
+        google: process.env.GOOGLE_SITE_VERIFICATION,
+      }
+    : undefined,
   manifest: '/manifest.json',
   icons: {
+    icon: '/favicon.ico',
     apple: '/icons/icon-192x192.png',
   },
 };

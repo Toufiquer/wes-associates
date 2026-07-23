@@ -1,9 +1,13 @@
 # *
-User-agent: *
+User-agent:*
+Disallow: /dashboard/
+Disallow: /application/
+Disallow: /login/
+Disallow: /forgot-password/
 Allow: /
 
 # Host
-Host: http://localhost:3000
+Host: https://www.wesassociates.com
 
 # Sitemaps
-Sitemap: http://localhost:3000/sitemap.xml
+Sitemap: https://www.wesassociates.com/sitemap.xml
