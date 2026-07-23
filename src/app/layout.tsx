@@ -28,7 +28,7 @@ import TecBuzzFooter from '@/components/TecBuzzFooter';
 
 export const metadata: Metadata = {
   title: 'Wes Associates',
-  description: 'Where your dream comes true',
+  description: 'Wes Associates || Study Abroad || consultancy firm in bangladesh',
   manifest: '/manifest.json',
   icons: {
     apple: '/icons/icon-192x192.png',
