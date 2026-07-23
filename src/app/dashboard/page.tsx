@@ -8,12 +8,28 @@
 
 'use client';
 
-import { CalendarDays, CheckCircle2, Clock3, FileText, Loader2, UserPlus, UsersRound, XCircle } from 'lucide-react';
+import {
+  ArrowRight,
+  BriefcaseBusiness,
+  CalendarDays,
+  CheckCircle2,
+  Clock3,
+  FileText,
+  Loader2,
+  Mail,
+  MapPin,
+  Phone,
+  UserPlus,
+  UsersRound,
+  XCircle,
+} from 'lucide-react';
+import Link from 'next/link';
 import { useMemo } from 'react';
 
 import { useSession } from '@/lib/auth-client';
 import { useGetAccessManagementsQuery } from '@/redux/features/accessManagements/accessManagementsSlice';
-import { useGetAllApplicationsQuery } from '@/redux/features/application/applicationSlice';
+import { useGetAllApplicationsQuery, useGetMyApplicationsQuery } from '@/redux/features/application/applicationSlice';
+import { useGetProfileByUserIdQuery } from '@/redux/features/profile/profileSlice';
 import { useGetUsersSummaryQuery } from '@/redux/features/user/userSlice';
 
 type ApplicationStatus = 'submitted' | 'in_review' | 'approved' | 'rejected';
@@ -22,6 +38,11 @@ interface Application {
   _id: string;
   status: ApplicationStatus;
   createdAt: string;
+  updatedAt?: string;
+  selectedCountry?: string;
+  selectedUniversity?: string;
+  selectedCourseName?: string;
+  adminNote?: string;
 }
 
 interface ApplicationsResponse {
@@ -35,6 +56,17 @@ interface UsersSummaryResponse {
     overall?: {
       totalRecords?: number;
       recordsLast24Hours?: number;
+    };
+  };
+}
+
+interface ProfileResponse {
+  data?: {
+    phone?: string;
+    occupation?: string;
+    address?: {
+      city?: string;
+      country?: string;
     };
   };
 }
@@ -67,6 +99,7 @@ const subtractDays = (date: Date, days: number) => {
 const Page = () => {
   const session = useSession();
   const email = session.data?.user?.email || '';
+  const userId = session.data?.user?.id;
 
   const { data: accessData, isLoading: isAccessLoading } = useGetAccessManagementsQuery(
     { user_email: email, page: 1, limit: 100 },
@@ -75,6 +108,7 @@ const Page = () => {
 
   const userRoles: string[] = accessData?.data?.accessManagements?.[0]?.assign_role || [];
   const isAdmin = userRoles.includes('Admin');
+  const shouldLoadUserDashboard = Boolean(email) && !isAccessLoading && !isAdmin;
 
   const {
     data: applicationsData,
@@ -95,6 +129,26 @@ const Page = () => {
     { skip: !isAdmin },
   ) as {
     data?: UsersSummaryResponse;
+    isLoading: boolean;
+    isError: boolean;
+  };
+
+  const {
+    data: myApplicationsData,
+    isLoading: isMyApplicationsLoading,
+    isError: isMyApplicationsError,
+  } = useGetMyApplicationsQuery(undefined, { skip: !shouldLoadUserDashboard }) as {
+    data?: ApplicationsResponse;
+    isLoading: boolean;
+    isError: boolean;
+  };
+
+  const {
+    data: profileData,
+    isLoading: isProfileLoading,
+    isError: isProfileError,
+  } = useGetProfileByUserIdQuery(userId, { skip: !shouldLoadUserDashboard || !userId }) as {
+    data?: ProfileResponse;
     isLoading: boolean;
     isError: boolean;
   };
@@ -135,14 +189,142 @@ const Page = () => {
   }
 
   if (!isAdmin) {
+    const myApplications = myApplicationsData?.data?.applications || [];
+    const latestApplication = myApplications[0];
+    const latestStatus = statuses.find(status => status.key === latestApplication?.status) || statuses[0];
+    const LatestStatusIcon = latestStatus.icon;
+    const profile = profileData?.data;
+    const location = [profile?.address?.city, profile?.address?.country].filter(Boolean).join(', ');
+
     return (
-      <section className="mx-auto flex min-h-[55vh] max-w-5xl items-center">
-        <div>
+      <main className="mx-auto max-w-6xl space-y-8">
+        <header>
           <p className="text-sm font-semibold text-white/60">Welcome back</p>
-          <h1 className="mt-2 text-3xl font-bold text-white">Dashboard</h1>
-          <p className="mt-2 text-sm text-white/60">Use the navigation to access your available tools.</p>
+          <h1 className="mt-2 text-3xl font-bold text-white">{session.data?.user?.name || 'Dashboard'}</h1>
+          <p className="mt-2 text-sm text-white/60">Review your application progress and personal information.</p>
+        </header>
+
+        <div className="grid gap-5 lg:grid-cols-2">
+          <section aria-labelledby="my-application-heading" className="rounded-sm border border-white/15 bg-white/[0.07] p-5 shadow-lg backdrop-blur-md sm:p-6">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-xs font-semibold uppercase text-cyan-200">Application update</p>
+                <h2 id="my-application-heading" className="mt-1 text-xl font-bold text-white">
+                  My application
+                </h2>
+              </div>
+              <div className="flex h-10 w-10 items-center justify-center rounded-sm bg-cyan-400/15 text-cyan-200">
+                <FileText className="h-5 w-5" />
+              </div>
+            </div>
+
+            {isMyApplicationsLoading ? (
+              <div className="flex h-44 items-center justify-center">
+                <Loader2 className="h-6 w-6 animate-spin text-cyan-200" />
+              </div>
+            ) : isMyApplicationsError ? (
+              <p className="mt-6 rounded-sm bg-rose-400/10 p-4 text-sm text-rose-100">Unable to load your application update.</p>
+            ) : latestApplication ? (
+              <div className="mt-6">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <p className="font-semibold text-white">{latestApplication.selectedCourseName || 'Course not selected'}</p>
+                    <p className="mt-1 text-sm text-white/50">
+                      {[latestApplication.selectedUniversity, latestApplication.selectedCountry].filter(Boolean).join(' / ') || 'Destination not selected'}
+                    </p>
+                  </div>
+                  <span className={`inline-flex items-center gap-2 rounded-sm px-3 py-2 text-xs font-semibold ${latestStatus.background} ${latestStatus.color}`}>
+                    <LatestStatusIcon className="h-4 w-4" />
+                    {latestStatus.label}
+                  </span>
+                </div>
+
+                {latestApplication.adminNote && (
+                  <div className="mt-5 border-l-2 border-amber-300 bg-amber-300/10 p-4">
+                    <p className="text-xs font-semibold text-amber-200">Admission team update</p>
+                    <p className="mt-1 text-sm text-amber-50/80">{latestApplication.adminNote}</p>
+                  </div>
+                )}
+
+                <p className="mt-5 text-xs text-white/45">
+                  Updated {new Date(latestApplication.updatedAt || latestApplication.createdAt).toLocaleDateString()}
+                  {myApplications.length > 1 ? ` / ${myApplications.length} applications total` : ''}
+                </p>
+              </div>
+            ) : (
+              <div className="mt-6 border border-dashed border-white/15 p-5 text-sm text-white/60">
+                You have not submitted an application yet.
+              </div>
+            )}
+
+            <Link
+              href={latestApplication ? '/dashboard/my-application' : '/application'}
+              className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-cyan-200 transition hover:text-cyan-100"
+            >
+              {latestApplication ? 'View my applications' : 'Start an application'}
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </section>
+
+          <section aria-labelledby="personal-info-heading" className="rounded-sm border border-white/15 bg-white/[0.07] p-5 shadow-lg backdrop-blur-md sm:p-6">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-xs font-semibold uppercase text-emerald-200">Account details</p>
+                <h2 id="personal-info-heading" className="mt-1 text-xl font-bold text-white">
+                  Personal information
+                </h2>
+              </div>
+              <div className="flex h-10 w-10 items-center justify-center rounded-sm bg-emerald-400/15 text-emerald-200">
+                <UsersRound className="h-5 w-5" />
+              </div>
+            </div>
+
+            {isProfileLoading ? (
+              <div className="flex h-44 items-center justify-center">
+                <Loader2 className="h-6 w-6 animate-spin text-emerald-200" />
+              </div>
+            ) : isProfileError ? (
+              <p className="mt-6 rounded-sm bg-rose-400/10 p-4 text-sm text-rose-100">Unable to load your personal information.</p>
+            ) : (
+              <dl className="mt-6 space-y-4">
+                <div className="flex items-start gap-3">
+                  <Mail className="mt-0.5 h-4 w-4 shrink-0 text-cyan-200" />
+                  <div>
+                    <dt className="text-xs text-white/45">Email</dt>
+                    <dd className="mt-0.5 break-all text-sm font-medium text-white">{email}</dd>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Phone className="mt-0.5 h-4 w-4 shrink-0 text-emerald-200" />
+                  <div>
+                    <dt className="text-xs text-white/45">Phone</dt>
+                    <dd className="mt-0.5 text-sm font-medium text-white">{profile?.phone || 'Not provided'}</dd>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <BriefcaseBusiness className="mt-0.5 h-4 w-4 shrink-0 text-amber-200" />
+                  <div>
+                    <dt className="text-xs text-white/45">Occupation</dt>
+                    <dd className="mt-0.5 text-sm font-medium text-white">{profile?.occupation || 'Not provided'}</dd>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-rose-200" />
+                  <div>
+                    <dt className="text-xs text-white/45">Location</dt>
+                    <dd className="mt-0.5 text-sm font-medium text-white">{location || 'Not provided'}</dd>
+                  </div>
+                </div>
+              </dl>
+            )}
+
+            <Link href="/dashboard/profile" className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-emerald-200 transition hover:text-emerald-100">
+              Edit personal information
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </section>
         </div>
-      </section>
+      </main>
     );
   }
 

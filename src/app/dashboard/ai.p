@@ -10,3 +10,5 @@ Only For 'Admin' role :
     - lifetime
 
 2. summery of users.
+
+and please add a div for all user except 'Admin' role. There I want to see My applicaton update and personal info.
